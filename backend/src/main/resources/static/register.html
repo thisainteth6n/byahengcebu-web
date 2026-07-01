@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Register Test</title>
+</head>
+
+<body>
+
+<h2>ByahengCebu Register Test</h2>
+
+
+<form id="form">
+
+    <input id="fullname" placeholder="Full Name">
+    <br><br>
+
+    <input id="email" placeholder="Email">
+    <br><br>
+
+    <input id="password" placeholder="Password">
+    <br><br>
+
+    <input id="role" placeholder="Role">
+    <br><br>
+
+    <button type="submit">
+        Register
+    </button>
+
+
+</form>
+
+
+<h3 id="result"></h3>
+
+
+<script>
+
+document
+.getElementById("form")
+.addEventListener("submit", async function(e){
+
+e.preventDefault();
+
+
+let response = await fetch(
+"/api/auth/register",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body: JSON.stringify({
+
+fullname:
+document.getElementById("fullname").value,
+
+email:
+document.getElementById("email").value,
+
+password:
+document.getElementById("password").value,
+
+role:
+document.getElementById("role").value
+
+})
+
+});
+
+
+document
+.getElementById("result")
+.innerText =
+await response.text();
+
+
+});
+
+</script>
+
+
+</body>
+
+</html>
