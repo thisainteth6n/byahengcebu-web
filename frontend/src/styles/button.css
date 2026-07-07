@@ -1,0 +1,47 @@
+.primary-button{
+
+    width:100%;
+    padding:15px;
+    margin-top:10px;
+
+    border:none;
+    border-radius:14px;
+
+    background:linear-gradient(
+            135deg,
+            #2563EB,
+            #3B82F6
+    );
+
+    color:white;
+
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.primary-button:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+            0 10px 25px rgba(37,99,235,.35);
+
+}
+
+.primary-button:active{
+
+    transform:scale(.98);
+
+}
+
+.primary-button:disabled{
+
+    opacity:.6;
+    cursor:not-allowed;
+
+}
