@@ -41,9 +41,14 @@ function Login() {
 
             console.log(response.data);
 
-            /*
-             * JWT will be stored here later.
-             */
+            // Save login session
+            localStorage.setItem("isLoggedIn", "true");
+
+            // Optional: Save user information
+            localStorage.setItem(
+                "user",
+                JSON.stringify(response.data)
+            );
 
             navigate("/dashboard");
 

@@ -1,5 +1,26 @@
+import { useNavigate } from "react-router-dom";
+
 function Header() {
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+
+        const confirmed = window.confirm(
+            "Are you sure you want to logout?"
+        );
+
+        if (!confirmed) return;
+
+        localStorage.clear();
+        sessionStorage.clear();
+
+        navigate("/login");
+
+    };
+
     return (
+
         <header className="dashboard-header">
 
             <div>
@@ -12,12 +33,17 @@ function Header() {
 
             </div>
 
-            <button className="logout-btn">
+            <button
+                className="logout-btn"
+                onClick={handleLogout}
+            >
                 Logout
             </button>
 
         </header>
+
     );
+
 }
 
 export default Header;

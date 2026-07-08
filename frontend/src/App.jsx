@@ -4,34 +4,60 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Dashboard from "./pages/dashboard/Dashboard";
 
+function ProtectedRoute({ children }) {
+
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+    if (!isLoggedIn) {
+        return <Navigate to="/login" replace />;
+    }
+
+    return children;
+}
+
 function App() {
-  return (
-      <BrowserRouter>
-        <Routes>
 
-          <Route
-              path="/"
-              element={<Navigate to="/login" />}
-          />
+    return (
 
-          <Route
-              path="/login"
-              element={<Login />}
-          />
+        <BrowserRouter>
 
-          <Route
-              path="/register"
-              element={<Register />}
-          />
+            <Routes>
 
-          <Route
-              path="/dashboard"
-              element={<Dashboard />}
-          />
+                <Route
+                    path="/"
+                    element={<Navigate to="/login" replace />}
+                />
 
-        </Routes>
-      </BrowserRouter>
-  );
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
+
+                <Route
+                    path="/register"
+                    element={<Register />}
+                />
+
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="*"
+                    element={<Navigate to="/login" replace />}
+                />
+
+            </Routes>
+
+        </BrowserRouter>
+
+    );
+
 }
 
 export default App;
