@@ -1,84 +1,155 @@
-import fleetData from "../data/sampleData";
+import { useEffect, useState } from "react";
+import {
+    getVehicles,
+    deleteVehicle
+} from "../../../services/vehicleService";
+
+import AddVehicleModal from "./AddVehicleModal";
 
 function FleetTable() {
 
+    const [vehicles, setVehicles] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+
+    useEffect(() => {
+        loadVehicles();
+    }, []);
+
+    const loadVehicles = async () => {
+
+        try {
+
+            const response = await getVehicles();
+
+            setVehicles(response.data);
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Failed to load vehicles.");
+
+        }
+
+    };
+
+    const handleDelete = async (id) => {
+
+        if (!window.confirm("Delete this vehicle?"))
+            return;
+
+        try {
+
+            await deleteVehicle(id);
+
+            loadVehicles();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Failed to delete vehicle.");
+
+        }
+
+    };
+
     return (
 
-        <section className="fleet-section">
+        <>
 
-            <div className="fleet-header">
+            <section className="fleet-section">
 
-                <h2>Fleet Overview</h2>
+                <div className="fleet-header">
 
-                <button className="primary-btn">
-                    + Add Vehicle
-                </button>
+                    <h2>Fleet Overview</h2>
 
-            </div>
+                    <button
+                        className="primary-btn"
+                        onClick={() => setShowModal(true)}
+                    >
+                        + Add Vehicle
+                    </button>
 
-            <table>
+                </div>
 
-                <thead>
+                <table>
 
-                <tr>
+                    <thead>
 
-                    <th>Plate Number</th>
-                    <th>Route</th>
-                    <th>Model</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <tr>
 
-                </tr>
-
-                </thead>
-
-                <tbody>
-
-                {fleetData.map(vehicle => (
-
-                    <tr key={vehicle.id}>
-
-                        <td>{vehicle.plateNumber}</td>
-
-                        <td>{vehicle.route}</td>
-
-                        <td>{vehicle.model}</td>
-
-                        <td>
-
-                            <span
-                                className={
-                                    vehicle.status === "ACTIVE"
-                                        ? "status active"
-                                        : "status maintenance"
-                                }
-                            >
-                                {vehicle.status}
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button className="edit-btn">
-                                Edit
-                            </button>
-
-                            <button className="delete-btn">
-                                Delete
-                            </button>
-
-                        </td>
+                        <th>Plate Number</th>
+                        <th>Route</th>
+                        <th>Model</th>
+                        <th>Status</th>
+                        <th>Action</th>
 
                     </tr>
 
-                ))}
+                    </thead>
 
-                </tbody>
+                    <tbody>
 
-            </table>
+                    {vehicles.map(vehicle => (
 
-        </section>
+                        <tr key={vehicle.id}>
+
+                            <td>{vehicle.plateNumber}</td>
+
+                            <td>{vehicle.route}</td>
+
+                            <td>{vehicle.model}</td>
+
+                            <td>
+
+                                <span
+                                    className={
+                                        vehicle.status === "ACTIVE"
+                                            ? "status active"
+                                            : "status maintenance"
+                                    }
+                                >
+                                    {vehicle.status}
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <button className="edit-btn">
+                                    Edit
+                                </button>
+
+                                <button
+                                    className="delete-btn"
+                                    onClick={() => handleDelete(vehicle.id)}
+                                >
+                                    Delete
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    ))}
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+            {showModal && (
+
+                <AddVehicleModal
+                    onClose={() => setShowModal(false)}
+                    onVehicleAdded={loadVehicles}
+                />
+
+            )}
+
+        </>
 
     );
 
