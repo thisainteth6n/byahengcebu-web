@@ -1,14 +1,23 @@
 import { useState } from "react";
-import { addVehicle } from "../../../services/vehicleService";
+import {
+    addVehicle,
+    updateVehicle
+} from "../../../services/vehicleService";
 
-function AddVehicleModal({ onClose, onVehicleAdded }) {
+function AddVehicleModal({
+    onClose,
+    onVehicleAdded,
+    editVehicle = null
+}) {
 
-    const [vehicle, setVehicle] = useState({
-        plateNumber: "",
-        route: "",
-        model: "",
-        status: "ACTIVE"
-    });
+    const [vehicle, setVehicle] = useState(
+        editVehicle ?? {
+            plateNumber:"",
+            route:"",
+            model:"",
+            status:"ACTIVE"
+        }
+    );
 
     const handleSubmit = async (e) => {
 
@@ -16,7 +25,15 @@ function AddVehicleModal({ onClose, onVehicleAdded }) {
 
         try {
 
-            await addVehicle(vehicle);
+            if(editVehicle){
+
+                await updateVehicle(editVehicle.id, vehicle);
+
+            }else{
+
+                await addVehicle(vehicle);
+
+            }
 
             alert("Vehicle added successfully!");
 
@@ -40,7 +57,9 @@ function AddVehicleModal({ onClose, onVehicleAdded }) {
 
             <div className="modal">
 
-                <h2>Add New Vehicle</h2>
+                <h2>
+                    {editVehicle ? "Edit Vehicle" : "Add New Vehicle"}
+                </h2>
 
                 <form onSubmit={handleSubmit}>
 
@@ -115,7 +134,7 @@ function AddVehicleModal({ onClose, onVehicleAdded }) {
                             type="submit"
                             className="save-btn"
                         >
-                            Save Vehicle
+                            {editVehicle ? "Update Vehicle" : "Save Vehicle"}
                         </button>
 
                     </div>

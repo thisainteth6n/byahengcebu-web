@@ -10,52 +10,40 @@ function FleetTable() {
 
     const [vehicles, setVehicles] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [selectedVehicle, setSelectedVehicle] = useState(null);
 
     useEffect(() => {
         loadVehicles();
     }, []);
 
     const loadVehicles = async () => {
-
         try {
-
             const response = await getVehicles();
-
             setVehicles(response.data);
-
         } catch (error) {
-
             console.error(error);
-
             alert("Failed to load vehicles.");
-
         }
-
     };
 
     const handleDelete = async (id) => {
 
-        if (!window.confirm("Delete this vehicle?"))
-            return;
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this vehicle?"
+        );
+
+        if (!confirmed) return;
 
         try {
-
             await deleteVehicle(id);
-
             loadVehicles();
-
         } catch (error) {
-
             console.error(error);
-
             alert("Failed to delete vehicle.");
-
         }
-
     };
 
     return (
-
         <>
 
             <section className="fleet-section">
@@ -66,7 +54,10 @@ function FleetTable() {
 
                     <button
                         className="primary-btn"
-                        onClick={() => setShowModal(true)}
+                        onClick={() => {
+                            setSelectedVehicle(null);
+                            setShowModal(true);
+                        }}
                     >
                         + Add Vehicle
                     </button>
@@ -91,7 +82,7 @@ function FleetTable() {
 
                     <tbody>
 
-                    {vehicles.map(vehicle => (
+                    {vehicles.map((vehicle) => (
 
                         <tr key={vehicle.id}>
 
@@ -117,13 +108,21 @@ function FleetTable() {
 
                             <td>
 
-                                <button className="edit-btn">
+                                <button
+                                    className="edit-btn"
+                                    onClick={() => {
+                                        setSelectedVehicle(vehicle);
+                                        setShowModal(true);
+                                    }}
+                                >
                                     Edit
                                 </button>
 
                                 <button
                                     className="delete-btn"
-                                    onClick={() => handleDelete(vehicle.id)}
+                                    onClick={() =>
+                                        handleDelete(vehicle.id)
+                                    }
                                 >
                                     Delete
                                 </button>
@@ -143,7 +142,11 @@ function FleetTable() {
             {showModal && (
 
                 <AddVehicleModal
-                    onClose={() => setShowModal(false)}
+                    editVehicle={selectedVehicle}
+                    onClose={() => {
+                        setShowModal(false);
+                        setSelectedVehicle(null);
+                    }}
                     onVehicleAdded={loadVehicles}
                 />
 
