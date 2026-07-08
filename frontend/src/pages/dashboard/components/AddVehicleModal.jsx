@@ -1,53 +1,62 @@
-import { useState } from "react";
-import {
-    addVehicle,
-    updateVehicle
-} from "../../../services/vehicleService";
+import { useEffect, useState } from "react";
 
 function AddVehicleModal({
+
+    show,
     onClose,
-    onVehicleAdded,
-    editVehicle = null
+    onSave,
+    vehicle
+
 }) {
 
-    const [vehicle, setVehicle] = useState(
-        editVehicle ?? {
-            plateNumber:"",
-            route:"",
-            model:"",
-            status:"ACTIVE"
-        }
-    );
+    const [form, setForm] = useState({
 
-    const handleSubmit = async (e) => {
+        plateNumber: "",
+        route: "",
+        model: "",
+        status: "ACTIVE"
+
+    });
+
+    useEffect(() => {
+
+        if (vehicle) {
+
+            setForm(vehicle);
+
+        } else {
+
+            setForm({
+
+                plateNumber: "",
+                route: "",
+                model: "",
+                status: "ACTIVE"
+
+            });
+
+        }
+
+    }, [vehicle]);
+
+    if (!show) return null;
+
+    const handleChange = (e) => {
+
+        setForm({
+
+            ...form,
+            [e.target.name]: e.target.value
+
+        });
+
+    };
+
+    const handleSubmit = (e) => {
 
         e.preventDefault();
 
-        try {
-
-            if(editVehicle){
-
-                await updateVehicle(editVehicle.id, vehicle);
-
-            }else{
-
-                await addVehicle(vehicle);
-
-            }
-
-            alert("Vehicle added successfully!");
-
-            onVehicleAdded();
-
-            onClose();
-
-        } catch (error) {
-
-            console.error(error);
-
-            alert("Failed to add vehicle.");
-
-        }
+        onSave(form);
 
     };
 
@@ -58,83 +67,129 @@ function AddVehicleModal({
             <div className="modal">
 
                 <h2>
-                    {editVehicle ? "Edit Vehicle" : "Add New Vehicle"}
+
+                    {vehicle ? "Edit Vehicle" : "Add Vehicle"}
+
                 </h2>
+
+                <p>
+
+                    Fill in the vehicle information below.
+
+                </p>
 
                 <form onSubmit={handleSubmit}>
 
-                    <label>Plate Number</label>
+                    <div className="form-group">
 
-                    <input
-                        type="text"
-                        value={vehicle.plateNumber}
-                        onChange={(e)=>
-                            setVehicle({
-                                ...vehicle,
-                                plateNumber:e.target.value
-                            })
-                        }
-                    />
+                        <label>Plate Number</label>
 
-                    <label>Route</label>
+                        <input
 
-                    <input
-                        type="text"
-                        value={vehicle.route}
-                        onChange={(e)=>
-                            setVehicle({
-                                ...vehicle,
-                                route:e.target.value
-                            })
-                        }
-                    />
+                            name="plateNumber"
 
-                    <label>Model</label>
+                            value={form.plateNumber}
 
-                    <input
-                        type="text"
-                        value={vehicle.model}
-                        onChange={(e)=>
-                            setVehicle({
-                                ...vehicle,
-                                model:e.target.value
-                            })
-                        }
-                    />
+                            onChange={handleChange}
 
-                    <label>Status</label>
+                            required
 
-                    <select
-                        value={vehicle.status}
-                        onChange={(e)=>
-                            setVehicle({
-                                ...vehicle,
-                                status:e.target.value
-                            })
-                        }
-                    >
+                        />
 
-                        <option>ACTIVE</option>
+                    </div>
 
-                        <option>MAINTENANCE</option>
+                    <div className="form-group">
 
-                    </select>
+                        <label>Route</label>
+
+                        <input
+
+                            name="route"
+
+                            value={form.route}
+
+                            onChange={handleChange}
+
+                            required
+
+                        />
+
+                    </div>
+
+                    <div className="form-group">
+
+                        <label>Vehicle Model</label>
+
+                        <input
+
+                            name="model"
+
+                            value={form.model}
+
+                            onChange={handleChange}
+
+                            required
+
+                        />
+
+                    </div>
+
+                    <div className="form-group">
+
+                        <label>Status</label>
+
+                        <select
+
+                            name="status"
+
+                            value={form.status}
+
+                            onChange={handleChange}
+
+                        >
+
+                            <option value="ACTIVE">
+
+                                ACTIVE
+
+                            </option>
+
+                            <option value="MAINTENANCE">
+
+                                MAINTENANCE
+
+                            </option>
+
+                        </select>
+
+                    </div>
 
                     <div className="modal-buttons">
 
                         <button
+
                             type="button"
+
                             className="cancel-btn"
+
                             onClick={onClose}
+
                         >
+
                             Cancel
+
                         </button>
 
                         <button
+
                             type="submit"
+
                             className="save-btn"
+
                         >
-                            {editVehicle ? "Update Vehicle" : "Save Vehicle"}
+
+                            {vehicle ? "Update Vehicle" : "Save Vehicle"}
+
                         </button>
 
                     </div>

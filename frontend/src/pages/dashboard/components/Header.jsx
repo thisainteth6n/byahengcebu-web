@@ -4,6 +4,13 @@ function Header() {
 
     const navigate = useNavigate();
 
+    const today = new Date().toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+    });
+
     const handleLogout = () => {
 
         const confirmed = window.confirm(
@@ -27,18 +34,28 @@ function Header() {
 
                 <h1>🚍 ByahengCebu</h1>
 
-                <p>
-                    Fleet Management and Maintenance Information System
-                </p>
+                <p>Fleet Management & Maintenance Information System</p>
 
             </div>
 
-            <button
-                className="logout-btn"
-                onClick={handleLogout}
-            >
-                Logout
-            </button>
+            <div className="header-right">
+
+                <div className="date-card">
+
+                    <span>Today</span>
+
+                    <strong>{today}</strong>
+
+                </div>
+
+                <button
+                    className="logout-btn"
+                    onClick={handleLogout}
+                >
+                    Logout
+                </button>
+
+            </div>
 
         </header>
 

@@ -1,8 +1,19 @@
 import { useEffect, useState } from "react";
-import { getVehicles } from "../../../services/vehicleService";
+import {
+    getVehicles,
+    addVehicle,
+    updateVehicle
+} from "../../../services/vehicleService";
 
 import AddVehicleModal from "./AddVehicleModal";
 import DeleteVehicleModal from "./DeleteVehicleModal";
+
+import {
+    FaPlus,
+    FaEdit,
+    FaTrash,
+    FaSearch
+} from "react-icons/fa";
 
 function FleetTable() {
 
@@ -72,18 +83,25 @@ function FleetTable() {
 
                         }}
                     >
-                        + Add Vehicle
+                        <FaPlus />
+                        <span>Add Vehicle</span>
                     </button>
 
                 </div>
 
-                <input
-                    type="text"
-                    className="search-input"
-                    placeholder="Search plate number, route or model..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
+                <div className="search-container">
+
+                    <FaSearch className="search-icon"/>
+
+                    <input
+                        type="text"
+                        className="search-input"
+                        placeholder="Search plate number, route or model..."
+                        value={search}
+                        onChange={(e)=>setSearch(e.target.value)}
+                    />
+
+                </div>
 
                 <table>
 
@@ -139,7 +157,11 @@ function FleetTable() {
 
                                     }}
                                 >
+
+                                    <FaEdit/>
+
                                     Edit
+
                                 </button>
 
                                 <button
@@ -152,7 +174,11 @@ function FleetTable() {
 
                                     }}
                                 >
+
+                                    <FaTrash/>
+
                                     Delete
+
                                 </button>
 
                             </td>
@@ -186,21 +212,44 @@ function FleetTable() {
 
             </section>
 
-            {showModal && (
+            <AddVehicleModal
+                show={showModal}
+                vehicle={selectedVehicle}
+                onClose={() => {
 
-                <AddVehicleModal
-                    editVehicle={selectedVehicle}
-                    onClose={() => {
+                    setShowModal(false);
+                    setSelectedVehicle(null);
+
+                }}
+                onSave={async (vehicleData) => {
+
+                    try {
+
+                        if (selectedVehicle) {
+
+                            await updateVehicle(selectedVehicle.id, vehicleData);
+
+                        } else {
+
+                            await addVehicle(vehicleData);
+
+                        }
 
                         setShowModal(false);
-
                         setSelectedVehicle(null);
 
-                    }}
-                    onVehicleAdded={loadVehicles}
-                />
+                        loadVehicles();
 
-            )}
+                    } catch (error) {
+
+                        console.error(error);
+
+                        alert("Failed to save vehicle.");
+
+                    }
+
+                }}
+            />
 
             {showDeleteModal && (
 
