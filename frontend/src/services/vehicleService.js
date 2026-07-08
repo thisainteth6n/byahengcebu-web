@@ -1,6 +1,7 @@
 import api from "./api";
 
-export const getVehicles = () => api.get("/vehicles");
+export const getVehicles = () =>
+    api.get("/vehicles");
 
 export const getVehicle = (id) =>
     api.get(`/vehicles/${id}`);
@@ -13,3 +14,7 @@ export const updateVehicle = (id, vehicle) =>
 
 export const deleteVehicle = (id) =>
     api.delete(`/vehicles/${id}`);
+
+// Dashboard Statistics
+export const getStatistics = () =>
+    api.get("/vehicles/statistics");

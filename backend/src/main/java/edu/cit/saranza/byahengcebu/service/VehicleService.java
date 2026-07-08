@@ -4,7 +4,9 @@ import edu.cit.saranza.byahengcebu.entity.Vehicle;
 import edu.cit.saranza.byahengcebu.repository.VehicleRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -53,6 +55,22 @@ public class VehicleService {
         }
 
         vehicleRepository.deleteById(id);
+    }
+
+    // Dashboard statistics
+    public Map<String, Long> getVehicleStatistics() {
+
+        Map<String, Long> statistics = new HashMap<>();
+
+        statistics.put("total", vehicleRepository.count());
+
+        statistics.put("active",
+                vehicleRepository.countByStatus("ACTIVE"));
+
+        statistics.put("maintenance",
+                vehicleRepository.countByStatus("MAINTENANCE"));
+
+        return statistics;
     }
 
 }

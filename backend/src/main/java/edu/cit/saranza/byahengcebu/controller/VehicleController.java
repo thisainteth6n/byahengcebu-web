@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/vehicles")
@@ -22,6 +23,12 @@ public class VehicleController {
     @GetMapping
     public List<Vehicle> getAllVehicles() {
         return vehicleService.getAllVehicles();
+    }
+
+    // GET DASHBOARD STATISTICS
+    @GetMapping("/statistics")
+    public Map<String, Long> getStatistics() {
+        return vehicleService.getVehicleStatistics();
     }
 
     // GET VEHICLE BY ID
