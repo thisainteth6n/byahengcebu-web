@@ -219,3 +219,33 @@ button:hover{
     justify-content:flex-end;
     gap:12px;
 }
+
+.search-input{
+
+    width:100%;
+
+    padding:14px 18px;
+
+    margin:20px 0;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#f5f7fb;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:.3s;
+
+}
+
+.search-input:focus{
+
+    background:white;
+
+    box-shadow:0 0 0 3px rgba(59,130,246,.15);
+
+}

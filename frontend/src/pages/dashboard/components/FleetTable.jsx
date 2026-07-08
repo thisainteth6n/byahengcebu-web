@@ -7,17 +7,15 @@ import DeleteVehicleModal from "./DeleteVehicleModal";
 function FleetTable() {
 
     const [vehicles, setVehicles] = useState([]);
+    const [search, setSearch] = useState("");
 
     const [showModal, setShowModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const [selectedVehicle, setSelectedVehicle] = useState(null);
 
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-
     useEffect(() => {
-
         loadVehicles();
-
     }, []);
 
     const loadVehicles = async () => {
@@ -32,9 +30,27 @@ function FleetTable() {
 
             console.error(error);
 
+            alert("Failed to load vehicles.");
+
         }
 
     };
+
+    const filteredVehicles = vehicles.filter(vehicle => {
+
+        const keyword = search.toLowerCase();
+
+        return (
+
+            vehicle.plateNumber.toLowerCase().includes(keyword) ||
+
+            vehicle.route.toLowerCase().includes(keyword) ||
+
+            vehicle.model.toLowerCase().includes(keyword)
+
+        );
+
+    });
 
     return (
 
@@ -61,6 +77,14 @@ function FleetTable() {
 
                 </div>
 
+                <input
+                    type="text"
+                    className="search-input"
+                    placeholder="Search plate number, route or model..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+
                 <table>
 
                     <thead>
@@ -79,7 +103,7 @@ function FleetTable() {
 
                     <tbody>
 
-                    {vehicles.map(vehicle => (
+                    {filteredVehicles.map(vehicle => (
 
                         <tr key={vehicle.id}>
 
@@ -136,6 +160,25 @@ function FleetTable() {
                         </tr>
 
                     ))}
+
+                    {filteredVehicles.length === 0 && (
+
+                        <tr>
+
+                            <td
+                                colSpan="5"
+                                style={{
+                                    textAlign: "center",
+                                    padding: "30px",
+                                    color: "#777"
+                                }}
+                            >
+                                No vehicles found.
+                            </td>
+
+                        </tr>
+
+                    )}
 
                     </tbody>
 
