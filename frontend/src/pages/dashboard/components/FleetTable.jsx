@@ -1,49 +1,43 @@
 import { useEffect, useState } from "react";
-import {
-    getVehicles,
-    deleteVehicle
-} from "../../../services/vehicleService";
+import { getVehicles } from "../../../services/vehicleService";
 
 import AddVehicleModal from "./AddVehicleModal";
+import DeleteVehicleModal from "./DeleteVehicleModal";
 
 function FleetTable() {
 
     const [vehicles, setVehicles] = useState([]);
+
     const [showModal, setShowModal] = useState(false);
+
     const [selectedVehicle, setSelectedVehicle] = useState(null);
 
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+
     useEffect(() => {
+
         loadVehicles();
+
     }, []);
 
     const loadVehicles = async () => {
+
         try {
+
             const response = await getVehicles();
+
             setVehicles(response.data);
+
         } catch (error) {
+
             console.error(error);
-            alert("Failed to load vehicles.");
+
         }
-    };
 
-    const handleDelete = async (id) => {
-
-        const confirmed = window.confirm(
-            "Are you sure you want to delete this vehicle?"
-        );
-
-        if (!confirmed) return;
-
-        try {
-            await deleteVehicle(id);
-            loadVehicles();
-        } catch (error) {
-            console.error(error);
-            alert("Failed to delete vehicle.");
-        }
     };
 
     return (
+
         <>
 
             <section className="fleet-section">
@@ -55,8 +49,11 @@ function FleetTable() {
                     <button
                         className="primary-btn"
                         onClick={() => {
+
                             setSelectedVehicle(null);
+
                             setShowModal(true);
+
                         }}
                     >
                         + Add Vehicle
@@ -82,7 +79,7 @@ function FleetTable() {
 
                     <tbody>
 
-                    {vehicles.map((vehicle) => (
+                    {vehicles.map(vehicle => (
 
                         <tr key={vehicle.id}>
 
@@ -111,8 +108,11 @@ function FleetTable() {
                                 <button
                                     className="edit-btn"
                                     onClick={() => {
+
                                         setSelectedVehicle(vehicle);
+
                                         setShowModal(true);
+
                                     }}
                                 >
                                     Edit
@@ -120,9 +120,13 @@ function FleetTable() {
 
                                 <button
                                     className="delete-btn"
-                                    onClick={() =>
-                                        handleDelete(vehicle.id)
-                                    }
+                                    onClick={() => {
+
+                                        setSelectedVehicle(vehicle);
+
+                                        setShowDeleteModal(true);
+
+                                    }}
                                 >
                                     Delete
                                 </button>
@@ -144,10 +148,29 @@ function FleetTable() {
                 <AddVehicleModal
                     editVehicle={selectedVehicle}
                     onClose={() => {
+
                         setShowModal(false);
+
                         setSelectedVehicle(null);
+
                     }}
                     onVehicleAdded={loadVehicles}
+                />
+
+            )}
+
+            {showDeleteModal && (
+
+                <DeleteVehicleModal
+                    vehicle={selectedVehicle}
+                    onClose={() => {
+
+                        setShowDeleteModal(false);
+
+                        setSelectedVehicle(null);
+
+                    }}
+                    onDeleted={loadVehicles}
                 />
 
             )}
