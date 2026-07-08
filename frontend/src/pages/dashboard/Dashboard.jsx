@@ -1,28 +1,48 @@
-function Dashboard(){
+import "./dashboard.css";
 
-return (
+import Header from "./components/Header";
+import WelcomeCard from "./components/WelcomeCard";
+import StatCard from "./components/StatCard";
+import FleetTable from "./components/FleetTable";
 
-<div>
+function Dashboard() {
 
-<h1>
-ByahengCebu Dashboard
-</h1>
+    return (
 
-<h3>
-Welcome User
-</h3>
+        <div className="dashboard">
 
+            <Header />
 
-<p>
-Fleet Management and Maintenance Information System
-</p>
+            <WelcomeCard />
 
+            <section className="stats">
 
-</div>
+                <StatCard
+                    title="Total Vehicles"
+                    value="25"
+                    subtitle="Registered Units"
+                />
 
-)
+                <StatCard
+                    title="Drivers"
+                    value="18"
+                    subtitle="Active Drivers"
+                />
+
+                <StatCard
+                    title="Maintenance"
+                    value="4"
+                    subtitle="Vehicles in Service"
+                />
+
+            </section>
+
+            <FleetTable />
+
+        </div>
+
+    );
 
 }
-
 
 export default Dashboard;
