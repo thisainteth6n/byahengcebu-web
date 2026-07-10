@@ -13,14 +13,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.byahengcebu.mobile.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
+
     onLoginClick: () -> Unit,
+
     onRegisterClick: () -> Unit
+
 ) {
 
+    val viewModel: AuthViewModel = viewModel()
+
     var email by remember { mutableStateOf("") }
+
     var password by remember { mutableStateOf("") }
 
     Surface(
@@ -28,6 +36,7 @@ fun LoginScreen(
     ) {
 
         Column(
+
             modifier = Modifier
                 .fillMaxSize()
                 .padding(24.dp),
@@ -35,13 +44,19 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
 
             verticalArrangement = Arrangement.Center
+
         ) {
 
             Text(
-                text = "🚍 ByahengCebu",
+
+                "🚍 ByahengCebu",
+
                 fontSize = 32.sp,
+
                 fontWeight = FontWeight.Bold,
+
                 color = MaterialTheme.colorScheme.primary
+
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -51,48 +66,126 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(36.dp))
 
             OutlinedTextField(
+
                 value = email,
-                onValueChange = { email = it },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("Email") },
-                leadingIcon = {
-                    Icon(Icons.Default.Email, contentDescription = null)
+
+                onValueChange = {
+
+                    email = it
+
                 },
+
+                modifier = Modifier.fillMaxWidth(),
+
+                label = {
+
+                    Text("Email")
+
+                },
+
+                leadingIcon = {
+
+                    Icon(Icons.Default.Email, null)
+
+                },
+
                 shape = RoundedCornerShape(18.dp)
+
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
             OutlinedTextField(
+
                 value = password,
-                onValueChange = { password = it },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("Password") },
-                leadingIcon = {
-                    Icon(Icons.Default.Lock, contentDescription = null)
+
+                onValueChange = {
+
+                    password = it
+
                 },
+
+                modifier = Modifier.fillMaxWidth(),
+
+                label = {
+
+                    Text("Password")
+
+                },
+
+                leadingIcon = {
+
+                    Icon(Icons.Default.Lock, null)
+
+                },
+
                 visualTransformation = PasswordVisualTransformation(),
+
                 shape = RoundedCornerShape(18.dp)
+
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
             Button(
-                onClick = onLoginClick,
+
+                onClick = {
+
+                    viewModel.login(
+
+                        email,
+
+                        password
+
+                    ) {
+
+                        onLoginClick()
+
+                    }
+
+                },
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                shape = RoundedCornerShape(18.dp)
+
+                shape = RoundedCornerShape(18.dp),
+
+                enabled = !viewModel.loading
+
             ) {
-                Text("Login")
+
+                Text(
+
+                    if (viewModel.loading)
+                        "Signing In..."
+                    else
+                        "Login"
+
+                )
+
             }
 
-            Spacer(modifier = Modifier.height(18.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+
+                viewModel.message,
+
+                color = MaterialTheme.colorScheme.primary
+
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             TextButton(
+
                 onClick = onRegisterClick
+
             ) {
+
                 Text("Create Account")
+
             }
 
         }
