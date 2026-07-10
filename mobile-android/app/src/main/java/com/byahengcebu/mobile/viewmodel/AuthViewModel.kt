@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byahengcebu.mobile.model.User
 import com.byahengcebu.mobile.repository.AuthRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
@@ -16,6 +17,12 @@ class AuthViewModel : ViewModel() {
 
     var message by mutableStateOf("")
         private set
+
+    fun updateMessage(text: String) {
+
+        message = text
+
+    }
 
     fun login(
 
@@ -34,19 +41,19 @@ class AuthViewModel : ViewModel() {
             try {
 
                 val response = repository.login(
-
                     User(
                         email = email,
                         password = password
                     )
-
                 )
 
-                message = response.body() ?: "Unknown error"
+                message = response.body() ?: "Unknown Error"
 
                 if (response.isSuccessful &&
                     message == "Login Successful"
                 ) {
+
+                    delay(1200)
 
                     onSuccess()
 
@@ -83,26 +90,21 @@ class AuthViewModel : ViewModel() {
             try {
 
                 val response = repository.register(
-
                     User(
-
                         fullname = fullname,
-
                         email = email,
-
                         password = password,
-
                         role = "DRIVER"
-
                     )
-
                 )
 
-                message = response.body() ?: "Unknown error"
+                message = response.body() ?: "Unknown Error"
 
                 if (response.isSuccessful &&
                     message == "Registration Successful"
                 ) {
+
+                    delay(1200)
 
                     onSuccess()
 
