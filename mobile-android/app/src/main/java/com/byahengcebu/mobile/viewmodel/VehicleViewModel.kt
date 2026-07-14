@@ -26,6 +26,9 @@ class VehicleViewModel : ViewModel() {
     )
         private set
 
+    var selectedVehicle by mutableStateOf<Vehicle?>(null)
+        private set
+
     var loading by mutableStateOf(false)
         private set
 
@@ -64,6 +67,10 @@ class VehicleViewModel : ViewModel() {
 
         }
 
+    }
+
+    fun selectVehicle(vehicle: Vehicle) {
+        selectedVehicle = vehicle
     }
 
 }
