@@ -1,11 +1,11 @@
-package edu.cit.saranza.byahengcebu.repository;
+package edu.cit.saranza.byahengcebu.features.auth.repository;
 
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import edu.cit.saranza.byahengcebu.model.User;
+import edu.cit.saranza.byahengcebu.features.auth.entity.User;
 
 
 public interface UserRepository

@@ -1,7 +1,7 @@
-package edu.cit.saranza.byahengcebu.service;
+package edu.cit.saranza.byahengcebu.features.vehicle.service;
 
-import edu.cit.saranza.byahengcebu.entity.Vehicle;
-import edu.cit.saranza.byahengcebu.repository.VehicleRepository;
+import edu.cit.saranza.byahengcebu.features.vehicle.entity.Vehicle;
+import edu.cit.saranza.byahengcebu.features.vehicle.repository.VehicleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

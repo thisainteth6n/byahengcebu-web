@@ -1,6 +1,6 @@
-package edu.cit.saranza.byahengcebu.repository;
+package edu.cit.saranza.byahengcebu.features.vehicle.repository;
 
-import edu.cit.saranza.byahengcebu.entity.Vehicle;
+import edu.cit.saranza.byahengcebu.features.vehicle.entity.Vehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

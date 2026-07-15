@@ -1,7 +1,7 @@
-package edu.cit.saranza.byahengcebu.controller;
+package edu.cit.saranza.byahengcebu.features.vehicle.controller;
 
-import edu.cit.saranza.byahengcebu.entity.Vehicle;
-import edu.cit.saranza.byahengcebu.service.VehicleService;
+import edu.cit.saranza.byahengcebu.features.vehicle.entity.Vehicle;
+import edu.cit.saranza.byahengcebu.features.vehicle.service.VehicleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,38 +19,38 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
-    // ==========================================
+    // ==========================
     // GET ALL VEHICLES
-    // ==========================================
+    // ==========================
 
     @GetMapping
     public List<Vehicle> getAllVehicles() {
         return vehicleService.getAllVehicles();
     }
 
-    // ==========================================
-    // GET VEHICLES ASSIGNED TO DRIVER
-    // ==========================================
+    // ==========================
+    // DRIVER VEHICLES
+    // ==========================
 
     @GetMapping("/driver/{email}")
-    public List<Vehicle> getVehiclesByDriver(
+    public List<Vehicle> getDriverVehicles(
             @PathVariable String email
     ) {
         return vehicleService.getVehiclesByDriver(email);
     }
 
-    // ==========================================
+    // ==========================
     // DASHBOARD STATISTICS
-    // ==========================================
+    // ==========================
 
     @GetMapping("/statistics")
     public Map<String, Long> getStatistics() {
         return vehicleService.getVehicleStatistics();
     }
 
-    // ==========================================
-    // GET VEHICLE BY ID
-    // ==========================================
+    // ==========================
+    // GET VEHICLE
+    // ==========================
 
     @GetMapping("/{id}")
     public ResponseEntity<Vehicle> getVehicleById(
@@ -63,9 +63,9 @@ public class VehicleController {
 
     }
 
-    // ==========================================
+    // ==========================
     // ADD VEHICLE
-    // ==========================================
+    // ==========================
 
     @PostMapping
     public ResponseEntity<?> addVehicle(
@@ -74,9 +74,9 @@ public class VehicleController {
 
         try {
 
-            Vehicle savedVehicle = vehicleService.addVehicle(vehicle);
-
-            return ResponseEntity.ok(savedVehicle);
+            return ResponseEntity.ok(
+                    vehicleService.addVehicle(vehicle)
+            );
 
         } catch (RuntimeException e) {
 
@@ -86,9 +86,9 @@ public class VehicleController {
 
     }
 
-    // ==========================================
+    // ==========================
     // UPDATE VEHICLE
-    // ==========================================
+    // ==========================
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateVehicle(
@@ -98,10 +98,9 @@ public class VehicleController {
 
         try {
 
-            Vehicle updatedVehicle =
-                    vehicleService.updateVehicle(id, vehicle);
-
-            return ResponseEntity.ok(updatedVehicle);
+            return ResponseEntity.ok(
+                    vehicleService.updateVehicle(id, vehicle)
+            );
 
         } catch (RuntimeException e) {
 
@@ -111,9 +110,9 @@ public class VehicleController {
 
     }
 
-    // ==========================================
+    // ==========================
     // DELETE VEHICLE
-    // ==========================================
+    // ==========================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteVehicle(

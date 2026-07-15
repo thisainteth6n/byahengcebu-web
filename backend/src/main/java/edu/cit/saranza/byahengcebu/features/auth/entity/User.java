@@ -1,4 +1,4 @@
-package edu.cit.saranza.byahengcebu.model;
+package edu.cit.saranza.byahengcebu.features.auth.entity;
 
 
 import jakarta.persistence.*;
