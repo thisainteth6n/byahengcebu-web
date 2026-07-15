@@ -10,6 +10,7 @@ public class Trip {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false)
     private Long id;
 
     private String driverName;
@@ -35,6 +36,9 @@ public class Trip {
 
     public Long getId() {
         return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDriverName() {

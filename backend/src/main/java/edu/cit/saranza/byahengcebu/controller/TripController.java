@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/trips")
@@ -18,35 +19,146 @@ public class TripController {
         this.tripService = tripService;
     }
 
+    // ==========================
     // GET ALL TRIPS
+    // ==========================
+
     @GetMapping
-    public List<Trip> getAllTrips() {
-        return tripService.getAllTrips();
+    public ResponseEntity<List<Trip>> getAllTrips() {
+
+        return ResponseEntity.ok(
+                tripService.getAllTrips()
+        );
+
     }
 
+    // ==========================
     // GET ONGOING TRIPS
+    // ==========================
+
     @GetMapping("/ongoing")
-    public List<Trip> getOngoingTrips() {
-        return tripService.getOngoingTrips();
+    public ResponseEntity<List<Trip>> getOngoingTrips() {
+
+        return ResponseEntity.ok(
+                tripService.getOngoingTrips()
+        );
+
     }
 
+    // ==========================
+    // SEARCH TRIPS
+    // ==========================
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Trip>> searchTrips(
+            @RequestParam String keyword
+    ) {
+
+        return ResponseEntity.ok(
+                tripService.searchTrips(keyword)
+        );
+
+    }
+
+    // ==========================
+    // FILTER BY STATUS
+    // ==========================
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Trip>> getTripsByStatus(
+            @PathVariable String status
+    ) {
+
+        return ResponseEntity.ok(
+                tripService.getTripsByStatus(status)
+        );
+
+    }
+
+    // ==========================
+    // DASHBOARD STATISTICS
+    // ==========================
+
+    @GetMapping("/statistics")
+    public ResponseEntity<Map<String, Long>> getStatistics() {
+
+        return ResponseEntity.ok(
+                tripService.getTripStatistics()
+        );
+
+    }
+
+    // ==========================
     // START TRIP
+    // ==========================
+
     @PostMapping("/start")
-    public Trip startTrip(@RequestBody Trip trip) {
-        return tripService.startTrip(trip);
+    public ResponseEntity<?> startTrip(
+            @RequestBody Trip trip
+    ) {
+
+        try {
+
+            return ResponseEntity.ok(
+                    tripService.startTrip(trip)
+            );
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.badRequest()
+                    .body(e.getMessage());
+
+        }
+
     }
 
+    // ==========================
     // END TRIP
+    // ==========================
+
     @PutMapping("/end/{id}")
-    public ResponseEntity<Trip> endTrip(
+    public ResponseEntity<?> endTrip(
             @PathVariable Long id,
             @RequestBody Trip trip
     ) {
 
         try {
-            return ResponseEntity.ok(tripService.endTrip(id, trip));
+
+            return ResponseEntity.ok(
+                    tripService.endTrip(id, trip)
+            );
+
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+
+            return ResponseEntity.badRequest()
+                    .body(e.getMessage());
+
+        }
+
+    }
+
+    // ==========================
+    // DELETE TRIP
+    // ==========================
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTrip(
+            @PathVariable Long id
+    ) {
+
+        try {
+
+            tripService.deleteTrip(id);
+
+            return ResponseEntity.ok(
+                    "Trip deleted successfully."
+            );
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.badRequest()
+                    .body(e.getMessage());
+
         }
 
     }

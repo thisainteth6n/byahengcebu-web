@@ -22,15 +22,27 @@ public class Vehicle {
     @Column(nullable = false)
     private String status;
 
+    // NEW
+    @Column(name = "assigned_driver_email")
+    private String assignedDriverEmail;
+
     public Vehicle() {
     }
 
-    public Vehicle(Long id, String plateNumber, String route, String model, String status) {
+    public Vehicle(
+            Long id,
+            String plateNumber,
+            String route,
+            String model,
+            String status,
+            String assignedDriverEmail
+    ) {
         this.id = id;
         this.plateNumber = plateNumber;
         this.route = route;
         this.model = model;
         this.status = status;
+        this.assignedDriverEmail = assignedDriverEmail;
     }
 
     public Long getId() {
@@ -72,4 +84,13 @@ public class Vehicle {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getAssignedDriverEmail() {
+        return assignedDriverEmail;
+    }
+
+    public void setAssignedDriverEmail(String assignedDriverEmail) {
+        this.assignedDriverEmail = assignedDriverEmail;
+    }
+
 }

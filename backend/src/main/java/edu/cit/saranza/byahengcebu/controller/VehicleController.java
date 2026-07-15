@@ -19,21 +19,43 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
+    // ==========================================
     // GET ALL VEHICLES
+    // ==========================================
+
     @GetMapping
     public List<Vehicle> getAllVehicles() {
         return vehicleService.getAllVehicles();
     }
 
-    // GET DASHBOARD STATISTICS
+    // ==========================================
+    // GET VEHICLES ASSIGNED TO DRIVER
+    // ==========================================
+
+    @GetMapping("/driver/{email}")
+    public List<Vehicle> getVehiclesByDriver(
+            @PathVariable String email
+    ) {
+        return vehicleService.getVehiclesByDriver(email);
+    }
+
+    // ==========================================
+    // DASHBOARD STATISTICS
+    // ==========================================
+
     @GetMapping("/statistics")
     public Map<String, Long> getStatistics() {
         return vehicleService.getVehicleStatistics();
     }
 
+    // ==========================================
     // GET VEHICLE BY ID
+    // ==========================================
+
     @GetMapping("/{id}")
-    public ResponseEntity<Vehicle> getVehicleById(@PathVariable Long id) {
+    public ResponseEntity<Vehicle> getVehicleById(
+            @PathVariable Long id
+    ) {
 
         return vehicleService.getVehicleById(id)
                 .map(ResponseEntity::ok)
@@ -41,46 +63,72 @@ public class VehicleController {
 
     }
 
+    // ==========================================
     // ADD VEHICLE
+    // ==========================================
+
     @PostMapping
-    public Vehicle addVehicle(@RequestBody Vehicle vehicle) {
-        return vehicleService.addVehicle(vehicle);
+    public ResponseEntity<?> addVehicle(
+            @RequestBody Vehicle vehicle
+    ) {
+
+        try {
+
+            Vehicle savedVehicle = vehicleService.addVehicle(vehicle);
+
+            return ResponseEntity.ok(savedVehicle);
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.badRequest().body(e.getMessage());
+
+        }
+
     }
 
+    // ==========================================
     // UPDATE VEHICLE
+    // ==========================================
+
     @PutMapping("/{id}")
-    public ResponseEntity<Vehicle> updateVehicle(
+    public ResponseEntity<?> updateVehicle(
             @PathVariable Long id,
             @RequestBody Vehicle vehicle
     ) {
 
         try {
 
-            Vehicle updatedVehicle = vehicleService.updateVehicle(id, vehicle);
+            Vehicle updatedVehicle =
+                    vehicleService.updateVehicle(id, vehicle);
 
             return ResponseEntity.ok(updatedVehicle);
 
         } catch (RuntimeException e) {
 
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
 
         }
 
     }
 
+    // ==========================================
     // DELETE VEHICLE
+    // ==========================================
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVehicle(@PathVariable Long id) {
+    public ResponseEntity<?> deleteVehicle(
+            @PathVariable Long id
+    ) {
 
         try {
 
             vehicleService.deleteVehicle(id);
 
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok("Vehicle deleted successfully.");
 
         } catch (RuntimeException e) {
 
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
 
         }
 
