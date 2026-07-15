@@ -108,6 +108,8 @@ fun TripScreen(
 
                 val trip = Trip(
 
+                    id = null,
+
                     driverName = driverName,
 
                     vehiclePlate = vehiclePlate,
@@ -234,17 +236,14 @@ fun TripCard(
 
                     if (endOdometer.isBlank()) return@Button
 
-                    viewModel.endTrip(
-
-                        trip.id,
-
-                        trip.copy(
-
-                            endOdometer = endOdometer.toInt()
-
+                    trip.id?.let { id ->
+                        viewModel.endTrip(
+                            id,
+                            trip.copy(
+                                endOdometer = endOdometer.toInt()
+                            )
                         )
-
-                    )
+                    }
 
                 }
 

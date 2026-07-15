@@ -2,7 +2,7 @@ package com.byahengcebu.mobile.model
 
 data class Trip(
 
-    val id: Long = 0,
+    val id: Long? = null,
 
     val driverName: String = "",
 

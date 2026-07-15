@@ -33,12 +33,23 @@ class TripViewModel : ViewModel() {
                 val response = repository.getOngoingTrips()
 
                 if (response.isSuccessful) {
+
                     ongoingTrips = response.body() ?: emptyList()
+
+                    println("Trips Loaded: ${ongoingTrips.size}")
+
+                } else {
+
+                    println("Load Trips Failed")
+                    println("HTTP ${response.code()}")
+                    println(response.errorBody()?.string())
+
                 }
 
             } catch (e: Exception) {
 
                 errorMessage = e.localizedMessage ?: "Connection Error"
+                e.printStackTrace()
 
             }
 
@@ -52,9 +63,30 @@ class TripViewModel : ViewModel() {
 
         viewModelScope.launch {
 
-            repository.startTrip(trip)
+            try {
 
-            loadTrips()
+                val response = repository.startTrip(trip)
+
+                if (response.isSuccessful) {
+
+                    println("Trip Created Successfully")
+                    println(response.body())
+
+                    loadTrips()
+
+                } else {
+
+                    println("START TRIP FAILED")
+                    println("HTTP ${response.code()}")
+                    println(response.errorBody()?.string())
+
+                }
+
+            } catch (e: Exception) {
+
+                e.printStackTrace()
+
+            }
 
         }
 
@@ -64,9 +96,29 @@ class TripViewModel : ViewModel() {
 
         viewModelScope.launch {
 
-            repository.endTrip(id, trip)
+            try {
 
-            loadTrips()
+                val response = repository.endTrip(id, trip)
+
+                if (response.isSuccessful) {
+
+                    println("Trip Ended Successfully")
+
+                    loadTrips()
+
+                } else {
+
+                    println("END TRIP FAILED")
+                    println("HTTP ${response.code()}")
+                    println(response.errorBody()?.string())
+
+                }
+
+            } catch (e: Exception) {
+
+                e.printStackTrace()
+
+            }
 
         }
 
