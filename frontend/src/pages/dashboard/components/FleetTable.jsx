@@ -109,11 +109,12 @@ function FleetTable() {
 
                     <tr>
 
-                        <th>Plate Number</th>
-                        <th>Route</th>
-                        <th>Model</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                       <th>Plate Number</th>
+                       <th>Route</th>
+                       <th>Model</th>
+                       <th>Assigned Driver</th>
+                       <th>Status</th>
+                       <th>Action</th>
 
                     </tr>
 
@@ -130,6 +131,12 @@ function FleetTable() {
                             <td>{vehicle.route}</td>
 
                             <td>{vehicle.model}</td>
+
+                            <td>
+
+                                {vehicle.assignedDriverEmail || "-"}
+
+                            </td>
 
                             <td>
 
@@ -192,7 +199,7 @@ function FleetTable() {
                         <tr>
 
                             <td
-                                colSpan="5"
+                                colSpan="6"
                                 style={{
                                     textAlign: "center",
                                     padding: "30px",
@@ -244,7 +251,15 @@ function FleetTable() {
 
                         console.error(error);
 
-                        alert("Failed to save vehicle.");
+                        if (error.response && error.response.data) {
+
+                            alert(error.response.data);
+
+                        } else {
+
+                            alert("Unable to connect to the server.");
+
+                        }
 
                     }
 
