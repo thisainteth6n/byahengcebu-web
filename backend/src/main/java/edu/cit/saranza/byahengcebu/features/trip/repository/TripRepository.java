@@ -1,6 +1,6 @@
-package edu.cit.saranza.byahengcebu.repository;
+package edu.cit.saranza.byahengcebu.features.trip.repository;
 
-import edu.cit.saranza.byahengcebu.entity.Trip;
+import edu.cit.saranza.byahengcebu.features.trip.entity.Trip;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,7 +1,7 @@
-package edu.cit.saranza.byahengcebu.controller;
+package edu.cit.saranza.byahengcebu.features.trip.controller;
 
-import edu.cit.saranza.byahengcebu.entity.Trip;
-import edu.cit.saranza.byahengcebu.service.TripService;
+import edu.cit.saranza.byahengcebu.features.trip.entity.Trip;
+import edu.cit.saranza.byahengcebu.features.trip.service.TripService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

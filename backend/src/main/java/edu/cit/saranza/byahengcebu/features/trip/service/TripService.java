@@ -1,7 +1,7 @@
-package edu.cit.saranza.byahengcebu.service;
+package edu.cit.saranza.byahengcebu.features.trip.service;
 
-import edu.cit.saranza.byahengcebu.entity.Trip;
-import edu.cit.saranza.byahengcebu.repository.TripRepository;
+import edu.cit.saranza.byahengcebu.features.trip.entity.Trip;
+import edu.cit.saranza.byahengcebu.features.trip.repository.TripRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

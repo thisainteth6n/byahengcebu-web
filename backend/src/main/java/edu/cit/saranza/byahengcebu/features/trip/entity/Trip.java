@@ -1,4 +1,4 @@
-package edu.cit.saranza.byahengcebu.entity;
+package edu.cit.saranza.byahengcebu.features.trip.entity;
 
 import jakarta.persistence.*;
 
@@ -13,18 +13,24 @@ public class Trip {
     @Column(updatable = false)
     private Long id;
 
+    @Column(nullable = false)
     private String driverName;
 
+    @Column(nullable = false)
     private String vehiclePlate;
 
+    @Column(nullable = false)
     private String route;
 
+    @Column(nullable = false)
     private Integer startOdometer;
 
     private Integer endOdometer;
 
+    @Column(nullable = false)
     private Integer passengerCount;
 
+    @Column(nullable = false)
     private String status;
 
     private LocalDateTime startTime;
@@ -37,6 +43,7 @@ public class Trip {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -112,4 +119,5 @@ public class Trip {
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
+
 }
