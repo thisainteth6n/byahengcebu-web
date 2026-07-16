@@ -4,19 +4,20 @@ import { Link, useNavigate } from "react-router-dom";
 import {
     FaEnvelope,
     FaLock,
+    FaUser,
     FaEye,
     FaEyeSlash
 } from "react-icons/fa";
 
-import Logo from "../../components/Logo";
-import AuthCard from "../../components/AuthCard";
-import Button from "../../components/Button";
+import Logo from "../components/Logo.jsx";
+import AuthCard from "../components/AuthCard.jsx";
+import Button from "../components/Button.jsx";
 
-import { loginUser } from "../../services/authService";
+import { registerUser } from "../services/authService.js";
 
-import "../../styles/auth.css";
+import "../styles/auth.css";
 
-function Login() {
+function Register() {
 
     const navigate = useNavigate();
 
@@ -25,11 +26,13 @@ function Login() {
     const [loading, setLoading] = useState(false);
 
     const [user, setUser] = useState({
+        fullname: "",
         email: "",
-        password: ""
+        password: "",
+        role: "DRIVER"
     });
 
-    const login = async (e) => {
+    const register = async (e) => {
 
         e.preventDefault();
 
@@ -37,28 +40,25 @@ function Login() {
 
         try {
 
-            const response = await loginUser(user);
+            const response = await registerUser(user);
 
             console.log(response.data);
 
-            // Save login session
-            localStorage.setItem("isLoggedIn", "true");
+            alert("Registration successful!");
 
-            // Optional: Save user information
-            localStorage.setItem(
-                "user",
-                JSON.stringify(response.data)
-            );
+            navigate("/login");
 
-            navigate("/dashboard");
+        }
 
-        } catch (error) {
+        catch (error) {
 
             console.error(error);
 
-            alert("Invalid email or password.");
+            alert("Registration failed.");
 
-        } finally {
+        }
+
+        finally {
 
             setLoading(false);
 
@@ -75,22 +75,49 @@ function Login() {
                 <Logo />
 
                 <h1 className="auth-title">
+
                     ByahengCebu
+
                 </h1>
 
                 <p className="auth-subtitle">
+
                     Fleet Management Information System
+
                 </p>
 
                 <h2 className="welcome-title">
-                    Welcome Back 👋
+
+                    Create Account ✨
+
                 </h2>
 
                 <p className="welcome-subtitle">
-                    Sign in to continue.
+
+                    Register to continue.
+
                 </p>
 
-                <form onSubmit={login}>
+                <form onSubmit={register}>
+
+                    <div className="input-group">
+
+                        <FaUser className="icon" />
+
+                        <input
+                            className="modern-input"
+                            placeholder="Full Name"
+                            value={user.fullname}
+                            onChange={(e) =>
+                                setUser({
+                                    ...user,
+                                    fullname: e.target.value
+                                })
+                            }
+                            required
+                        />
+
+                    </div>
 
                     <div className="input-group">
 
@@ -140,9 +167,23 @@ function Login() {
 
                     </div>
 
+                    <select
+                        className="modern-input"
+                        value={user.role}
+                        onChange={(e) =>
+                            setUser({
+                                ...user,
+                                role: e.target.value
+                            })
+                        }
+                    >
+                        <option value="DRIVER">Driver</option>
+                        <option value="ADMIN">Administrator</option>
+                    </select>
+
                     <Button disabled={loading}>
 
-                        {loading ? "Signing In..." : "Login"}
+                        {loading ? "Creating Account..." : "Create Account"}
 
                     </Button>
 
@@ -150,11 +191,11 @@ function Login() {
 
                 <p className="switch-page">
 
-                    Don't have an account?
+                    Already have an account?
 
-                    <Link to="/register">
+                    <Link to="/login">
 
-                        Register
+                        Login
 
                     </Link>
 
@@ -168,4 +209,4 @@ function Login() {
 
 }
 
-export default Login;
+export default Register;

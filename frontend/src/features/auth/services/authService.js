@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "../../../shared/services/api.js";
 
 export const loginUser = (user) =>
     api.post("/auth/login", user);

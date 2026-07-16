@@ -4,20 +4,19 @@ import { Link, useNavigate } from "react-router-dom";
 import {
     FaEnvelope,
     FaLock,
-    FaUser,
     FaEye,
     FaEyeSlash
 } from "react-icons/fa";
 
-import Logo from "../../components/Logo";
-import AuthCard from "../../components/AuthCard";
-import Button from "../../components/Button";
+import Logo from "../components/Logo.jsx";
+import AuthCard from "../components/AuthCard.jsx";
+import Button from "../components/Button.jsx";
 
-import { registerUser } from "../../services/authService";
+import { loginUser } from "../services/authService.js";
 
-import "../../styles/auth.css";
+import "../styles/auth.css";
 
-function Register() {
+function Login() {
 
     const navigate = useNavigate();
 
@@ -26,13 +25,11 @@ function Register() {
     const [loading, setLoading] = useState(false);
 
     const [user, setUser] = useState({
-        fullname: "",
         email: "",
-        password: "",
-        role: "DRIVER"
+        password: ""
     });
 
-    const register = async (e) => {
+    const login = async (e) => {
 
         e.preventDefault();
 
@@ -40,25 +37,38 @@ function Register() {
 
         try {
 
-            const response = await registerUser(user);
+            const response = await loginUser(user);
 
             console.log(response.data);
 
-            alert("Registration successful!");
+            // Stop login if backend says login failed
+            if (!response.data.success) {
 
-            navigate("/login");
+                alert(response.data.message);
 
-        }
+                return;
 
-        catch (error) {
+            }
+
+            // Save login session
+            localStorage.setItem("isLoggedIn", "true");
+
+            // Save logged-in user
+            localStorage.setItem(
+                "user",
+                JSON.stringify(response.data)
+            );
+
+            // Redirect to dashboard
+            navigate("/dashboard");
+
+        } catch (error) {
 
             console.error(error);
 
-            alert("Registration failed.");
+            alert("Unable to connect to the server.");
 
-        }
-
-        finally {
+        } finally {
 
             setLoading(false);
 
@@ -75,49 +85,22 @@ function Register() {
                 <Logo />
 
                 <h1 className="auth-title">
-
                     ByahengCebu
-
                 </h1>
 
                 <p className="auth-subtitle">
-
                     Fleet Management Information System
-
                 </p>
 
                 <h2 className="welcome-title">
-
-                    Create Account ✨
-
+                    Welcome Back 👋
                 </h2>
 
                 <p className="welcome-subtitle">
-
-                    Register to continue.
-
+                    Sign in to continue.
                 </p>
 
-                <form onSubmit={register}>
-
-                    <div className="input-group">
-
-                        <FaUser className="icon" />
-
-                        <input
-                            className="modern-input"
-                            placeholder="Full Name"
-                            value={user.fullname}
-                            onChange={(e) =>
-                                setUser({
-                                    ...user,
-                                    fullname: e.target.value
-                                })
-                            }
-                            required
-                        />
-
-                    </div>
+                <form onSubmit={login}>
 
                     <div className="input-group">
 
@@ -167,23 +150,9 @@ function Register() {
 
                     </div>
 
-                    <select
-                        className="modern-input"
-                        value={user.role}
-                        onChange={(e) =>
-                            setUser({
-                                ...user,
-                                role: e.target.value
-                            })
-                        }
-                    >
-                        <option value="DRIVER">Driver</option>
-                        <option value="ADMIN">Administrator</option>
-                    </select>
-
                     <Button disabled={loading}>
 
-                        {loading ? "Creating Account..." : "Create Account"}
+                        {loading ? "Signing In..." : "Login"}
 
                     </Button>
 
@@ -191,11 +160,11 @@ function Register() {
 
                 <p className="switch-page">
 
-                    Already have an account?
+                    Don't have an account?
 
-                    <Link to="/login">
+                    <Link to="/register">
 
-                        Login
+                        Register
 
                     </Link>
 
@@ -209,4 +178,4 @@ function Register() {
 
 }
 
-export default Register;
+export default Login;

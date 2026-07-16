@@ -1,4 +1,4 @@
-import { deleteVehicle } from "../../../services/vehicleService";
+import { deleteVehicle } from "../services/vehicleService.js";
 
 function DeleteVehicleModal({
     vehicle,

@@ -1,42 +1,22 @@
-import { useEffect, useState } from "react";
 import "./dashboard.css";
 
-import Header from "./components/Header";
-import WelcomeCard from "./components/WelcomeCard";
-import StatCard from "./components/StatCard";
-import FleetTable from "./components/FleetTable";
+import Header from "./components/Header.jsx";
+import WelcomeCard from "./components/WelcomeCard.jsx";
+import StatCard from "./components/StatCard.jsx";
 
-import { getStatistics } from "../../services/vehicleService";
+import FleetTable from "../vehicles/components/FleetTable.jsx";
+
+import { useVehicles } from "../vehicles/hooks/useVehicles.js";
 
 function Dashboard() {
 
-    const [statistics, setStatistics] = useState({
-        total: 0,
-        active: 0,
-        maintenance: 0
-    });
+    const {
 
-    useEffect(() => {
+        vehicles,
+        statistics,
+        refreshVehicles
 
-        loadStatistics();
-
-    }, []);
-
-    const loadStatistics = async () => {
-
-        try {
-
-            const response = await getStatistics();
-
-            setStatistics(response.data);
-
-        } catch (error) {
-
-            console.error(error);
-
-        }
-
-    };
+    } = useVehicles();
 
     return (
 
@@ -68,7 +48,10 @@ function Dashboard() {
 
             </section>
 
-            <FleetTable />
+            <FleetTable
+                vehicles={vehicles}
+                refreshVehicles={refreshVehicles}
+            />
 
         </div>
 

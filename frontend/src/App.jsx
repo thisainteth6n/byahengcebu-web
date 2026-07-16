@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import Dashboard from "./pages/dashboard/Dashboard";
+import Login from "./features/auth/pages/Login.jsx";
+import Register from "./features/auth/pages/Register.jsx";
+
+import Dashboard from "./features/dashboard/Dashboard.jsx";
+import TripDashboard from "./features/trip/pages/TripDashboard.jsx";
 
 function ProtectedRoute({ children }) {
 
@@ -13,6 +15,7 @@ function ProtectedRoute({ children }) {
     }
 
     return children;
+
 }
 
 function App() {
@@ -43,6 +46,15 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/trips"
+                    element={
+                        <ProtectedRoute>
+                            <TripDashboard />
                         </ProtectedRoute>
                     }
                 />
