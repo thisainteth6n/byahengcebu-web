@@ -1,5 +1,7 @@
 package edu.cit.saranza.byahengcebu.features.vehicle.service;
 
+import edu.cit.saranza.byahengcebu.features.auth.entity.User;
+import edu.cit.saranza.byahengcebu.features.auth.repository.UserRepository;
 import edu.cit.saranza.byahengcebu.features.vehicle.entity.Vehicle;
 import edu.cit.saranza.byahengcebu.features.vehicle.repository.VehicleRepository;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,14 @@ import java.util.Optional;
 public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
+    private final UserRepository userRepository;
 
-    public VehicleService(VehicleRepository vehicleRepository) {
+    public VehicleService(
+            VehicleRepository vehicleRepository,
+            UserRepository userRepository
+    ) {
         this.vehicleRepository = vehicleRepository;
+        this.userRepository = userRepository;
     }
 
     // ==========================
@@ -50,6 +57,15 @@ public class VehicleService {
 
         validateVehicle(vehicle);
 
+        User driver = userRepository.findByEmail(vehicle.getAssignedDriverEmail())
+                .orElseThrow(() ->
+                        new RuntimeException("Assigned driver does not exist.")
+                );
+
+        if (!driver.getRole().equalsIgnoreCase("DRIVER")) {
+            throw new RuntimeException("Selected user is not a DRIVER.");
+        }
+
         if (vehicleRepository.existsByPlateNumber(vehicle.getPlateNumber())) {
             throw new RuntimeException("Plate number already exists.");
         }
@@ -72,22 +88,27 @@ public class VehicleService {
 
         validateVehicle(updatedVehicle);
 
+        User driver = userRepository.findByEmail(updatedVehicle.getAssignedDriverEmail())
+                .orElseThrow(() ->
+                        new RuntimeException("Assigned driver does not exist.")
+                );
+
+        if (!driver.getRole().equalsIgnoreCase("DRIVER")) {
+            throw new RuntimeException("Selected user is not a DRIVER.");
+        }
+
         if (vehicleRepository.existsByPlateNumberAndIdNot(
                 updatedVehicle.getPlateNumber(),
                 id
         )) {
-
             throw new RuntimeException("Plate number already exists.");
-
         }
 
         if (vehicleRepository.existsByAssignedDriverEmailAndIdNot(
                 updatedVehicle.getAssignedDriverEmail(),
                 id
         )) {
-
             throw new RuntimeException("Driver is already assigned to another vehicle.");
-
         }
 
         vehicle.setPlateNumber(updatedVehicle.getPlateNumber());
@@ -97,11 +118,10 @@ public class VehicleService {
         vehicle.setAssignedDriverEmail(updatedVehicle.getAssignedDriverEmail());
 
         return vehicleRepository.save(vehicle);
-
     }
 
     // ==========================
-    // DELETE
+    // DELETE VEHICLE
     // ==========================
 
     public void deleteVehicle(Long id) {
@@ -111,11 +131,10 @@ public class VehicleService {
         }
 
         vehicleRepository.deleteById(id);
-
     }
 
     // ==========================
-    // DASHBOARD
+    // DASHBOARD STATISTICS
     // ==========================
 
     public Map<String, Long> getVehicleStatistics() {
@@ -124,18 +143,11 @@ public class VehicleService {
 
         statistics.put("total", vehicleRepository.count());
 
-        statistics.put(
-                "active",
-                vehicleRepository.countByStatus("ACTIVE")
-        );
+        statistics.put("active", vehicleRepository.countByStatus("ACTIVE"));
 
-        statistics.put(
-                "maintenance",
-                vehicleRepository.countByStatus("MAINTENANCE")
-        );
+        statistics.put("maintenance", vehicleRepository.countByStatus("MAINTENANCE"));
 
         return statistics;
-
     }
 
     // ==========================
@@ -146,39 +158,28 @@ public class VehicleService {
 
         if (vehicle.getPlateNumber() == null ||
                 vehicle.getPlateNumber().trim().isEmpty()) {
-
             throw new RuntimeException("Plate Number is required.");
-
         }
 
         if (vehicle.getRoute() == null ||
                 vehicle.getRoute().trim().isEmpty()) {
-
             throw new RuntimeException("Route is required.");
-
         }
 
         if (vehicle.getModel() == null ||
                 vehicle.getModel().trim().isEmpty()) {
-
             throw new RuntimeException("Vehicle Model is required.");
-
         }
 
         if (vehicle.getStatus() == null ||
                 vehicle.getStatus().trim().isEmpty()) {
-
             throw new RuntimeException("Status is required.");
-
         }
 
         if (vehicle.getAssignedDriverEmail() == null ||
                 vehicle.getAssignedDriverEmail().trim().isEmpty()) {
-
             throw new RuntimeException("Assigned Driver Email is required.");
-
         }
-
     }
-
 }
+
