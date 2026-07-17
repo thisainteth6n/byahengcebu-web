@@ -65,6 +65,36 @@ public class TripService {
 
         validateTrip(trip);
 
+        // ======================================
+        // BUSINESS RULE #1
+        // ONE ONGOING TRIP PER DRIVER
+        // ======================================
+
+        if (tripRepository.existsByDriverNameAndStatus(
+                trip.getDriverName(),
+                "ONGOING")) {
+
+            throw new RuntimeException(
+                    "This driver already has an ongoing trip."
+            );
+
+        }
+
+        // ======================================
+        // BUSINESS RULE #2
+        // ONE ONGOING TRIP PER VEHICLE
+        // ======================================
+
+        if (tripRepository.existsByVehiclePlateAndStatus(
+                trip.getVehiclePlate(),
+                "ONGOING")) {
+
+            throw new RuntimeException(
+                    "This vehicle already has an ongoing trip."
+            );
+
+        }
+
         trip.setId(null);
 
         trip.setStatus("ONGOING");
@@ -86,24 +116,41 @@ public class TripService {
     public Trip endTrip(Long id, Trip updatedTrip) {
 
         Trip trip = tripRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Trip not found."));
+                .orElseThrow(() ->
+                        new RuntimeException("Trip not found.")
+                );
 
         if (!trip.getStatus().equals("ONGOING")) {
-            throw new RuntimeException("Trip has already been completed.");
+
+            throw new RuntimeException(
+                    "Trip has already been completed."
+            );
+
         }
 
         if (updatedTrip.getEndOdometer() == null) {
-            throw new RuntimeException("End odometer is required.");
+
+            throw new RuntimeException(
+                    "End odometer is required."
+            );
+
         }
 
-        if (updatedTrip.getEndOdometer() <= trip.getStartOdometer()) {
+        if (updatedTrip.getEndOdometer()
+                <= trip.getStartOdometer()) {
+
             throw new RuntimeException(
                     "End odometer must be greater than start odometer."
             );
+
         }
 
-        trip.setEndOdometer(updatedTrip.getEndOdometer());
+        trip.setEndOdometer(
+                updatedTrip.getEndOdometer()
+        );
+
         trip.setEndTime(LocalDateTime.now());
+
         trip.setStatus("COMPLETED");
 
         return tripRepository.save(trip);
@@ -117,12 +164,16 @@ public class TripService {
     public void deleteTrip(Long id) {
 
         Trip trip = tripRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Trip not found."));
+                .orElseThrow(() ->
+                        new RuntimeException("Trip not found.")
+                );
 
         if (!trip.getStatus().equals("COMPLETED")) {
+
             throw new RuntimeException(
                     "Only completed trips can be deleted."
             );
+
         }
 
         tripRepository.delete(trip);
@@ -130,14 +181,18 @@ public class TripService {
     }
 
     // ==========================
-    // DASHBOARD STATISTICS
+    // DASHBOARD
     // ==========================
 
     public Map<String, Long> getTripStatistics() {
 
-        Map<String, Long> statistics = new HashMap<>();
+        Map<String, Long> statistics =
+                new HashMap<>();
 
-        statistics.put("total", tripRepository.count());
+        statistics.put(
+                "total",
+                tripRepository.count()
+        );
 
         statistics.put(
                 "ongoing",
@@ -162,35 +217,45 @@ public class TripService {
         if (trip.getDriverName() == null ||
                 trip.getDriverName().trim().isEmpty()) {
 
-            throw new RuntimeException("Driver Name is required.");
+            throw new RuntimeException(
+                    "Driver Name is required."
+            );
 
         }
 
         if (trip.getVehiclePlate() == null ||
                 trip.getVehiclePlate().trim().isEmpty()) {
 
-            throw new RuntimeException("Vehicle Plate is required.");
+            throw new RuntimeException(
+                    "Vehicle Plate is required."
+            );
 
         }
 
         if (trip.getRoute() == null ||
                 trip.getRoute().trim().isEmpty()) {
 
-            throw new RuntimeException("Route is required.");
+            throw new RuntimeException(
+                    "Route is required."
+            );
 
         }
 
         if (trip.getPassengerCount() == null ||
                 trip.getPassengerCount() < 0) {
 
-            throw new RuntimeException("Passenger count is invalid.");
+            throw new RuntimeException(
+                    "Passenger count is invalid."
+            );
 
         }
 
         if (trip.getStartOdometer() == null ||
                 trip.getStartOdometer() < 0) {
 
-            throw new RuntimeException("Start odometer is invalid.");
+            throw new RuntimeException(
+                    "Start odometer is invalid."
+            );
 
         }
 

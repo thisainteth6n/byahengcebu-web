@@ -8,16 +8,29 @@ import java.util.List;
 public interface TripRepository extends JpaRepository<Trip, Long> {
 
     // Existing
+
     List<Trip> findByStatus(String status);
 
-    // Dashboard Statistics
     long countByStatus(String status);
 
-    // Search
     List<Trip> findByDriverNameContainingIgnoreCaseOrVehiclePlateContainingIgnoreCaseOrRouteContainingIgnoreCase(
             String driverName,
             String vehiclePlate,
             String route
+    );
+
+    // ==========================
+    // BUSINESS RULES
+    // ==========================
+
+    boolean existsByDriverNameAndStatus(
+            String driverName,
+            String status
+    );
+
+    boolean existsByVehiclePlateAndStatus(
+            String vehiclePlate,
+            String status
     );
 
 }
