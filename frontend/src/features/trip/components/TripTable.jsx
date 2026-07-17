@@ -73,47 +73,11 @@ function TripTable({
 
                             <td>
 
-                                {
-
-                                    trip.status === "ONGOING"
-
-                                        ? (
-
-                                            <button
-
-                                                onClick={() =>
-
-                                                    setSelectedTrip(trip)
-
-                                                }
-
-                                            >
-
-                                                End Trip
-
-                                            </button>
-
-                                        )
-
-                                        : (
-
-                                            <button
-
-                                                onClick={() =>
-
-                                                    onStart(trip)
-
-                                                }
-
-                                            >
-
-                                                Start Trip
-
-                                            </button>
-
-                                        )
-
-                                }
+                                {trip.status === "ONGOING" ? (
+                                    <button onClick={() => onEnd(trip.id)}>
+                                        End Trip
+                                    </button>
+                                ) : null}
 
                                 <button
 
