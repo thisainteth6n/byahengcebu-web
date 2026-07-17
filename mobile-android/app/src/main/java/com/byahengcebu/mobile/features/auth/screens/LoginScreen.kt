@@ -1,4 +1,4 @@
-package com.byahengcebu.mobile.screens.auth
+package com.byahengcebu.mobile.features.auth.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,7 +14,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.byahengcebu.mobile.viewmodel.AuthViewModel
+import com.byahengcebu.mobile.features.auth.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
@@ -169,11 +169,8 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-
-                viewModel.message,
-
+                text = viewModel.message.toString(),
                 color = MaterialTheme.colorScheme.primary
-
             )
 
             Spacer(modifier = Modifier.height(16.dp))

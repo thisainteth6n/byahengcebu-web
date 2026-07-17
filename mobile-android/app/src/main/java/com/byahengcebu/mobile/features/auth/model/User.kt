@@ -1,4 +1,4 @@
-package com.byahengcebu.mobile.model
+package com.byahengcebu.mobile.features.auth.model
 
 data class User(
 
