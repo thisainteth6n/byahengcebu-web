@@ -1,4 +1,4 @@
-package com.byahengcebu.mobile.model
+package com.byahengcebu.mobile.features.trip.model
 
 data class Statistics(
 
