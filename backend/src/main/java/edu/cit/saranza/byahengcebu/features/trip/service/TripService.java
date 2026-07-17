@@ -3,6 +3,8 @@ package edu.cit.saranza.byahengcebu.features.trip.service;
 import edu.cit.saranza.byahengcebu.features.trip.entity.Trip;
 import edu.cit.saranza.byahengcebu.features.trip.repository.TripRepository;
 import org.springframework.stereotype.Service;
+import edu.cit.saranza.byahengcebu.features.vehicle.entity.Vehicle;
+import edu.cit.saranza.byahengcebu.features.vehicle.repository.VehicleRepository;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -13,9 +15,16 @@ import java.util.Map;
 public class TripService {
 
     private final TripRepository tripRepository;
+    private final VehicleRepository vehicleRepository;
 
-    public TripService(TripRepository tripRepository) {
+    public TripService(
+            TripRepository tripRepository,
+            VehicleRepository vehicleRepository
+    ) {
+
         this.tripRepository = tripRepository;
+        this.vehicleRepository = vehicleRepository;
+
     }
 
     // ==========================
@@ -69,6 +78,20 @@ public class TripService {
         // BUSINESS RULE #1
         // ONE ONGOING TRIP PER DRIVER
         // ======================================
+        Vehicle vehicle = vehicleRepository
+                .findByPlateNumber(trip.getVehiclePlate())
+                .orElseThrow(() ->
+                        new RuntimeException("Vehicle not found.")
+                );
+
+        if (vehicle.getAssignedDriverEmail() == null ||
+                vehicle.getAssignedDriverEmail().trim().isEmpty()) {
+
+            throw new RuntimeException(
+                    "Cannot start trip. Vehicle has no assigned driver."
+            );
+
+        }
 
         if (tripRepository.existsByDriverNameAndStatus(
                 trip.getDriverName(),
