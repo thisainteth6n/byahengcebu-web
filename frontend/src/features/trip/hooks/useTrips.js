@@ -103,17 +103,13 @@ export function useTrips() {
 
     };
 
-    const handleEndTrip = async (id) => {
-
-        const endOdometer = prompt("Enter End Odometer:");
-
-        if (!endOdometer) return;
+    const handleEndTrip = async (id, endOdometer) => {
 
         try {
 
             await endTrip(id, {
 
-                endOdometer: Number(endOdometer)
+                endOdometer
 
             });
 
