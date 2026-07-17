@@ -7,6 +7,7 @@ import { useTrips } from "../hooks/useTrips";
 
 import TripStatCard from "../components/TripStatCard";
 import TripTable from "../components/TripTable";
+import AddTripModal from "../components/AddTripModal";
 
 function TripDashboard() {
 
@@ -15,6 +16,8 @@ function TripDashboard() {
     const [statusFilter, setStatusFilter] = useState("ALL");
 
     const [search, setSearch] = useState("");
+
+    const [showAddModal, setShowAddModal] = useState(false);
 
     const {
 
@@ -65,15 +68,26 @@ function TripDashboard() {
 
                 <h1>Trip Management</h1>
 
-                <button
-
-                    onClick={() => navigate("/dashboard")}
-
+                <div
+                    style={{
+                        display: "flex",
+                        gap: "10px"
+                    }}
                 >
 
-                    ← Dashboard
+                    <button
+                        onClick={() => setShowAddModal(true)}
+                    >
+                        + Start New Trip
+                    </button>
 
-                </button>
+                    <button
+                        onClick={() => navigate("/dashboard")}
+                    >
+                        ← Dashboard
+                    </button>
+
+                </div>
 
             </div>
 
@@ -121,11 +135,8 @@ function TripDashboard() {
                     }}
 
                     style={{
-
                         flex: 1,
-
                         padding: "10px"
-
                     }}
 
                 />
@@ -143,9 +154,7 @@ function TripDashboard() {
                 >
 
                     <option value="ALL">All</option>
-
                     <option value="ONGOING">Ongoing</option>
-
                     <option value="COMPLETED">Completed</option>
 
                 </select>
@@ -161,6 +170,22 @@ function TripDashboard() {
                 onEnd={handleEndTrip}
 
                 onDelete={handleDeleteTrip}
+
+            />
+
+            <AddTripModal
+
+                show={showAddModal}
+
+                onClose={() => setShowAddModal(false)}
+
+                onSave={async (trip) => {
+
+                    await handleStartTrip(trip);
+
+                    setShowAddModal(false);
+
+                }}
 
             />
 

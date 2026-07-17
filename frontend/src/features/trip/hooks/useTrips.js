@@ -4,10 +4,10 @@ import {
 
     getTrips,
     getTripStatistics,
+    searchTrips,
     startTrip,
     endTrip,
-    deleteTrip,
-    searchTrips
+    deleteTrip
 
 } from "../services/tripService";
 
@@ -59,17 +59,20 @@ export function useTrips() {
 
     }, []);
 
+    // ==========================
+    // SEARCH
+    // ==========================
+
     const handleSearch = async (keyword) => {
 
+        if (!keyword.trim()) {
+
+            refreshTrips();
+            return;
+
+        }
+
         try {
-
-            if (keyword.trim() === "") {
-
-                refreshTrips();
-
-                return;
-
-            }
 
             const response = await searchTrips(keyword);
 
@@ -85,13 +88,19 @@ export function useTrips() {
 
     };
 
+    // ==========================
+    // START TRIP
+    // ==========================
+
     const handleStartTrip = async (trip) => {
 
         try {
 
             await startTrip(trip);
 
-            refreshTrips();
+            alert("Trip started successfully.");
+
+            await refreshTrips();
 
         }
 
@@ -99,9 +108,15 @@ export function useTrips() {
 
             alert(error.response?.data || "Unable to start trip.");
 
+            throw error;
+
         }
 
     };
+
+    // ==========================
+    // END TRIP
+    // ==========================
 
     const handleEndTrip = async (id, endOdometer) => {
 
@@ -113,7 +128,9 @@ export function useTrips() {
 
             });
 
-            refreshTrips();
+            alert("Trip completed successfully.");
+
+            await refreshTrips();
 
         }
 
@@ -125,13 +142,19 @@ export function useTrips() {
 
     };
 
+    // ==========================
+    // DELETE
+    // ==========================
+
     const handleDeleteTrip = async (id) => {
 
         try {
 
             await deleteTrip(id);
 
-            refreshTrips();
+            alert("Trip deleted successfully.");
+
+            await refreshTrips();
 
         }
 
