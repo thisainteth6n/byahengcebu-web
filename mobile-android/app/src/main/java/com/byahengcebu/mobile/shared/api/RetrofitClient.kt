@@ -1,2 +1,2 @@
-package com.byahengcebu.mobile.api
+package com.byahengcebu.mobile.shared.api
 

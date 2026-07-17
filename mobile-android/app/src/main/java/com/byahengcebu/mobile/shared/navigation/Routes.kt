@@ -1,4 +1,4 @@
-package com.byahengcebu.mobile.navigation
+package com.byahengcebu.mobile.shared.navigation
 
 sealed class Routes(val route: String) {
 

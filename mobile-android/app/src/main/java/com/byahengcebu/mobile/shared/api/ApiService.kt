@@ -1,9 +1,10 @@
-package com.byahengcebu.mobile.api
+package com.byahengcebu.mobile.shared.api
 
-import com.byahengcebu.mobile.model.Statistics
-import com.byahengcebu.mobile.model.Trip
-import com.byahengcebu.mobile.model.User
-import com.byahengcebu.mobile.model.Vehicle
+import com.byahengcebu.mobile.features.auth.model.AuthResponse
+import com.byahengcebu.mobile.features.trip.model.Statistics
+import com.byahengcebu.mobile.features.trip.model.Trip
+import com.byahengcebu.mobile.features.auth.model.User
+import com.byahengcebu.mobile.features.vehicle.model.Vehicle
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -16,12 +17,12 @@ interface ApiService {
     @POST("auth/login")
     suspend fun login(
         @Body user: User
-    ): Response<String>
+    ): Response<AuthResponse>
 
     @POST("auth/register")
     suspend fun register(
         @Body user: User
-    ): Response<String>
+    ): Response<AuthResponse>
 
 
     // ==========================

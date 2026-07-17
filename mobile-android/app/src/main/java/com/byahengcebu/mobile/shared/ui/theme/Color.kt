@@ -1,4 +1,4 @@
-package com.byahengcebu.mobile.ui.theme
+package com.byahengcebu.mobile.shared.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
