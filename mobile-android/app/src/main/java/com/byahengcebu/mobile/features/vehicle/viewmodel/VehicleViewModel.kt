@@ -1,0 +1,76 @@
+package com.byahengcebu.mobile.features.vehicle.viewmodel
+
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.byahengcebu.mobile.features.trip.model.Statistics
+import com.byahengcebu.mobile.features.vehicle.model.Vehicle
+import com.byahengcebu.mobile.features.vehicle.repository.VehicleRepository
+import kotlinx.coroutines.launch
+
+class VehicleViewModel : ViewModel() {
+
+    private val repository = VehicleRepository()
+
+    var vehicles by mutableStateOf<List<Vehicle>>(emptyList())
+        private set
+
+    var statistics by mutableStateOf(
+        Statistics(
+            total = 0,
+            active = 0,
+            maintenance = 0
+        )
+    )
+        private set
+
+    var selectedVehicle by mutableStateOf<Vehicle?>(null)
+        private set
+
+    var loading by mutableStateOf(false)
+        private set
+
+    var errorMessage by mutableStateOf("")
+        private set
+
+    fun loadDashboard() {
+
+        loading = true
+
+        viewModelScope.launch {
+
+            try {
+
+                val statisticsResponse = repository.getStatistics()
+
+                if (statisticsResponse.isSuccessful) {
+                    statisticsResponse.body()?.let {
+                        statistics = it
+                    }
+                }
+
+                val vehiclesResponse = repository.getVehicles()
+
+                if (vehiclesResponse.isSuccessful) {
+                    vehicles = vehiclesResponse.body() ?: emptyList()
+                }
+
+            } catch (e: Exception) {
+
+                errorMessage = e.localizedMessage ?: "Connection Error"
+
+            }
+
+            loading = false
+
+        }
+
+    }
+
+    fun selectVehicle(vehicle: Vehicle) {
+        selectedVehicle = vehicle
+    }
+
+}
