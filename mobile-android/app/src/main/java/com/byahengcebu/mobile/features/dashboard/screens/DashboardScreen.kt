@@ -1,4 +1,4 @@
-package com.byahengcebu.mobile.screens.dashboard
+package com.byahengcebu.mobile.features.dashboard.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byahengcebu.mobile.features.vehicle.model.Vehicle
 import com.byahengcebu.mobile.features.vehicle.viewmodel.VehicleViewModel
+import kotlin.collections.get
 
 @Composable
 fun DashboardScreen(

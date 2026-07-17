@@ -1,4 +1,4 @@
-package com.byahengcebu.mobile.screens.dashboard
+package com.byahengcebu.mobile.features.dashboard.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
