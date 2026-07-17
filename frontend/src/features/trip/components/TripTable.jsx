@@ -1,8 +1,14 @@
 function TripTable({
 
-                       trips
+    trips,
 
-                   }) {
+    onStart,
+
+    onEnd,
+
+    onDelete
+
+}) {
 
     return (
 
@@ -17,6 +23,7 @@ function TripTable({
                 <th>Route</th>
                 <th>Status</th>
                 <th>Passengers</th>
+                <th>Actions</th>
 
             </tr>
 
@@ -26,7 +33,7 @@ function TripTable({
 
             {
 
-                trips.map(trip => (
+                trips.map((trip) => (
 
                     <tr key={trip.id}>
 
@@ -39,6 +46,54 @@ function TripTable({
                         <td>{trip.status}</td>
 
                         <td>{trip.passengerCount}</td>
+
+                        <td>
+
+                            {
+
+                                trip.status === "ONGOING"
+
+                                    ? (
+
+                                        <button
+                                            onClick={() => onEnd(trip.id)}
+                                        >
+                                            End Trip
+                                        </button>
+
+                                    )
+
+                                    : (
+
+                                        <button
+                                            onClick={() => onStart(trip)}
+                                        >
+                                            Start Trip
+                                        </button>
+
+                                    )
+
+                            }
+
+                            <button
+
+                                onClick={() => {
+
+                                    if (window.confirm("Delete this trip?")) {
+
+                                        onDelete(trip.id);
+
+                                    }
+
+                                }}
+
+                            >
+
+                                Delete
+
+                            </button>
+
+                        </td>
 
                     </tr>
 
