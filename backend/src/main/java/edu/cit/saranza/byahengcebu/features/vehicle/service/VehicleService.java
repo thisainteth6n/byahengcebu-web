@@ -182,21 +182,24 @@ public class VehicleService {
         }
     }
 
+// ==========================
+// GET ASSIGNED VEHICLE
+// ==========================
+
     public Vehicle getAssignedVehicle(String email) {
 
-        List<Vehicle> vehicles =
-                vehicleRepository.findByAssignedDriverEmail(email);
-
-        if (vehicles.isEmpty()) {
-
-            throw new RuntimeException(
-                    "Driver has no assigned vehicle."
-            );
-
-        }
-
-        return vehicles.get(0);
+        return vehicleRepository
+                .findByAssignedDriverEmail(email)
+                .stream()
+                .findFirst()
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "This driver has no assigned vehicle."
+                        )
+                );
 
     }
+
+
 }
 

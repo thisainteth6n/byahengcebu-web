@@ -54,11 +54,11 @@ public class VehicleController {
                     vehicleService.getAssignedVehicle(email)
             );
 
-        }
+        } catch (RuntimeException e) {
 
-        catch (RuntimeException e) {
-
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    e.getMessage()
+            );
 
         }
 
