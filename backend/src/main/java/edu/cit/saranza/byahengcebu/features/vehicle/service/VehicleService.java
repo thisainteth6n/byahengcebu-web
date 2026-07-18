@@ -181,5 +181,22 @@ public class VehicleService {
             throw new RuntimeException("Assigned Driver Email is required.");
         }
     }
+
+    public Vehicle getAssignedVehicle(String email) {
+
+        List<Vehicle> vehicles =
+                vehicleRepository.findByAssignedDriverEmail(email);
+
+        if (vehicles.isEmpty()) {
+
+            throw new RuntimeException(
+                    "Driver has no assigned vehicle."
+            );
+
+        }
+
+        return vehicles.get(0);
+
+    }
 }
 

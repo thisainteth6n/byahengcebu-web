@@ -5,6 +5,8 @@ import edu.cit.saranza.byahengcebu.features.trip.repository.TripRepository;
 import org.springframework.stereotype.Service;
 import edu.cit.saranza.byahengcebu.features.vehicle.entity.Vehicle;
 import edu.cit.saranza.byahengcebu.features.vehicle.repository.VehicleRepository;
+import edu.cit.saranza.byahengcebu.features.auth.entity.User;
+import edu.cit.saranza.byahengcebu.features.auth.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -16,14 +18,17 @@ public class TripService {
 
     private final TripRepository tripRepository;
     private final VehicleRepository vehicleRepository;
+    private final UserRepository userRepository;
 
     public TripService(
             TripRepository tripRepository,
-            VehicleRepository vehicleRepository
+            VehicleRepository vehicleRepository,
+            UserRepository userRepository
     ) {
 
         this.tripRepository = tripRepository;
         this.vehicleRepository = vehicleRepository;
+        this.userRepository = userRepository;
 
     }
 
@@ -33,6 +38,23 @@ public class TripService {
 
     public List<Trip> getAllTrips() {
         return tripRepository.findAll();
+    }
+
+// ==========================
+// DRIVER TRIPS
+// ==========================
+
+    public List<Trip> getTripsByDriver(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("Driver not found.")
+                );
+
+        return tripRepository.findByDriverName(
+                user.getFullname()
+        );
+
     }
 
     // ==========================

@@ -40,7 +40,32 @@ public class VehicleController {
     }
 
     // ==========================
-    // DASHBOARD STATISTICS
+    // GET ASSIGNED VEHICLE
+    // ==========================
+
+    @GetMapping("/assigned/{email}")
+    public ResponseEntity<?> getAssignedVehicle(
+            @PathVariable String email
+    ) {
+
+        try {
+
+            return ResponseEntity.ok(
+                    vehicleService.getAssignedVehicle(email)
+            );
+
+        }
+
+        catch (RuntimeException e) {
+
+            return ResponseEntity.badRequest().body(e.getMessage());
+
+        }
+
+    }
+
+    // ==========================
+    // DASHBOARD
     // ==========================
 
     @GetMapping("/statistics")
@@ -78,7 +103,9 @@ public class VehicleController {
                     vehicleService.addVehicle(vehicle)
             );
 
-        } catch (RuntimeException e) {
+        }
+
+        catch (RuntimeException e) {
 
             return ResponseEntity.badRequest().body(e.getMessage());
 
@@ -102,7 +129,9 @@ public class VehicleController {
                     vehicleService.updateVehicle(id, vehicle)
             );
 
-        } catch (RuntimeException e) {
+        }
+
+        catch (RuntimeException e) {
 
             return ResponseEntity.badRequest().body(e.getMessage());
 
@@ -125,7 +154,9 @@ public class VehicleController {
 
             return ResponseEntity.ok("Vehicle deleted successfully.");
 
-        } catch (RuntimeException e) {
+        }
+
+        catch (RuntimeException e) {
 
             return ResponseEntity.badRequest().body(e.getMessage());
 

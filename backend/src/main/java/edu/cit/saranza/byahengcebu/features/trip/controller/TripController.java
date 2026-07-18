@@ -33,6 +33,21 @@ public class TripController {
     }
 
     // ==========================
+    // DRIVER TRIPS
+    // ==========================
+
+    @GetMapping("/driver/{email}")
+    public ResponseEntity<List<Trip>> getDriverTrips(
+            @PathVariable String email
+    ) {
+
+        return ResponseEntity.ok(
+                tripService.getTripsByDriver(email)
+        );
+
+    }
+
+    // ==========================
     // GET ONGOING TRIPS
     // ==========================
 
