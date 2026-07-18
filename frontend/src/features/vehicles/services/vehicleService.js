@@ -12,6 +12,10 @@ export const getDriverVehicles = (email) => {
     return api.get(`/vehicles/driver/${email}`);
 };
 
+export const getAssignedVehicle = (email) => {
+    return api.get(`/vehicles/assigned/${email}`);
+};
+
 export const getVehicle = (id) => {
     return api.get(`/vehicles/${id}`);
 };

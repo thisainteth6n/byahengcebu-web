@@ -1,47 +1,41 @@
-import { useState } from "react";
-
-import EndTripModal from "./EndTripModal";
-
 function TripTable({
 
-    trips,
+                       trips,
 
-    onStart,
+                       onStart,
 
-    onEnd,
+                       onEnd,
 
-    onDelete
+                       onDelete
 
-}) {
-
-    const [selectedTrip, setSelectedTrip] = useState(null);
+                   }) {
 
     return (
 
-        <>
+        <table className="trip-table">
 
-            <table className="trip-table">
+            <thead>
 
-                <thead>
+            <tr>
 
-                <tr>
+                <th>Driver</th>
+                <th>Vehicle</th>
+                <th>Route</th>
+                <th>Start Odometer</th>
+                <th>End Odometer</th>
+                <th>Status</th>
+                <th>Passengers</th>
+                <th>Actions</th>
 
-                    <th>Driver</th>
-                    <th>Vehicle</th>
-                    <th>Route</th>
-                    <th>Start Odometer</th>
-                    <th>End Odometer</th>
-                    <th>Status</th>
-                    <th>Passengers</th>
-                    <th>Actions</th>
+            </tr>
 
-                </tr>
+            </thead>
 
-                </thead>
+            <tbody>
 
-                <tbody>
+            {
 
-                {
+                trips.length > 0 ? (
 
                     trips.map((trip) => (
 
@@ -55,17 +49,7 @@ function TripTable({
 
                             <td>{trip.startOdometer}</td>
 
-                            <td>
-
-                                {
-
-                                    trip.endOdometer ??
-
-                                    "-"
-
-                                }
-
-                            </td>
+                            <td>{trip.endOdometer ?? "-"}</td>
 
                             <td>{trip.status}</td>
 
@@ -73,29 +57,41 @@ function TripTable({
 
                             <td>
 
-                                {trip.status === "ONGOING" ? (
-                                    <button onClick={() => onEnd(trip.id)}>
+                                {trip.status === "ONGOING" && (
+
+                                    <button
+                                        onClick={() => onEnd(trip.id)}
+                                    >
                                         End Trip
                                     </button>
-                                ) : null}
 
-                                <button
+                                )}
 
-                                    onClick={() => {
+                                {trip.status === "COMPLETED" && (
 
-                                        if (window.confirm("Delete this trip?")) {
+                                    <button
 
-                                            onDelete(trip.id);
+                                        onClick={() => {
 
-                                        }
+                                            if (
+                                                window.confirm(
+                                                    "Delete this completed trip?"
+                                                )
+                                            ) {
 
-                                    }}
+                                                onDelete(trip.id);
 
-                                >
+                                            }
 
-                                    Delete
+                                        }}
 
-                                </button>
+                                    >
+
+                                        Delete
+
+                                    </button>
+
+                                )}
 
                             </td>
 
@@ -103,41 +99,29 @@ function TripTable({
 
                     ))
 
-                }
+                ) : (
 
-                </tbody>
+                    <tr>
 
-            </table>
+                        <td
+                            colSpan="8"
+                            style={{
+                                textAlign: "center",
+                                padding: "20px"
+                            }}
+                        >
+                            No trips found.
+                        </td>
 
-            {
-
-                selectedTrip && (
-
-                    <EndTripModal
-
-                        trip={selectedTrip}
-
-                        onClose={() =>
-
-                            setSelectedTrip(null)
-
-                        }
-
-                        onConfirm={async (id, endOdometer) => {
-
-                            await onEnd(id, endOdometer);
-
-                            setSelectedTrip(null);
-
-                        }}
-
-                    />
+                    </tr>
 
                 )
 
             }
 
-        </>
+            </tbody>
+
+        </table>
 
     );
 

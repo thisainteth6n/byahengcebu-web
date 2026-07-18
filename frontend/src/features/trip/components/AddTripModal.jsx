@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
 
+import { getDrivers } from "../../auth/services/userService";
+import { getAssignedVehicle } from "../../vehicles/services/vehicleService";
+
 function AddTripModal({
 
-    show,
+                          show,
 
-    onClose,
+                          onClose,
 
-    onSave
+                          onSave
 
-}) {
+                      }) {
+
+    const [drivers, setDrivers] = useState([]);
 
     const [trip, setTrip] = useState({
 
@@ -28,6 +33,8 @@ function AddTripModal({
 
         if (show) {
 
+            loadDrivers();
+
             setTrip({
 
                 driverName: "",
@@ -46,15 +53,97 @@ function AddTripModal({
 
     }, [show]);
 
-    if (!show) return null;
+    const loadDrivers = async () => {
 
-    const handleChange = (e) => {
+        try {
+
+            const response = await getDrivers();
+
+            setDrivers(response.data);
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            alert("Unable to load drivers.");
+
+        }
+
+    };
+
+    const handleChange = async (e) => {
+
+        const { name, value } = e.target;
+
+        if (name === "driverName") {
+
+            const selectedDriver = drivers.find(
+
+                driver => driver.fullname === value
+
+            );
+
+            setTrip({
+
+                ...trip,
+
+                driverName: value,
+
+                vehiclePlate: "",
+
+                route: ""
+
+            });
+
+            if (!selectedDriver) return;
+
+            try {
+
+                const response = await getAssignedVehicle(
+
+                    selectedDriver.email
+
+                );
+
+                setTrip({
+
+                    driverName: value,
+
+                    vehiclePlate: response.data.plateNumber,
+
+                    route: response.data.route,
+
+                    passengerCount: trip.passengerCount,
+
+                    startOdometer: trip.startOdometer
+
+                });
+
+            }
+
+            catch (error) {
+
+                alert(
+
+                    error.response?.data ||
+
+                    "Selected driver has no assigned vehicle."
+
+                );
+
+            }
+
+            return;
+
+        }
 
         setTrip({
 
             ...trip,
 
-            [e.target.name]: e.target.value
+            [name]: value
 
         });
 
@@ -94,6 +183,8 @@ function AddTripModal({
 
     };
 
+    if (!show) return null;
+
     return (
 
         <div className="modal-overlay">
@@ -102,39 +193,61 @@ function AddTripModal({
 
                 <h2>Start New Trip</h2>
 
-                <input
+                <select
 
                     name="driverName"
-
-                    placeholder="Driver Name"
 
                     value={trip.driverName}
 
                     onChange={handleChange}
 
-                />
+                >
+
+                    <option value="">
+
+                        Select Driver
+
+                    </option>
+
+                    {
+
+                        drivers.map(driver => (
+
+                            <option
+
+                                key={driver.id}
+
+                                value={driver.fullname}
+
+                            >
+
+                                {driver.fullname}
+
+                            </option>
+
+                        ))
+
+                    }
+
+                </select>
 
                 <input
-
-                    name="vehiclePlate"
-
-                    placeholder="Vehicle Plate"
 
                     value={trip.vehiclePlate}
 
-                    onChange={handleChange}
+                    readOnly
+
+                    placeholder="Vehicle Plate"
 
                 />
 
                 <input
 
-                    name="route"
-
-                    placeholder="Route"
-
                     value={trip.route}
 
-                    onChange={handleChange}
+                    readOnly
+
+                    placeholder="Route"
 
                 />
 
@@ -167,12 +280,19 @@ function AddTripModal({
                 />
 
                 <div
+
                     style={{
+
                         display: "flex",
+
                         justifyContent: "flex-end",
+
                         gap: "10px",
+
                         marginTop: "20px"
+
                     }}
+
                 >
 
                     <button onClick={onClose}>

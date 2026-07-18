@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import {
 
     getTrips,
+    getDriverTrips,
     getTripStatistics,
-    searchTrips,
     startTrip,
     endTrip,
     deleteTrip
@@ -29,13 +29,45 @@ export function useTrips() {
 
         try {
 
-            const tripResponse = await getTrips();
+            const user = JSON.parse(
+                localStorage.getItem("user")
+            );
 
-            const statResponse = await getTripStatistics();
+            let tripResponse;
+
+            if (user.role === "ADMIN") {
+
+                tripResponse = await getTrips();
+
+                const statResponse = await getTripStatistics();
+
+                setStatistics(statResponse.data);
+
+            } else {
+
+                tripResponse = await getDriverTrips(
+                    user.email
+                );
+
+                const list = tripResponse.data;
+
+                setStatistics({
+
+                    total: list.length,
+
+                    ongoing: list.filter(
+                        t => t.status === "ONGOING"
+                    ).length,
+
+                    completed: list.filter(
+                        t => t.status === "COMPLETED"
+                    ).length
+
+                });
+
+            }
 
             setTrips(tripResponse.data);
-
-            setStatistics(statResponse.data);
 
         }
 
