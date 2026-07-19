@@ -1,18 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function EndTripModal({
 
-    trip,
-    onClose,
-    onConfirm
+                          show,
 
-}) {
+                          trip,
+
+                          onClose,
+
+                          onConfirm
+
+                      }) {
 
     const [endOdometer, setEndOdometer] = useState("");
 
+    useEffect(() => {
+
+        if (show) {
+
+            setEndOdometer("");
+
+        }
+
+    }, [show]);
+
+    if (!show || !trip) {
+
+        return null;
+
+    }
+
     const submit = () => {
 
-        if (endOdometer.trim() === "") {
+        if (!endOdometer) {
 
             alert("Please enter the end odometer.");
 
@@ -20,65 +40,73 @@ function EndTripModal({
 
         }
 
-        if (isNaN(endOdometer)) {
+        if (Number(endOdometer) <= trip.startOdometer) {
 
-            alert("End odometer must be a number.");
+            alert(
+                "End odometer must be greater than start odometer."
+            );
 
             return;
 
         }
 
-        onConfirm(
-
-            trip.id,
-
-            Number(endOdometer)
-
-        );
+        onConfirm(Number(endOdometer));
 
     };
 
     return (
 
         <div
-            style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: "rgba(0,0,0,0.5)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 999
-            }}
+            className="modal-overlay"
         >
 
             <div
-                style={{
-                    background: "white",
-                    padding: "25px",
-                    borderRadius: "10px",
-                    width: "350px"
-                }}
+                className="modal"
             >
 
-                <h2>End Trip</h2>
+                <h2>
+
+                    End Trip
+
+                </h2>
 
                 <p>
 
-                    Driver:
+                    <strong>Driver:</strong>
 
-                    <strong> {trip.driverName}</strong>
+                    {" "}
+
+                    {trip.driverName}
 
                 </p>
 
                 <p>
 
-                    Vehicle:
+                    <strong>Vehicle:</strong>
 
-                    <strong> {trip.vehiclePlate}</strong>
+                    {" "}
+
+                    {trip.vehiclePlate}
+
+                </p>
+
+                <p>
+
+                    <strong>Route:</strong>
+
+                    {" "}
+
+                    {trip.route}
+
+                </p>
+
+                <p>
+
+                    <strong>Start Odometer:</strong>
+
+                    {" "}
+
+                    {trip.startOdometer}
 
                 </p>
 
@@ -90,36 +118,31 @@ function EndTripModal({
 
                     value={endOdometer}
 
-                    onChange={(e) =>
+                    onChange={(e)=>
 
                         setEndOdometer(e.target.value)
 
                     }
 
-                    style={{
-                        width: "100%",
-                        padding: "10px",
-                        marginTop: "15px",
-                        marginBottom: "20px"
-                    }}
-
                 />
 
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        gap: "10px"
-                    }}
-                >
+                <div className="modal-buttons">
 
-                    <button onClick={onClose}>
+                    <button
+
+                        onClick={onClose}
+
+                    >
 
                         Cancel
 
                     </button>
 
-                    <button onClick={submit}>
+                    <button
+
+                        onClick={submit}
+
+                    >
 
                         End Trip
 

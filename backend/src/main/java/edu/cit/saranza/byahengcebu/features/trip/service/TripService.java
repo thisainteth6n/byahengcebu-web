@@ -57,6 +57,20 @@ public class TripService {
 
     }
 
+    public Trip getDriverCurrentTrip(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("Driver not found.")
+                );
+
+        return tripRepository.findByDriverNameAndStatus(
+                user.getFullname(),
+                "ONGOING"
+        ).orElse(null);
+
+    }
+
     // ==========================
     // GET ONGOING TRIPS
     // ==========================

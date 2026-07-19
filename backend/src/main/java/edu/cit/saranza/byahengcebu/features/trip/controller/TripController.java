@@ -48,6 +48,21 @@ public class TripController {
     }
 
     // ==========================
+    // DRIVER CURRENT TRIP
+    // ==========================
+
+    @GetMapping("/driver/{email}/ongoing")
+    public ResponseEntity<Trip> getDriverCurrentTrip(
+            @PathVariable String email
+    ) {
+
+        return ResponseEntity.ok(
+                tripService.getDriverCurrentTrip(email)
+        );
+
+    }
+
+    // ==========================
     // GET ONGOING TRIPS
     // ==========================
 

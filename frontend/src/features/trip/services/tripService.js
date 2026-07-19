@@ -57,3 +57,7 @@ export const deleteTrip = (id) =>
 
 export const getDriverTrips = (email) =>
     api.get(`/trips/driver/${email}`);
+
+export const getDriverCurrentTrip = (email) => {
+    return api.get(`/trips/driver/${email}/ongoing`);
+};

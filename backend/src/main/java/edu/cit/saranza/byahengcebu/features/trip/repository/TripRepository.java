@@ -4,10 +4,13 @@ import edu.cit.saranza.byahengcebu.features.trip.entity.Trip;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TripRepository extends JpaRepository<Trip, Long> {
 
-    // Existing
+    // ==========================
+    // EXISTING
+    // ==========================
 
     List<Trip> findByStatus(String status);
 
@@ -34,5 +37,14 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     );
 
     List<Trip> findByDriverName(String driverName);
+
+    // ==========================
+    // DRIVER CURRENT TRIP
+    // ==========================
+
+    Optional<Trip> findByDriverNameAndStatus(
+            String driverName,
+            String status
+    );
 
 }
