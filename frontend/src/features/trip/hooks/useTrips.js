@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 
-import {
+import { getAssignedVehicle } from "../../vehicles/services/vehicleService";
 
+import {
     getTrips,
     getDriverTrips,
     getTripStatistics,
     startTrip,
     endTrip,
-    deleteTrip
-
+    deleteTrip,
+    searchTrips
 } from "../services/tripService";
 
 export function useTrips() {
@@ -100,6 +101,7 @@ export function useTrips() {
         if (!keyword.trim()) {
 
             refreshTrips();
+
             return;
 
         }
@@ -128,7 +130,39 @@ export function useTrips() {
 
         try {
 
-            await startTrip(trip);
+            const user = JSON.parse(
+                localStorage.getItem("user")
+            );
+
+            // DRIVER starts their own trip
+            if (user.role === "DRIVER") {
+
+                const response = await getAssignedVehicle(
+                    user.email
+                );
+
+                const vehicle = response.data;
+
+                trip = {
+
+                    driverName: user.fullname,
+
+                    vehiclePlate: vehicle.plateNumber,
+
+                    route: vehicle.route,
+
+                    passengerCount: trip.passengerCount,
+
+                    startOdometer: trip.startOdometer
+
+                };
+
+            }
+
+            await startTrip(
+                user.email,
+                trip
+            );
 
             alert("Trip started successfully.");
 
@@ -138,7 +172,10 @@ export function useTrips() {
 
         catch (error) {
 
-            alert(error.response?.data || "Unable to start trip.");
+            alert(
+                error.response?.data ||
+                "Unable to start trip."
+            );
 
             throw error;
 
@@ -168,7 +205,10 @@ export function useTrips() {
 
         catch (error) {
 
-            alert(error.response?.data || "Unable to end trip.");
+            alert(
+                error.response?.data ||
+                "Unable to end trip."
+            );
 
         }
 
@@ -192,7 +232,10 @@ export function useTrips() {
 
         catch (error) {
 
-            alert(error.response?.data || "Unable to delete trip.");
+            alert(
+                error.response?.data ||
+                "Unable to delete trip."
+            );
 
         }
 

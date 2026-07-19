@@ -50,31 +50,27 @@ function EndTripModal({
 
         }
 
-        onConfirm(Number(endOdometer));
+        console.log("Trip:", trip);
+        console.log("Trip ID:", trip.id);
+
+        onConfirm(
+            trip.id,
+            Number(endOdometer)
+        );
 
     };
 
     return (
 
-        <div
-            className="modal-overlay"
-        >
+        <div className="modal-overlay">
 
-            <div
-                className="modal"
-            >
+            <div className="modal">
 
-                <h2>
-
-                    End Trip
-
-                </h2>
+                <h2>End Trip</h2>
 
                 <p>
 
-                    <strong>Driver:</strong>
-
-                    {" "}
+                    <strong>Driver:</strong>{" "}
 
                     {trip.driverName}
 
@@ -82,9 +78,7 @@ function EndTripModal({
 
                 <p>
 
-                    <strong>Vehicle:</strong>
-
-                    {" "}
+                    <strong>Vehicle:</strong>{" "}
 
                     {trip.vehiclePlate}
 
@@ -92,9 +86,7 @@ function EndTripModal({
 
                 <p>
 
-                    <strong>Route:</strong>
-
-                    {" "}
+                    <strong>Route:</strong>{" "}
 
                     {trip.route}
 
@@ -102,9 +94,7 @@ function EndTripModal({
 
                 <p>
 
-                    <strong>Start Odometer:</strong>
-
-                    {" "}
+                    <strong>Start Odometer:</strong>{" "}
 
                     {trip.startOdometer}
 
@@ -118,7 +108,7 @@ function EndTripModal({
 
                     value={endOdometer}
 
-                    onChange={(e)=>
+                    onChange={(e) =>
 
                         setEndOdometer(e.target.value)
 
@@ -129,9 +119,7 @@ function EndTripModal({
                 <div className="modal-buttons">
 
                     <button
-
                         onClick={onClose}
-
                     >
 
                         Cancel
@@ -139,9 +127,7 @@ function EndTripModal({
                     </button>
 
                     <button
-
                         onClick={submit}
-
                     >
 
                         End Trip

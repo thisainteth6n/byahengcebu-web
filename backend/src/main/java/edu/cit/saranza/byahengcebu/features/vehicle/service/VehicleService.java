@@ -34,11 +34,16 @@ public class VehicleService {
     }
 
     // ==========================
-    // DRIVER VEHICLES
+    // GET ASSIGNED VEHICLE
     // ==========================
 
-    public List<Vehicle> getVehiclesByDriver(String email) {
-        return vehicleRepository.findByAssignedDriverEmail(email);
+    public Vehicle getAssignedVehicle(String email) {
+
+        return vehicleRepository.findByAssignedDriverEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("No vehicle assigned.")
+                );
+
     }
 
     // ==========================
@@ -75,6 +80,7 @@ public class VehicleService {
         }
 
         return vehicleRepository.save(vehicle);
+
     }
 
     // ==========================
@@ -84,7 +90,9 @@ public class VehicleService {
     public Vehicle updateVehicle(Long id, Vehicle updatedVehicle) {
 
         Vehicle vehicle = vehicleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vehicle not found."));
+                .orElseThrow(() ->
+                        new RuntimeException("Vehicle not found.")
+                );
 
         validateVehicle(updatedVehicle);
 
@@ -118,6 +126,7 @@ public class VehicleService {
         vehicle.setAssignedDriverEmail(updatedVehicle.getAssignedDriverEmail());
 
         return vehicleRepository.save(vehicle);
+
     }
 
     // ==========================
@@ -131,10 +140,11 @@ public class VehicleService {
         }
 
         vehicleRepository.deleteById(id);
+
     }
 
     // ==========================
-    // DASHBOARD STATISTICS
+    // DASHBOARD
     // ==========================
 
     public Map<String, Long> getVehicleStatistics() {
@@ -148,6 +158,7 @@ public class VehicleService {
         statistics.put("maintenance", vehicleRepository.countByStatus("MAINTENANCE"));
 
         return statistics;
+
     }
 
     // ==========================
@@ -180,26 +191,7 @@ public class VehicleService {
                 vehicle.getAssignedDriverEmail().trim().isEmpty()) {
             throw new RuntimeException("Assigned Driver Email is required.");
         }
-    }
-
-// ==========================
-// GET ASSIGNED VEHICLE
-// ==========================
-
-    public Vehicle getAssignedVehicle(String email) {
-
-        return vehicleRepository
-                .findByAssignedDriverEmail(email)
-                .stream()
-                .findFirst()
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "This driver has no assigned vehicle."
-                        )
-                );
 
     }
-
 
 }
-

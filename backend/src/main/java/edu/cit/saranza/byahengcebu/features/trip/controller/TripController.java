@@ -122,15 +122,16 @@ public class TripController {
     // START TRIP
     // ==========================
 
-    @PostMapping("/start")
+    @PostMapping("/start/{email}")
     public ResponseEntity<?> startTrip(
+            @PathVariable String email,
             @RequestBody Trip trip
     ) {
 
         try {
 
             return ResponseEntity.ok(
-                    tripService.startTrip(trip)
+                    tripService.startTrip(email, trip)
             );
 
         } catch (RuntimeException e) {

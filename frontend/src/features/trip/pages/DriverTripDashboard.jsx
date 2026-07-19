@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { useDriverVehicle } from "../hooks/useDriverVehicle";
+import { useCurrentTrip } from "../hooks/useCurrentTrip";
 import { useTrips } from "../hooks/useTrips";
 
 import StartTripModal from "../components/StartTripModal";
@@ -12,13 +13,17 @@ function DriverTripDashboard() {
 
         vehicle,
 
-        currentTrip,
-
-        loading,
-
-        refreshDashboard
+        loading
 
     } = useDriverVehicle();
+
+    const {
+
+        currentTrip,
+
+        refreshCurrentTrip
+
+    } = useCurrentTrip();
 
     const {
 
@@ -32,8 +37,6 @@ function DriverTripDashboard() {
 
     const [showEndModal, setShowEndModal] = useState(false);
 
-    const user = JSON.parse(localStorage.getItem("user"));
-
     if (loading) {
 
         return <h2>Loading...</h2>;
@@ -46,215 +49,107 @@ function DriverTripDashboard() {
 
             <h1>Driver Dashboard</h1>
 
-            {
+            <div className="trip-stat-card">
 
-                currentTrip ? (
+                <h2>My Assigned Vehicle</h2>
 
-                    <div className="trip-stat-card">
+                {
 
-                        <h2>Current Trip</h2>
+                    vehicle ? (
 
-                        <p>
+                        <>
 
-                            <strong>Driver:</strong>{" "}
+                            <p>
 
-                            {currentTrip.driverName}
+                                <strong>Plate:</strong> {vehicle.plateNumber}
 
-                        </p>
+                            </p>
 
-                        <p>
+                            <p>
 
-                            <strong>Vehicle:</strong>{" "}
+                                <strong>Route:</strong> {vehicle.route}
 
-                            {currentTrip.vehiclePlate}
+                            </p>
 
-                        </p>
+                            <p>
 
-                        <p>
+                                <strong>Status:</strong> {vehicle.status}
 
-                            <strong>Route:</strong>{" "}
+                            </p>
 
-                            {currentTrip.route}
+                            {
 
-                        </p>
+                                currentTrip ? (
 
-                        <p>
+                                    <button
+                                        onClick={() => setShowEndModal(true)}
+                                    >
+                                        End Trip
+                                    </button>
 
-                            <strong>Passengers:</strong>{" "}
+                                ) : (
 
-                            {currentTrip.passengerCount}
+                                    <button
+                                        onClick={() => setShowStartModal(true)}
+                                    >
+                                        Start Trip
+                                    </button>
 
-                        </p>
-
-                        <p>
-
-                            <strong>Start Odometer:</strong>{" "}
-
-                            {currentTrip.startOdometer}
-
-                        </p>
-
-                        <p>
-
-                            <strong>Started:</strong>{" "}
-
-                            {new Date(currentTrip.startTime).toLocaleString()}
-
-                        </p>
-
-                        <button
-
-                            onClick={() =>
-
-                                setShowEndModal(true)
+                                )
 
                             }
 
-                        >
+                        </>
 
-                            End Trip
+                    ) : (
 
-                        </button>
+                        <p>No vehicle assigned.</p>
 
-                    </div>
+                    )
 
-                ) : (
+                }
 
-                    <div className="trip-stat-card">
-
-                        <h2>My Assigned Vehicle</h2>
-
-                        {
-
-                            vehicle ? (
-
-                                <>
-
-                                    <p>
-
-                                        <strong>Plate:</strong>{" "}
-
-                                        {vehicle.plateNumber}
-
-                                    </p>
-
-                                    <p>
-
-                                        <strong>Route:</strong>{" "}
-
-                                        {vehicle.route}
-
-                                    </p>
-
-                                    <p>
-
-                                        <strong>Status:</strong>{" "}
-
-                                        {vehicle.status}
-
-                                    </p>
-
-                                    <button
-
-                                        onClick={() =>
-
-                                            setShowStartModal(true)
-
-                                        }
-
-                                    >
-
-                                        Start Trip
-
-                                    </button>
-
-                                </>
-
-                            ) : (
-
-                                <p>
-
-                                    No assigned vehicle.
-
-                                </p>
-
-                            )
-
-                        }
-
-                    </div>
-
-                )
-
-            }
+            </div>
 
             <StartTripModal
 
                 show={showStartModal}
 
-                onClose={() =>
+                onClose={() => setShowStartModal(false)}
 
-                    setShowStartModal(false)
+                onStart={async (data) => {
 
-                }
+                    await handleStartTrip(data);
 
-                onStart={async (tripData) => {
+                    setShowStartModal(false);
 
-                    try {
-
-                        await handleStartTrip({
-
-                            driverName: user.fullname,
-
-                            vehiclePlate: vehicle.plateNumber,
-
-                            route: vehicle.route,
-
-                            passengerCount: tripData.passengerCount,
-
-                            startOdometer: tripData.startOdometer
-
-                        });
-
-                        setShowStartModal(false);
-
-                        await refreshDashboard();
-
-                    }
-
-                    catch (error) {
-
-                        console.error(error);
-
-                    }
+                    refreshCurrentTrip();
 
                 }}
 
             />
 
             {
-
                 currentTrip && (
 
                     <EndTripModal
+
                         show={showEndModal}
+
                         trip={currentTrip}
+
                         onClose={() => setShowEndModal(false)}
-                        onConfirm={async (endOdometer) => {
 
-                            await handleEndTrip(
+                        onConfirm={async (id, endOdometer) => {
 
-                                currentTrip.id,
-
-                                endOdometer
-
-                            );
+                            await handleEndTrip(id, endOdometer);
 
                             setShowEndModal(false);
 
-                            await refreshDashboard();
+                            refreshCurrentTrip();
 
                         }}
+
                     />
 
                 )

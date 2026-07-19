@@ -29,17 +29,6 @@ public class VehicleController {
     }
 
     // ==========================
-    // DRIVER VEHICLES
-    // ==========================
-
-    @GetMapping("/driver/{email}")
-    public List<Vehicle> getDriverVehicles(
-            @PathVariable String email
-    ) {
-        return vehicleService.getVehiclesByDriver(email);
-    }
-
-    // ==========================
     // GET ASSIGNED VEHICLE
     // ==========================
 
@@ -56,16 +45,15 @@ public class VehicleController {
 
         } catch (RuntimeException e) {
 
-            return ResponseEntity.badRequest().body(
-                    e.getMessage()
-            );
+            return ResponseEntity.badRequest()
+                    .body(e.getMessage());
 
         }
 
     }
 
     // ==========================
-    // DASHBOARD
+    // DASHBOARD STATISTICS
     // ==========================
 
     @GetMapping("/statistics")
@@ -103,11 +91,10 @@ public class VehicleController {
                     vehicleService.addVehicle(vehicle)
             );
 
-        }
+        } catch (RuntimeException e) {
 
-        catch (RuntimeException e) {
-
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(e.getMessage());
 
         }
 
@@ -129,11 +116,10 @@ public class VehicleController {
                     vehicleService.updateVehicle(id, vehicle)
             );
 
-        }
+        } catch (RuntimeException e) {
 
-        catch (RuntimeException e) {
-
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(e.getMessage());
 
         }
 
@@ -154,11 +140,10 @@ public class VehicleController {
 
             return ResponseEntity.ok("Vehicle deleted successfully.");
 
-        }
+        } catch (RuntimeException e) {
 
-        catch (RuntimeException e) {
-
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(e.getMessage());
 
         }
 

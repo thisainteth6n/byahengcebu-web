@@ -2,8 +2,6 @@ function TripTable({
 
                        trips,
 
-                       onStart,
-
                        onEnd,
 
                        onDelete
@@ -57,41 +55,50 @@ function TripTable({
 
                             <td>
 
-                                {trip.status === "ONGOING" && (
+                                {
 
-                                    <button
-                                        onClick={() => onEnd(trip.id)}
-                                    >
-                                        End Trip
-                                    </button>
+                                    trip.status === "ONGOING" ? (
 
-                                )}
+                                        <span
+                                            style={{
+                                                color: "#2563eb",
+                                                fontWeight: "600"
+                                            }}
+                                        >
+                                                In Progress
+                                            </span>
 
-                                {trip.status === "COMPLETED" && (
+                                    ) : (
 
-                                    <button
+                                        <button
 
-                                        onClick={() => {
+                                            onClick={() => {
 
-                                            if (
-                                                window.confirm(
-                                                    "Delete this completed trip?"
-                                                )
-                                            ) {
+                                                if (
 
-                                                onDelete(trip.id);
+                                                    window.confirm(
 
-                                            }
+                                                        "Delete this completed trip?"
 
-                                        }}
+                                                    )
 
-                                    >
+                                                ) {
 
-                                        Delete
+                                                    onDelete(trip.id);
 
-                                    </button>
+                                                }
 
-                                )}
+                                            }}
+
+                                        >
+
+                                            Delete
+
+                                        </button>
+
+                                    )
+
+                                }
 
                             </td>
 
@@ -104,13 +111,21 @@ function TripTable({
                     <tr>
 
                         <td
+
                             colSpan="8"
+
                             style={{
+
                                 textAlign: "center",
+
                                 padding: "20px"
+
                             }}
+
                         >
+
                             No trips found.
+
                         </td>
 
                     </tr>

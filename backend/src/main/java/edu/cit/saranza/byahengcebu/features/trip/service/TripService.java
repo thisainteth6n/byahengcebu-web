@@ -106,46 +106,49 @@ public class TripService {
     // START TRIP
     // ==========================
 
-    public Trip startTrip(Trip trip) {
+    public Trip startTrip(String email, Trip trip) {
 
-        validateTrip(trip);
-
-        // ======================================
-        // BUSINESS RULE #1
-        // ONE ONGOING TRIP PER DRIVER
-        // ======================================
-        Vehicle vehicle = vehicleRepository
-                .findByPlateNumber(trip.getVehiclePlate())
+        User driver = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new RuntimeException("Vehicle not found.")
+                        new RuntimeException("Driver not found.")
                 );
 
-        if (vehicle.getAssignedDriverEmail() == null ||
-                vehicle.getAssignedDriverEmail().trim().isEmpty()) {
+        Vehicle vehicle = vehicleRepository
+                .findByAssignedDriverEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "No vehicle assigned to this driver."
+                        )
+                );
+
+        if ("MAINTENANCE".equals(vehicle.getStatus())) {
 
             throw new RuntimeException(
-                    "Cannot start trip. Vehicle has no assigned driver."
+                    "Vehicle is currently under maintenance."
+            );
+
+        }
+
+        if (!vehicle.getStatus().equalsIgnoreCase("ACTIVE")) {
+
+            throw new RuntimeException(
+                    "Vehicle is not available for operation."
             );
 
         }
 
         if (tripRepository.existsByDriverNameAndStatus(
-                trip.getDriverName(),
+                driver.getFullname(),
                 "ONGOING")) {
 
             throw new RuntimeException(
-                    "This driver already has an ongoing trip."
+                    "You already have an ongoing trip."
             );
 
         }
 
-        // ======================================
-        // BUSINESS RULE #2
-        // ONE ONGOING TRIP PER VEHICLE
-        // ======================================
-
         if (tripRepository.existsByVehiclePlateAndStatus(
-                trip.getVehiclePlate(),
+                vehicle.getPlateNumber(),
                 "ONGOING")) {
 
             throw new RuntimeException(
@@ -154,7 +157,31 @@ public class TripService {
 
         }
 
+        if (trip.getPassengerCount() == null ||
+                trip.getPassengerCount() < 0) {
+
+            throw new RuntimeException(
+                    "Passenger count is invalid."
+            );
+
+        }
+
+        if (trip.getStartOdometer() == null ||
+                trip.getStartOdometer() < 0) {
+
+            throw new RuntimeException(
+                    "Start odometer is invalid."
+            );
+
+        }
+
         trip.setId(null);
+
+        trip.setDriverName(driver.getFullname());
+
+        trip.setVehiclePlate(vehicle.getPlateNumber());
+
+        trip.setRoute(vehicle.getRoute());
 
         trip.setStatus("ONGOING");
 
@@ -167,7 +194,6 @@ public class TripService {
         return tripRepository.save(trip);
 
     }
-
     // ==========================
     // END TRIP
     // ==========================

@@ -39,7 +39,7 @@ function Dashboard() {
             >
 
                 <button
-                    onClick={() => navigate("/trips")}
+                    onClick={() => navigate("/admin/trips")}
                     style={{
                         background: "#2563eb",
                         color: "#fff",
@@ -51,6 +51,21 @@ function Dashboard() {
                     }}
                 >
                     Trip Management
+                </button>
+
+                <button
+                    onClick={() => navigate("/admin/maintenance")}
+                    style={{
+                        background: "#059669",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "8px",
+                        padding: "10px 18px",
+                        cursor: "pointer",
+                        fontWeight: "600"
+                    }}
+                >
+                    Maintenance
                 </button>
 
             </div>

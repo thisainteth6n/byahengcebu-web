@@ -1,0 +1,130 @@
+.maintenance-dashboard {
+
+    padding: 30px;
+
+}
+
+.trip-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: white;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+}
+
+.trip-table th,
+.trip-table td {
+
+    padding: 14px;
+
+    border-bottom: 1px solid #eee;
+
+    text-align: left;
+
+}
+
+.trip-table th {
+
+    background: #2563eb;
+
+    color: white;
+
+}
+
+.trip-table button {
+
+    background: #2563eb;
+
+    color: white;
+
+    border: none;
+
+    padding: 8px 14px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+}
+
+.trip-table button:hover {
+
+    background: #1d4ed8;
+
+}
+
+.modal-overlay {
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    background: rgba(0,0,0,.45);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 999;
+
+}
+
+.modal {
+
+    background: white;
+
+    width: 420px;
+
+    padding: 25px;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+
+    padding: 10px;
+
+    font-size: 15px;
+
+}
+
+.modal textarea {
+
+    min-height: 90px;
+
+    resize: vertical;
+
+}
+
+.modal-buttons {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+}

@@ -38,8 +38,8 @@ export const getTripStatistics = () =>
 // START TRIP
 // ==========================
 
-export const startTrip = (trip) =>
-    api.post("/trips/start", trip);
+export const startTrip = (email, trip) =>
+    api.post(`/trips/start/${email}`, trip);
 
 // ==========================
 // END TRIP

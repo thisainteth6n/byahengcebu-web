@@ -7,7 +7,6 @@ import { useTrips } from "../hooks/useTrips";
 
 import TripStatCard from "../components/TripStatCard";
 import TripTable from "../components/TripTable";
-import AddTripModal from "../components/AddTripModal";
 
 function TripDashboard() {
 
@@ -17,22 +16,13 @@ function TripDashboard() {
 
     const [search, setSearch] = useState("");
 
-    const [showAddModal, setShowAddModal] = useState(false);
-
     const {
 
         trips,
-
         statistics,
-
         loading,
-
         handleSearch,
-
-        handleStartTrip,
-
         handleEndTrip,
-
         handleDeleteTrip
 
     } = useTrips();
@@ -66,28 +56,13 @@ function TripDashboard() {
                 }}
             >
 
-                <h1>Trip Management</h1>
+                <h1>Trip Monitoring</h1>
 
-                <div
-                    style={{
-                        display: "flex",
-                        gap: "10px"
-                    }}
+                <button
+                    onClick={() => navigate("/admin/dashboard")}
                 >
-
-                    <button
-                        onClick={() => setShowAddModal(true)}
-                    >
-                        + Start New Trip
-                    </button>
-
-                    <button
-                        onClick={() => navigate("/dashboard")}
-                    >
-                        ← Dashboard
-                    </button>
-
-                </div>
+                    ← Dashboard
+                </button>
 
             </div>
 
@@ -165,27 +140,9 @@ function TripDashboard() {
 
                 trips={filteredTrips}
 
-                onStart={handleStartTrip}
-
                 onEnd={handleEndTrip}
 
                 onDelete={handleDeleteTrip}
-
-            />
-
-            <AddTripModal
-
-                show={showAddModal}
-
-                onClose={() => setShowAddModal(false)}
-
-                onSave={async (trip) => {
-
-                    await handleStartTrip(trip);
-
-                    setShowAddModal(false);
-
-                }}
 
             />
 

@@ -11,6 +11,8 @@ import ProtectedRoute from "./shared/routes/ProtectedRoute.jsx";
 import AdminRoute from "./shared/routes/AdminRoute.jsx";
 import DriverRoute from "./shared/routes/DriverRoute.jsx";
 
+import MaintenanceDashboard from "./features/maintenance/pages/MaintenanceDashboard";
+
 function App() {
 
     return (
@@ -55,6 +57,17 @@ function App() {
                         <ProtectedRoute>
                             <AdminRoute>
                                 <TripDashboard />
+                            </AdminRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/maintenance"
+                    element={
+                        <ProtectedRoute>
+                            <AdminRoute>
+                                <MaintenanceDashboard />
                             </AdminRoute>
                         </ProtectedRoute>
                     }
