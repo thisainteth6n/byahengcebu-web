@@ -4,41 +4,12 @@ import Login from "./features/auth/pages/Login.jsx";
 import Register from "./features/auth/pages/Register.jsx";
 
 import Dashboard from "./features/dashboard/Dashboard.jsx";
-
-import TripDashboard from "./features/trip/pages/TripDashboard.jsx";
 import DriverTripDashboard from "./features/trip/pages/DriverTripDashboard.jsx";
+import TripDashboard from "./features/trip/pages/TripDashboard.jsx";
 
-function ProtectedRoute({ children }) {
-
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-    if (!isLoggedIn) {
-        return <Navigate to="/login" replace />;
-    }
-
-    return children;
-
-}
-
-function TripRoute() {
-
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    if (!user) {
-        return <Navigate to="/login" replace />;
-    }
-
-    if (user.role === "ADMIN") {
-        return <TripDashboard />;
-    }
-
-    if (user.role === "DRIVER") {
-        return <DriverTripDashboard />;
-    }
-
-    return <Navigate to="/dashboard" replace />;
-
-}
+import ProtectedRoute from "./shared/routes/ProtectedRoute.jsx";
+import AdminRoute from "./shared/routes/AdminRoute.jsx";
+import DriverRoute from "./shared/routes/DriverRoute.jsx";
 
 function App() {
 
@@ -63,20 +34,43 @@ function App() {
                     element={<Register />}
                 />
 
+                {/* ==========================
+                    ADMIN
+                ========================== */}
+
                 <Route
-                    path="/dashboard"
+                    path="/admin/dashboard"
                     element={
                         <ProtectedRoute>
-                            <Dashboard />
+                            <AdminRoute>
+                                <Dashboard />
+                            </AdminRoute>
                         </ProtectedRoute>
                     }
                 />
 
                 <Route
-                    path="/trips"
+                    path="/admin/trips"
                     element={
                         <ProtectedRoute>
-                            <TripRoute />
+                            <AdminRoute>
+                                <TripDashboard />
+                            </AdminRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+                {/* ==========================
+                    DRIVER
+                ========================== */}
+
+                <Route
+                    path="/driver/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <DriverRoute>
+                                <DriverTripDashboard />
+                            </DriverRoute>
                         </ProtectedRoute>
                     }
                 />

@@ -60,7 +60,25 @@ function Login() {
             );
 
             // Redirect to dashboard
-            navigate("/dashboard");
+            // Redirect based on role
+
+            if (response.data.role === "ADMIN") {
+
+                navigate("/admin/dashboard");
+
+            }
+
+            else if (response.data.role === "DRIVER") {
+
+                navigate("/driver/dashboard");
+
+            }
+
+            else {
+
+                alert("Unknown user role.");
+
+            }
 
         } catch (error) {
 
