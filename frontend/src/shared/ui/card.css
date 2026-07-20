@@ -1,0 +1,21 @@
+.card{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:28px;
+
+    box-shadow:0 10px 25px rgba(15,23,42,.08);
+
+    border:1px solid #e2e8f0;
+
+    transition:.25s;
+
+}
+
+.card:hover{
+
+    box-shadow:0 16px 36px rgba(37,99,235,.10);
+
+}

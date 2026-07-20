@@ -5,11 +5,13 @@ import { useState } from "react";
 
 import { useTrips } from "../hooks/useTrips";
 
-import TripStatCard from "../components/TripStatCard";
-import TripTable from "../components/TripTable";
+import AdminLayout from "../../../shared/components/AdminLayout";
+import PageHeader from "../../../shared/components/PageHeader";
 
-import DataTable from "../../../shared/ui/DataTable";
+import StatCard from "../../../shared/ui/StatCard";
 import Button from "../../../shared/ui/Button";
+
+import TripTable from "../components/TripTable";
 
 function TripDashboard() {
 
@@ -25,7 +27,6 @@ function TripDashboard() {
         statistics,
         loading,
         handleSearch,
-        handleEndTrip,
         handleDeleteTrip
 
     } = useTrips();
@@ -48,101 +49,129 @@ function TripDashboard() {
 
     return (
 
-        <div className="trip-dashboard">
+        <AdminLayout>
 
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "20px"
-                }}
-            >
+            <div className="trip-dashboard">
 
-                <h1>Trip Monitoring</h1>
+                <PageHeader
 
-                <button
-                    onClick={() => navigate("/admin/dashboard")}
-                >
-                    ← Dashboard
-                </button>
+                    title="Trip Monitoring"
 
-            </div>
+                    subtitle="Monitor all ongoing and completed trips"
 
-            <section className="trip-stats">
+                    actions={
 
-                <TripStatCard
-                    title="Total Trips"
-                    value={statistics.total}
+                        <Button
+
+                            variant="secondary"
+
+                            onClick={() => navigate("/admin/dashboard")}
+
+                        >
+
+                            ← Dashboard
+
+                        </Button>
+
+                    }
+
                 />
 
-                <TripStatCard
-                    title="Ongoing Trips"
-                    value={statistics.ongoing}
-                />
+                <section className="stats">
 
-                <TripStatCard
-                    title="Completed Trips"
-                    value={statistics.completed}
-                />
+                    <StatCard
 
-            </section>
+                        title="Total Trips"
 
-            <DataTable
+                        value={statistics.total}
 
-                title="Trip Monitoring"
+                        subtitle="All Recorded Trips"
 
-                subtitle="Monitor all completed and ongoing trips."
+                    />
 
-                columns={[
+                    <StatCard
 
-                    "Driver",
+                        title="Ongoing Trips"
 
-                    "Vehicle",
+                        value={statistics.ongoing}
 
-                    "Route",
+                        subtitle="Currently Running"
 
-                    "Start",
+                    />
 
-                    "End",
+                    <StatCard
 
-                    "Status",
+                        title="Completed Trips"
 
-                    "Passengers",
+                        value={statistics.completed}
 
-                    "Actions"
+                        subtitle="Finished Trips"
 
-                ]}
+                    />
 
-                search={search}
+                </section>
 
-                onSearch={(value)=>{
+                <div className="trip-toolbar">
 
-                    setSearch(value);
+                    <div className="search-container">
 
-                    handleSearch(value);
+                        <input
 
-                }}
+                            className="search-input"
 
-                searchPlaceholder="Search driver, vehicle or route..."
+                            type="text"
 
-                actions={
+                            placeholder="Search Driver, Vehicle or Route..."
 
-                    <Button
+                            value={search}
 
-                        variant="secondary"
+                            onChange={(e) => {
 
-                        onClick={()=>navigate("/admin/dashboard")}
+                                setSearch(e.target.value);
+
+                                handleSearch(e.target.value);
+
+                            }}
+
+                        />
+
+                    </div>
+
+                    <select
+
+                        className="trip-filter"
+
+                        value={statusFilter}
+
+                        onChange={(e) =>
+
+                            setStatusFilter(e.target.value)
+
+                        }
 
                     >
 
-                        Dashboard
+                        <option value="ALL">
 
-                    </Button>
+                            All Trips
 
-                }
+                        </option>
 
-            >
+                        <option value="ONGOING">
+
+                            Ongoing
+
+                        </option>
+
+                        <option value="COMPLETED">
+
+                            Completed
+
+                        </option>
+
+                    </select>
+
+                </div>
 
                 <TripTable
 
@@ -152,70 +181,9 @@ function TripDashboard() {
 
                 />
 
-            </DataTable>
-
-            <div
-                style={{
-                    display: "flex",
-                    gap: "15px",
-                    margin: "20px 0"
-                }}
-            >
-
-                <input
-
-                    type="text"
-
-                    placeholder="Search Driver, Vehicle or Route..."
-
-                    value={search}
-
-                    onChange={(e) => {
-
-                        setSearch(e.target.value);
-
-                        handleSearch(e.target.value);
-
-                    }}
-
-                    style={{
-                        flex: 1,
-                        padding: "10px"
-                    }}
-
-                />
-
-                <select
-
-                    value={statusFilter}
-
-                    onChange={(e) =>
-
-                        setStatusFilter(e.target.value)
-
-                    }
-
-                >
-
-                    <option value="ALL">All</option>
-                    <option value="ONGOING">Ongoing</option>
-                    <option value="COMPLETED">Completed</option>
-
-                </select>
-
             </div>
 
-            <TripTable
-
-                trips={filteredTrips}
-
-                onEnd={handleEndTrip}
-
-                onDelete={handleDeleteTrip}
-
-            />
-
-        </div>
+        </AdminLayout>
 
     );
 
