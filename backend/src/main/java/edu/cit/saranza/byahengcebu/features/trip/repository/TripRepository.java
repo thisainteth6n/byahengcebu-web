@@ -47,4 +47,9 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
             String status
     );
 
+    List<Trip> findAllByDriverNameAndStatus(
+            String driverName,
+            String status
+    );
+
 }

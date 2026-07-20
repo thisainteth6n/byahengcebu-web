@@ -34,6 +34,7 @@ function Dashboard() {
                 style={{
                     display: "flex",
                     justifyContent: "flex-end",
+                    gap: "10px",
                     margin: "20px 0"
                 }}
             >
@@ -66,6 +67,21 @@ function Dashboard() {
                     }}
                 >
                     Maintenance
+                </button>
+
+                <button
+                    onClick={() => navigate("/admin/remittances")}
+                    style={{
+                        background: "#7c3aed",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "8px",
+                        padding: "10px 18px",
+                        cursor: "pointer",
+                        fontWeight: "600"
+                    }}
+                >
+                    Cash Remittances
                 </button>
 
             </div>

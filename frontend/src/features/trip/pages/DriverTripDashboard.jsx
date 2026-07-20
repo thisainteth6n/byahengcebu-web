@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useDriverVehicle } from "../hooks/useDriverVehicle";
 import { useCurrentTrip } from "../hooks/useCurrentTrip";
@@ -8,6 +9,8 @@ import StartTripModal from "../components/StartTripModal";
 import EndTripModal from "../components/EndTripModal";
 
 function DriverTripDashboard() {
+
+    const navigate = useNavigate();
 
     const {
 
@@ -47,7 +50,38 @@ function DriverTripDashboard() {
 
         <div className="trip-dashboard">
 
-            <h1>Driver Dashboard</h1>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "20px"
+                }}
+            >
+
+                <h1>Driver Dashboard</h1>
+
+                <button
+
+                    onClick={() => navigate("/driver/remittances")}
+
+                    style={{
+                        background: "#7c3aed",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "8px",
+                        padding: "10px 18px",
+                        cursor: "pointer",
+                        fontWeight: "600"
+                    }}
+
+                >
+
+                    Cash Remittances
+
+                </button>
+
+            </div>
 
             <div className="trip-stat-card">
 
@@ -130,6 +164,7 @@ function DriverTripDashboard() {
             />
 
             {
+
                 currentTrip && (
 
                     <EndTripModal

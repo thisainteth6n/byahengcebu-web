@@ -4,14 +4,18 @@ import Login from "./features/auth/pages/Login.jsx";
 import Register from "./features/auth/pages/Register.jsx";
 
 import Dashboard from "./features/dashboard/Dashboard.jsx";
+
 import DriverTripDashboard from "./features/trip/pages/DriverTripDashboard.jsx";
 import TripDashboard from "./features/trip/pages/TripDashboard.jsx";
+
+import MaintenanceDashboard from "./features/maintenance/pages/MaintenanceDashboard";
+
+import RemittanceDashboard from "./features/remittance/pages/RemittanceDashboard.jsx";
+import DriverRemittanceDashboard from "./features/remittance/pages/DriverRemittanceDashboard.jsx";
 
 import ProtectedRoute from "./shared/routes/ProtectedRoute.jsx";
 import AdminRoute from "./shared/routes/AdminRoute.jsx";
 import DriverRoute from "./shared/routes/DriverRoute.jsx";
-
-import MaintenanceDashboard from "./features/maintenance/pages/MaintenanceDashboard";
 
 function App() {
 
@@ -73,6 +77,17 @@ function App() {
                     }
                 />
 
+                <Route
+                    path="/admin/remittances"
+                    element={
+                        <ProtectedRoute>
+                            <AdminRoute>
+                                <RemittanceDashboard />
+                            </AdminRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
                 {/* ==========================
                     DRIVER
                 ========================== */}
@@ -83,6 +98,17 @@ function App() {
                         <ProtectedRoute>
                             <DriverRoute>
                                 <DriverTripDashboard />
+                            </DriverRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/driver/remittances"
+                    element={
+                        <ProtectedRoute>
+                            <DriverRoute>
+                                <DriverRemittanceDashboard />
                             </DriverRoute>
                         </ProtectedRoute>
                     }

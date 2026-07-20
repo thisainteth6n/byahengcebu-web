@@ -1,0 +1,61 @@
+.trip-dashboard {
+    padding: 30px;
+}
+
+.trip-stats {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.trip-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.trip-table th,
+.trip-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.trip-table th {
+    background: #f5f5f5;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,.4);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    min-width: 400px;
+}
+
+.modal input,
+.modal select,
+.modal textarea {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
