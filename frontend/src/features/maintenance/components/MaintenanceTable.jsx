@@ -1,3 +1,6 @@
+import Button from "../../../shared/ui/Button";
+import Badge from "../../../shared/ui/Badge";
+
 function MaintenanceTable({
 
                               maintenance,
@@ -10,163 +13,93 @@ function MaintenanceTable({
 
     return (
 
-        <table className="trip-table">
-
-            <thead>
-
-            <tr>
-
-                <th>Vehicle</th>
-
-                <th>Type</th>
-
-                <th>Technician</th>
-
-                <th>Scheduled</th>
-
-                <th>Status</th>
-
-                <th>Actions</th>
-
-            </tr>
-
-            </thead>
-
-            <tbody>
+        <>
 
             {
 
-                maintenance.length > 0 ? (
+                maintenance.map((record) => (
 
-                    maintenance.map((record) => (
+                    <tr key={record.id}>
 
-                        <tr key={record.id}>
+                        <td>{record.vehiclePlate}</td>
 
-                            <td>
+                        <td>{record.maintenanceType}</td>
 
-                                {record.vehiclePlate}
+                        <td>{record.technician}</td>
 
-                            </td>
+                        <td>{record.scheduledDate}</td>
 
-                            <td>
+                        <td>
 
-                                {record.maintenanceType}
+                            <Badge status={record.status} />
 
-                            </td>
+                        </td>
 
-                            <td>
+                        <td>
 
-                                {record.technician}
+                            {
 
-                            </td>
+                                record.status === "SCHEDULED"
 
-                            <td>
+                                    ?
 
-                                {record.scheduledDate}
+                                    <Button
 
-                            </td>
+                                        variant="primary"
 
-                            <td>
+                                        onClick={() =>
 
-                                {record.status}
+                                            onComplete(record)
 
-                            </td>
+                                        }
 
-                            <td>
+                                    >
 
-                                {
+                                        Complete
 
-                                    record.status === "SCHEDULED" && (
+                                    </Button>
 
-                                        <button
+                                    :
 
-                                            onClick={() =>
+                                    <Button
 
-                                                onComplete(record)
+                                        variant="danger"
+
+                                        onClick={() => {
+
+                                            if (
+
+                                                window.confirm(
+
+                                                    "Delete this maintenance record?"
+
+                                                )
+
+                                            ) {
+
+                                                onDelete(record.id);
 
                                             }
 
-                                        >
+                                        }}
 
-                                            Complete
+                                    >
 
-                                        </button>
+                                        Delete
 
-                                    )
+                                    </Button>
 
-                                }
-
-                                {
-
-                                    record.status === "COMPLETED" && (
-
-                                        <button
-
-                                            onClick={() => {
-
-                                                if (
-
-                                                    window.confirm(
-
-                                                        "Delete this maintenance record?"
-
-                                                    )
-
-                                                ) {
-
-                                                    onDelete(record.id);
-
-                                                }
-
-                                            }}
-
-                                        >
-
-                                            Delete
-
-                                        </button>
-
-                                    )
-
-                                }
-
-                            </td>
-
-                        </tr>
-
-                    ))
-
-                ) : (
-
-                    <tr>
-
-                        <td
-
-                            colSpan="6"
-
-                            style={{
-
-                                textAlign: "center",
-
-                                padding: "25px"
-
-                            }}
-
-                        >
-
-                            No maintenance records.
+                            }
 
                         </td>
 
                     </tr>
 
-                )
+                ))
 
             }
 
-            </tbody>
-
-        </table>
+        </>
 
     );
 

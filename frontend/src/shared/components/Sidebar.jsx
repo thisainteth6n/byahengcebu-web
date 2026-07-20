@@ -1,5 +1,14 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
+import {
+    FaHome,
+    FaRoute,
+    FaTools,
+    FaMoneyBillWave,
+    FaSignOutAlt,
+    FaBus
+} from "react-icons/fa";
+
 import "./layout.css";
 
 function Sidebar() {
@@ -14,69 +23,103 @@ function Sidebar() {
 
     };
 
-    const linkStyle = ({ isActive }) => ({
+    const menuItems = [
 
-        background: isActive ? "#2563eb" : "transparent",
+        {
+            path: "/admin/dashboard",
+            label: "Dashboard",
+            icon: <FaHome />
+        },
 
-        color: "#fff",
+        {
+            path: "/admin/trips",
+            label: "Trip Management",
+            icon: <FaRoute />
+        },
 
-        padding: "12px 16px",
+        {
+            path: "/admin/maintenance",
+            label: "Maintenance",
+            icon: <FaTools />
+        },
 
-        borderRadius: "8px",
+        {
+            path: "/admin/remittances",
+            label: "Remittances",
+            icon: <FaMoneyBillWave />
+        }
 
-        textDecoration: "none",
-
-        display: "block",
-
-        fontWeight: "600",
-
-        transition: "0.2s"
-
-    });
+    ];
 
     return (
 
         <aside className="sidebar">
 
-            <div className="sidebar-logo">
+            <div>
 
-                <h2>🚍 ByahengCebu</h2>
+                <div className="sidebar-logo">
 
-                <p>Fleet Management</p>
+                    <div className="logo-circle">
+
+                        <FaBus />
+
+                    </div>
+
+                    <h2>
+
+                        ByahengCebu
+
+                    </h2>
+
+                    <p>
+
+                        Fleet Management System
+
+                    </p>
+
+                </div>
+
+                <nav className="sidebar-links">
+
+                    {
+
+                        menuItems.map(item => (
+
+                            <NavLink
+
+                                key={item.path}
+
+                                to={item.path}
+
+                                className={({ isActive }) =>
+
+                                    isActive
+
+                                        ? "sidebar-link active"
+
+                                        : "sidebar-link"
+
+                                }
+
+                            >
+
+                                <span>
+
+                                    {item.icon}
+
+                                </span>
+
+                                {item.label}
+
+                            </NavLink>
+
+                        ))
+
+                    }
+
+                </nav>
 
             </div>
-
-            <nav className="sidebar-links">
-
-                <NavLink
-                    to="/admin/dashboard"
-                    style={linkStyle}
-                >
-                    🏠 Dashboard
-                </NavLink>
-
-                <NavLink
-                    to="/admin/trips"
-                    style={linkStyle}
-                >
-                    🛣 Trip Management
-                </NavLink>
-
-                <NavLink
-                    to="/admin/maintenance"
-                    style={linkStyle}
-                >
-                    🔧 Maintenance
-                </NavLink>
-
-                <NavLink
-                    to="/admin/remittances"
-                    style={linkStyle}
-                >
-                    💰 Remittances
-                </NavLink>
-
-            </nav>
 
             <button
 
@@ -86,7 +129,9 @@ function Sidebar() {
 
             >
 
-                🚪 Logout
+                <FaSignOutAlt />
+
+                Logout
 
             </button>
 

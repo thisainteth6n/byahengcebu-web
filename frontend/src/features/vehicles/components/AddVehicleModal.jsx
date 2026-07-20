@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Button from "../../../shared/ui/Button";
 
 function AddVehicleModal({
 
@@ -169,24 +170,29 @@ function AddVehicleModal({
 
                     <div className="modal-buttons">
 
-                        <button
-                            type="button"
-                            className="cancel-btn"
+                        <Button
+
+                            variant="secondary"
+
                             onClick={onClose}
+
                         >
 
                             Cancel
 
-                        </button>
+                        </Button>
 
-                        <button
+                        <Button
+
                             type="submit"
-                            className="save-btn"
+
+                            variant="primary"
+
                         >
 
                             {vehicle ? "Update Vehicle" : "Save Vehicle"}
 
-                        </button>
+                        </Button>
 
                     </div>
 

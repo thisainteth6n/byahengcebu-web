@@ -1,8 +1,9 @@
+import Button from "../../../shared/ui/Button";
+import Badge from "../../../shared/ui/Badge";
+
 function TripTable({
 
                        trips,
-
-                       onEnd,
 
                        onDelete
 
@@ -10,133 +11,92 @@ function TripTable({
 
     return (
 
-        <table className="trip-table">
-
-            <thead>
-
-            <tr>
-
-                <th>Driver</th>
-                <th>Vehicle</th>
-                <th>Route</th>
-                <th>Start Odometer</th>
-                <th>End Odometer</th>
-                <th>Status</th>
-                <th>Passengers</th>
-                <th>Actions</th>
-
-            </tr>
-
-            </thead>
-
-            <tbody>
+        <>
 
             {
 
-                trips.length > 0 ? (
+                trips.map(trip => (
 
-                    trips.map((trip) => (
+                    <tr key={trip.id}>
 
-                        <tr key={trip.id}>
+                        <td>{trip.driverName}</td>
 
-                            <td>{trip.driverName}</td>
+                        <td>{trip.vehiclePlate}</td>
 
-                            <td>{trip.vehiclePlate}</td>
+                        <td>{trip.route}</td>
 
-                            <td>{trip.route}</td>
+                        <td>{trip.startOdometer}</td>
 
-                            <td>{trip.startOdometer}</td>
+                        <td>{trip.endOdometer ?? "-"}</td>
 
-                            <td>{trip.endOdometer ?? "-"}</td>
+                        <td>
 
-                            <td>{trip.status}</td>
+                            <Badge status={trip.status} />
 
-                            <td>{trip.passengerCount}</td>
+                        </td>
 
-                            <td>
+                        <td>{trip.passengerCount}</td>
 
-                                {
+                        <td>
 
-                                    trip.status === "ONGOING" ? (
+                            {
 
-                                        <span
-                                            style={{
-                                                color: "#2563eb",
-                                                fontWeight: "600"
-                                            }}
-                                        >
-                                                In Progress
-                                            </span>
+                                trip.status === "ONGOING"
 
-                                    ) : (
+                                    ?
 
-                                        <button
+                                    <span
+                                        style={{
+                                            color:"#2563eb",
+                                            fontWeight:"600"
+                                        }}
+                                    >
 
-                                            onClick={() => {
+                                        In Progress
 
-                                                if (
+                                    </span>
 
-                                                    window.confirm(
+                                    :
 
-                                                        "Delete this completed trip?"
+                                    <Button
 
-                                                    )
+                                        variant="danger"
 
-                                                ) {
+                                        onClick={() => {
 
-                                                    onDelete(trip.id);
+                                            if (
 
-                                                }
+                                                window.confirm(
 
-                                            }}
+                                                    "Delete this completed trip?"
 
-                                        >
+                                                )
 
-                                            Delete
+                                            ) {
 
-                                        </button>
+                                                onDelete(trip.id);
 
-                                    )
+                                            }
 
-                                }
+                                        }}
 
-                            </td>
+                                    >
 
-                        </tr>
+                                        Delete
 
-                    ))
+                                    </Button>
 
-                ) : (
-
-                    <tr>
-
-                        <td
-
-                            colSpan="8"
-
-                            style={{
-
-                                textAlign: "center",
-
-                                padding: "20px"
-
-                            }}
-
-                        >
-
-                            No trips found.
+                            }
 
                         </td>
 
                     </tr>
 
-                )
+                ))
 
             }
 
-            </tbody>
-
-        </table>
+        </>
 
     );
 

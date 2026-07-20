@@ -8,6 +8,9 @@ import { useTrips } from "../hooks/useTrips";
 import TripStatCard from "../components/TripStatCard";
 import TripTable from "../components/TripTable";
 
+import DataTable from "../../../shared/ui/DataTable";
+import Button from "../../../shared/ui/Button";
+
 function TripDashboard() {
 
     const navigate = useNavigate();
@@ -84,6 +87,72 @@ function TripDashboard() {
                 />
 
             </section>
+
+            <DataTable
+
+                title="Trip Monitoring"
+
+                subtitle="Monitor all completed and ongoing trips."
+
+                columns={[
+
+                    "Driver",
+
+                    "Vehicle",
+
+                    "Route",
+
+                    "Start",
+
+                    "End",
+
+                    "Status",
+
+                    "Passengers",
+
+                    "Actions"
+
+                ]}
+
+                search={search}
+
+                onSearch={(value)=>{
+
+                    setSearch(value);
+
+                    handleSearch(value);
+
+                }}
+
+                searchPlaceholder="Search driver, vehicle or route..."
+
+                actions={
+
+                    <Button
+
+                        variant="secondary"
+
+                        onClick={()=>navigate("/admin/dashboard")}
+
+                    >
+
+                        Dashboard
+
+                    </Button>
+
+                }
+
+            >
+
+                <TripTable
+
+                    trips={filteredTrips}
+
+                    onDelete={handleDeleteTrip}
+
+                />
+
+            </DataTable>
 
             <div
                 style={{

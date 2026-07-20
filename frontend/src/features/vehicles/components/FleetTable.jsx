@@ -15,6 +15,12 @@ import {
     FaSearch
 } from "react-icons/fa";
 
+import Button from "../../../shared/ui/Button";
+
+import Badge from "../../../shared/ui/Badge";
+
+import DataTable from "../../../shared/ui/DataTable";
+
 function FleetTable({
 
                         vehicles,
@@ -53,224 +59,153 @@ function FleetTable({
 
         <>
 
-            <section className="fleet-section">
+            <DataTable
 
-                <div className="fleet-header">
+                title="Fleet Overview"
 
-                    <h2>Fleet Overview</h2>
+                subtitle="Manage all registered fleet vehicles."
 
-                    {
+                columns={[
 
-                        isAdmin && (
+                    "Plate Number",
 
-                            <button
+                    "Route",
 
-                                className="primary-btn"
+                    "Model",
 
-                                onClick={() => {
+                    "Assigned Driver",
 
-                                    setSelectedVehicle(null);
-                                    setShowModal(true);
+                    "Status",
 
-                                }}
+                    ...(isAdmin ? ["Actions"] : [])
 
-                            >
+                ]}
 
-                                <FaPlus />
+                search={search}
 
-                                <span>Add Vehicle</span>
+                onSearch={setSearch}
 
-                            </button>
+                searchPlaceholder="Search plate number, route or model..."
 
-                        )
+                actions={
 
-                    }
+                    isAdmin && (
 
-                </div>
+                        <Button
 
-                <div className="search-container">
+                            variant="primary"
 
-                    <FaSearch className="search-icon" />
+                            icon={<FaPlus />}
 
-                    <input
+                            onClick={() => {
 
-                        type="text"
+                                setSelectedVehicle(null);
 
-                        className="search-input"
+                                setShowModal(true);
 
-                        placeholder="Search plate number, route or model..."
+                            }}
 
-                        value={search}
+                        >
 
-                        onChange={(e) => setSearch(e.target.value)}
+                            Add Vehicle
 
-                    />
+                        </Button>
 
-                </div>
+                    )
 
-                <table>
+                }
 
-                    <thead>
+            >
 
-                    <tr>
+                {
 
-                        <th>Plate Number</th>
-                        <th>Route</th>
-                        <th>Model</th>
-                        <th>Assigned Driver</th>
-                        <th>Status</th>
+                    filteredVehicles.map(vehicle => (
 
-                        {
+                        <tr key={vehicle.id}>
 
-                            isAdmin &&
+                            <td>{vehicle.plateNumber}</td>
 
-                            <th>Action</th>
+                            <td>{vehicle.route}</td>
 
-                        }
+                            <td>{vehicle.model}</td>
 
-                    </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    {
-
-                        filteredVehicles.map(vehicle => (
-
-                            <tr key={vehicle.id}>
-
-                                <td>{vehicle.plateNumber}</td>
-
-                                <td>{vehicle.route}</td>
-
-                                <td>{vehicle.model}</td>
-
-                                <td>
-
-                                    {
-
-                                        vehicle.assignedDriverEmail || "-"
-
-                                    }
-
-                                </td>
-
-                                <td>
-
-                                    <span
-
-                                        className={
-
-                                            vehicle.status === "ACTIVE"
-
-                                                ? "status active"
-
-                                                : "status maintenance"
-
-                                        }
-
-                                    >
-
-                                        {vehicle.status}
-
-                                    </span>
-
-                                </td>
+                            <td>
 
                                 {
 
-                                    isAdmin && (
-
-                                        <td>
-
-                                            <button
-
-                                                className="edit-btn"
-
-                                                onClick={() => {
-
-                                                    setSelectedVehicle(vehicle);
-                                                    setShowModal(true);
-
-                                                }}
-
-                                            >
-
-                                                <FaEdit />
-
-                                                Edit
-
-                                            </button>
-
-                                            <button
-
-                                                className="delete-btn"
-
-                                                onClick={() => {
-
-                                                    setSelectedVehicle(vehicle);
-                                                    setShowDeleteModal(true);
-
-                                                }}
-
-                                            >
-
-                                                <FaTrash />
-
-                                                Delete
-
-                                            </button>
-
-                                        </td>
-
-                                    )
+                                    vehicle.assignedDriverEmail || "-"
 
                                 }
 
-                            </tr>
+                            </td>
 
-                        ))
+                            <td>
 
-                    }
+                                <Badge status={vehicle.status} />
 
-                    {
+                            </td>
 
-                        filteredVehicles.length === 0 && (
+                            {
 
-                            <tr>
+                                isAdmin && (
 
-                                <td
+                                    <td>
 
-                                    colSpan={isAdmin ? 6 : 5}
+                                        <Button
 
-                                    style={{
+                                            variant="primary"
 
-                                        textAlign: "center",
+                                            icon={<FaEdit />}
 
-                                        padding: "30px",
+                                            onClick={() => {
 
-                                        color: "#777"
+                                                setSelectedVehicle(vehicle);
 
-                                    }}
+                                                setShowModal(true);
 
-                                >
+                                            }}
 
-                                    No vehicles found.
+                                        >
 
-                                </td>
+                                            Edit
 
-                            </tr>
+                                        </Button>
 
-                        )
+                                        {" "}
 
-                    }
+                                        <Button
 
-                    </tbody>
+                                            variant="danger"
 
-                </table>
+                                            icon={<FaTrash />}
 
-            </section>
+                                            onClick={() => {
+
+                                                setSelectedVehicle(vehicle);
+
+                                                setShowDeleteModal(true);
+
+                                            }}
+
+                                        >
+
+                                            Delete
+
+                                        </Button>
+
+                                    </td>
+
+                                )
+
+                            }
+
+                        </tr>
+
+                    ))
+
+                }
+
+            </DataTable>
 
             {
 

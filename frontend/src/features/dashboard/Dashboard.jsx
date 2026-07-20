@@ -2,9 +2,16 @@ import "./dashboard.css";
 
 import { useNavigate } from "react-router-dom";
 
+import {
+    FaBus,
+    FaCheckCircle,
+    FaTools
+} from "react-icons/fa";
+
 import Header from "./components/Header.jsx";
 import WelcomeCard from "./components/WelcomeCard.jsx";
-import StatCard from "./components/StatCard.jsx";
+
+import StatCard from "../../shared/ui/StatCard";
 
 import FleetTable from "../vehicles/components/FleetTable.jsx";
 
@@ -92,18 +99,24 @@ function Dashboard() {
                     title="Total Vehicles"
                     value={statistics.total}
                     subtitle="Registered Units"
+                    icon={<FaBus />}
+                    color="#2563eb"
                 />
 
                 <StatCard
                     title="Active Vehicles"
                     value={statistics.active}
                     subtitle="Ready for Operation"
+                    icon={<FaCheckCircle />}
+                    color="#22c55e"
                 />
 
                 <StatCard
                     title="Maintenance"
                     value={statistics.maintenance}
                     subtitle="Currently Under Repair"
+                    icon={<FaTools />}
+                    color="#f59e0b"
                 />
 
             </section>

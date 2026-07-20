@@ -1,0 +1,87 @@
+.ui-button{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    font-size:15px;
+
+    transition:all .25s ease;
+
+}
+
+.ui-button:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.ui-button:disabled{
+
+    opacity:.55;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}
+
+.ui-button.primary{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.ui-button.success{
+
+    background:#16a34a;
+
+    color:white;
+
+}
+
+.ui-button.danger{
+
+    background:#dc2626;
+
+    color:white;
+
+}
+
+.ui-button.secondary{
+
+    background:#e2e8f0;
+
+    color:#334155;
+
+}
+
+.button-icon{
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.full-width{
+
+    width:100%;
+
+}

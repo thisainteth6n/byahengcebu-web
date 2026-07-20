@@ -1,14 +1,18 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import "../styles/maintenance.css";
 
 import { useMaintenance } from "../hooks/useMaintenance";
 
 import MaintenanceStatCard from "../components/MaintenanceStatCard";
 import MaintenanceTable from "../components/MaintenanceTable";
+
 import AddMaintenanceModal from "../components/AddMaintenanceModal";
 import CompleteMaintenanceModal from "../components/CompleteMaintenanceModal";
 
-import "../styles/maintenance.css";
+import DataTable from "../../../shared/ui/DataTable";
+import Button from "../../../shared/ui/Button";
 
 function MaintenanceDashboard() {
 
@@ -44,133 +48,174 @@ function MaintenanceDashboard() {
 
     }
 
+    const filteredMaintenance =
+
+        statusFilter === "ALL"
+
+            ? maintenance
+
+            : maintenance.filter(
+
+                item => item.status === statusFilter
+
+            );
+
     return (
 
         <div className="maintenance-dashboard">
-
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "20px"
-                }}
-            >
-
-                <h1>Maintenance Management</h1>
-
-                <div
-                    style={{
-                        display: "flex",
-                        gap: "10px"
-                    }}
-                >
-
-                    <button
-                        onClick={() => setShowAddModal(true)}
-                    >
-                        + Schedule Maintenance
-                    </button>
-
-                    <button
-                        onClick={() => navigate("/admin/dashboard")}
-                    >
-                        ← Dashboard
-                    </button>
-
-                </div>
-
-            </div>
 
             <section
                 style={{
                     display: "flex",
                     gap: "20px",
-                    marginBottom: "25px"
+                    marginBottom: "30px"
                 }}
             >
 
                 <MaintenanceStatCard
-
                     title="Total"
-
                     value={statistics.total}
-
                 />
 
                 <MaintenanceStatCard
-
                     title="Scheduled"
-
                     value={statistics.scheduled}
-
                 />
 
                 <MaintenanceStatCard
-
                     title="Completed"
-
                     value={statistics.completed}
-
                 />
 
             </section>
 
-            <div
-                style={{
-                    marginBottom: "20px"
-                }}
-            >
+            <DataTable
 
-                <select
+                title="Maintenance Management"
 
-                    value={statusFilter}
+                subtitle="Monitor all maintenance schedules."
 
-                    onChange={(e) => {
+                columns={[
 
-                        setStatusFilter(e.target.value);
+                    "Vehicle",
 
-                        handleFilter(e.target.value);
+                    "Type",
 
-                    }}
+                    "Technician",
 
-                >
+                    "Scheduled",
 
-                    <option value="ALL">
+                    "Status",
 
-                        All
+                    "Actions"
 
-                    </option>
+                ]}
 
-                    <option value="SCHEDULED">
+                search=""
 
-                        Scheduled
+                onSearch={() => {}}
 
-                    </option>
+                searchPlaceholder="Search maintenance..."
 
-                    <option value="COMPLETED">
+                actions={
 
-                        Completed
+                    <>
 
-                    </option>
+                        <select
 
-                </select>
+                            value={statusFilter}
 
-            </div>
+                            onChange={(e) => {
 
-            <MaintenanceTable
+                                setStatusFilter(
 
-                maintenance={maintenance}
+                                    e.target.value
 
-                onComplete={(record) =>
+                                );
 
-                    setSelectedMaintenance(record)
+                                handleFilter(
+
+                                    e.target.value
+
+                                );
+
+                            }}
+
+                        >
+
+                            <option value="ALL">
+
+                                All
+
+                            </option>
+
+                            <option value="SCHEDULED">
+
+                                Scheduled
+
+                            </option>
+
+                            <option value="COMPLETED">
+
+                                Completed
+
+                            </option>
+
+                        </select>
+
+                        <Button
+
+                            variant="primary"
+
+                            onClick={() =>
+
+                                setShowAddModal(true)
+
+                            }
+
+                        >
+
+                            Schedule
+
+                        </Button>
+
+                        <Button
+
+                            variant="secondary"
+
+                            onClick={() =>
+
+                                navigate("/admin/dashboard")
+
+                            }
+
+                        >
+
+                            Dashboard
+
+                        </Button>
+
+                    </>
 
                 }
 
-                onDelete={handleDelete}
+            >
 
-            />
+                <MaintenanceTable
+
+                    maintenance={filteredMaintenance}
+
+                    onComplete={(record) =>
+
+                        setSelectedMaintenance(record)
+
+                    }
+
+                    onDelete={handleDelete}
+
+                />
+
+            </DataTable>
 
             <AddMaintenanceModal
 

@@ -1,0 +1,135 @@
+.datatable-card{
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:30px;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+}
+
+.datatable-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+.datatable-header h2{
+
+    margin:0;
+
+    color:#1e293b;
+
+    font-size:26px;
+
+}
+
+.datatable-header p{
+
+    margin-top:6px;
+
+    color:#64748b;
+
+}
+
+.datatable-search{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+    padding:14px 18px;
+
+    margin-bottom:25px;
+
+}
+
+.datatable-search input{
+
+    flex:1;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    font-size:15px;
+
+}
+
+.datatable-container{
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+    border:1px solid #e2e8f0;
+
+}
+
+.datatable{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.datatable th{
+
+    background:#2563eb;
+
+    color:white;
+
+    text-align:left;
+
+    padding:18px;
+
+}
+
+.datatable td{
+
+    padding:18px;
+
+    border-bottom:1px solid #edf2f7;
+
+}
+
+.datatable tbody tr{
+
+    transition:.25s;
+
+}
+
+.datatable tbody tr:hover{
+
+    background:#f8fbff;
+
+}
+
+.datatable-empty{
+
+    text-align:center;
+
+    padding:45px;
+
+    color:#94a3b8;
+
+}
