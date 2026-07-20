@@ -40,6 +40,14 @@ function DriverTripDashboard() {
 
     const [showEndModal, setShowEndModal] = useState(false);
 
+    const handleLogout = () => {
+
+        localStorage.removeItem("user");
+
+        navigate("/login", { replace: true });
+
+    };
+
     if (loading) {
 
         return <h2>Loading...</h2>;
@@ -61,25 +69,54 @@ function DriverTripDashboard() {
 
                 <h1>Driver Dashboard</h1>
 
-                <button
-
-                    onClick={() => navigate("/driver/remittances")}
-
+                <div
                     style={{
-                        background: "#7c3aed",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "8px",
-                        padding: "10px 18px",
-                        cursor: "pointer",
-                        fontWeight: "600"
+                        display: "flex",
+                        gap: "10px"
                     }}
-
                 >
 
-                    Cash Remittances
+                    <button
 
-                </button>
+                        onClick={() => navigate("/driver/remittances")}
+
+                        style={{
+                            background: "#7c3aed",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "8px",
+                            padding: "10px 18px",
+                            cursor: "pointer",
+                            fontWeight: "600"
+                        }}
+
+                    >
+
+                        Cash Remittances
+
+                    </button>
+
+                    <button
+
+                        onClick={handleLogout}
+
+                        style={{
+                            background: "#dc2626",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "8px",
+                            padding: "10px 18px",
+                            cursor: "pointer",
+                            fontWeight: "600"
+                        }}
+
+                    >
+
+                        Logout
+
+                    </button>
+
+                </div>
 
             </div>
 

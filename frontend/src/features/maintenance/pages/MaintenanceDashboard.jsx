@@ -73,7 +73,7 @@ function MaintenanceDashboard() {
                     </button>
 
                     <button
-                        onClick={() => navigate("/dashboard")}
+                        onClick={() => navigate("/admin/dashboard")}
                     >
                         ← Dashboard
                     </button>
@@ -136,7 +136,11 @@ function MaintenanceDashboard() {
 
                 >
 
-                    <option value="ALL">All</option>
+                    <option value="ALL">
+
+                        All
+
+                    </option>
 
                     <option value="SCHEDULED">
 

@@ -53,7 +53,9 @@ function RemittanceDashboard() {
                 <h1>Cash Remittance Management</h1>
 
                 <button
+
                     onClick={() => navigate("/admin/dashboard")}
+
                     style={{
                         background: "#2563eb",
                         color: "#fff",
@@ -63,8 +65,11 @@ function RemittanceDashboard() {
                         cursor: "pointer",
                         fontWeight: "600"
                     }}
+
                 >
+
                     ← Dashboard
+
                 </button>
 
             </div>
@@ -72,18 +77,27 @@ function RemittanceDashboard() {
             <section className="trip-stats">
 
                 <RemittanceStatCard
+
                     title="Total"
+
                     value={statistics.total}
+
                 />
 
                 <RemittanceStatCard
+
                     title="Pending"
+
                     value={statistics.pending}
+
                 />
 
                 <RemittanceStatCard
+
                     title="Verified"
+
                     value={statistics.verified}
+
                 />
 
             </section>
@@ -95,7 +109,9 @@ function RemittanceDashboard() {
                 onVerify={(id) => {
 
                     const remittance = remittances.find(
+
                         r => r.id === id
+
                     );
 
                     setSelectedRemittance(remittance);
@@ -105,6 +121,8 @@ function RemittanceDashboard() {
                 }}
 
                 onDelete={handleDeleteRemittance}
+
+                isAdmin={true}
 
             />
 

@@ -4,7 +4,9 @@ function RemittanceTable({
 
                              onVerify,
 
-                             onDelete
+                             onDelete,
+
+                             isAdmin = false
 
                          }) {
 
@@ -28,7 +30,15 @@ function RemittanceTable({
 
                 <th>Status</th>
 
-                <th>Actions</th>
+                {
+
+                    isAdmin && (
+
+                        <th>Actions</th>
+
+                    )
+
+                }
 
             </tr>
 
@@ -84,65 +94,73 @@ function RemittanceTable({
 
                                     </td>
 
-                                    <td>
+                                    {
 
-                                        {
+                                        isAdmin && (
 
-                                            remittance.status === "PENDING" && (
+                                            <td>
 
-                                                <button
+                                                {
 
-                                                    onClick={() =>
+                                                    remittance.status === "PENDING" && (
 
-                                                        onVerify(
+                                                        <button
 
-                                                            remittance.id
+                                                            onClick={() =>
 
-                                                        )
+                                                                onVerify(
 
-                                                    }
+                                                                    remittance.id
 
-                                                >
+                                                                )
 
-                                                    Verify
+                                                            }
 
-                                                </button>
+                                                        >
 
-                                            )
+                                                            Verify
 
-                                        }
-
-                                        <button
-
-                                            onClick={() => {
-
-                                                if (
-
-                                                    window.confirm(
-
-                                                        "Delete this remittance?"
+                                                        </button>
 
                                                     )
 
-                                                ) {
-
-                                                    onDelete(
-
-                                                        remittance.id
-
-                                                    );
-
                                                 }
 
-                                            }}
+                                                <button
 
-                                        >
+                                                    onClick={() => {
 
-                                            Delete
+                                                        if (
 
-                                        </button>
+                                                            window.confirm(
 
-                                    </td>
+                                                                "Delete this remittance?"
+
+                                                            )
+
+                                                        ) {
+
+                                                            onDelete(
+
+                                                                remittance.id
+
+                                                            );
+
+                                                        }
+
+                                                    }}
+
+                                                >
+
+                                                    Delete
+
+                                                </button>
+
+                                            </td>
+
+                                        )
+
+                                    }
 
                                 </tr>
 
@@ -160,7 +178,7 @@ function RemittanceTable({
 
                             <td
 
-                                colSpan="7"
+                                colSpan={isAdmin ? 7 : 6}
 
                                 style={{
 
