@@ -2,6 +2,12 @@ import Badge from "../../../shared/ui/Badge";
 
 function DriverTripTable({ trips }) {
 
+    if (!trips.length) {
+
+        return <p>No trip history yet.</p>;
+
+    }
+
     return (
 
         <table className="trip-table">
@@ -10,6 +16,7 @@ function DriverTripTable({ trips }) {
 
             <tr>
 
+                <th>Driver</th>
                 <th>Vehicle</th>
                 <th>Route</th>
                 <th>Start</th>
@@ -23,9 +30,11 @@ function DriverTripTable({ trips }) {
 
             <tbody>
 
-            {trips.map((trip) => (
+            {trips.map(trip => (
 
                 <tr key={trip.id}>
+
+                    <td>{trip.driverName}</td>
 
                     <td>{trip.vehiclePlate}</td>
 
@@ -36,7 +45,9 @@ function DriverTripTable({ trips }) {
                     <td>{trip.endOdometer ?? "-"}</td>
 
                     <td>
+
                         <Badge status={trip.status} />
+
                     </td>
 
                     <td>{trip.passengerCount}</td>

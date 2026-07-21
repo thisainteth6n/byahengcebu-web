@@ -4,99 +4,118 @@ import Badge from "../../../shared/ui/Badge";
 function TripTable({
 
                        trips,
-
-                       onDelete
+                       onDelete,
+                       showDelete = true
 
                    }) {
 
     return (
 
-        <>
+        <tbody>
 
-            {
+        {
 
-                trips.map(trip => (
+            trips.map(trip => (
 
-                    <tr key={trip.id}>
+                <tr key={trip.id}>
 
-                        <td>{trip.driverName}</td>
+                    <td>{trip.driverName}</td>
 
-                        <td>{trip.vehiclePlate}</td>
+                    <td>{trip.vehiclePlate}</td>
 
-                        <td>{trip.route}</td>
+                    <td>{trip.route}</td>
 
-                        <td>{trip.startOdometer}</td>
+                    <td>{trip.startOdometer}</td>
 
-                        <td>{trip.endOdometer ?? "-"}</td>
+                    <td>{trip.endOdometer ?? "-"}</td>
 
-                        <td>
+                    <td>
 
-                            <Badge status={trip.status} />
+                        <Badge status={trip.status} />
 
-                        </td>
+                    </td>
 
-                        <td>{trip.passengerCount}</td>
+                    <td>{trip.passengerCount}</td>
 
-                        <td>
+                    <td>
 
-                            {
+                        {
+
+                            showDelete ? (
 
                                 trip.status === "ONGOING"
 
-                                    ?
+                                    ? (
 
-                                    <span
-                                        style={{
-                                            color:"#2563eb",
-                                            fontWeight:"600"
-                                        }}
-                                    >
+                                        <span
+                                            style={{
+                                                color:"#2563eb",
+                                                fontWeight:"600"
+                                            }}
+                                        >
 
-                                        In Progress
+                                            In Progress
 
-                                    </span>
+                                        </span>
 
-                                    :
+                                    )
 
-                                    <Button
+                                    : (
 
-                                        variant="danger"
+                                        <Button
 
-                                        onClick={() => {
+                                            variant="danger"
 
-                                            if (
+                                            onClick={() => {
 
-                                                window.confirm(
+                                                if (
 
-                                                    "Delete this completed trip?"
+                                                    window.confirm(
+                                                        "Delete this completed trip?"
+                                                    )
 
-                                                )
+                                                ) {
 
-                                            ) {
+                                                    onDelete(trip.id);
 
-                                                onDelete(trip.id);
+                                                }
 
-                                            }
+                                            }}
 
-                                        }}
+                                        >
 
-                                    >
+                                            Delete
 
-                                        Delete
+                                        </Button>
 
-                                    </Button>
+                                    )
 
-                            }
+                            ) : (
 
-                        </td>
+                                <span
+                                    style={{
+                                        color:"#64748b",
+                                        fontWeight:"500"
+                                    }}
+                                >
 
-                    </tr>
+                                    —
 
-                ))
+                                </span>
 
-            }
+                            )
 
-        </>
+                        }
+
+                    </td>
+
+                </tr>
+
+            ))
+
+        }
+
+        </tbody>
 
     );
 
