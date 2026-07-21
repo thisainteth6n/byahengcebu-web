@@ -7,6 +7,7 @@ import { useTrips } from "../hooks/useTrips";
 
 import StartTripModal from "../components/StartTripModal";
 import EndTripModal from "../components/EndTripModal";
+import DriverTripTable from "../components/DriverTripTable";
 
 function DriverTripDashboard() {
 
@@ -30,9 +31,13 @@ function DriverTripDashboard() {
 
     const {
 
+        trips,
+
         handleStartTrip,
 
-        handleEndTrip
+        handleEndTrip,
+
+        refreshTrips
 
     } = useTrips();
 
@@ -120,6 +125,8 @@ function DriverTripDashboard() {
 
             </div>
 
+            {/* Assigned Vehicle */}
+
             <div className="trip-stat-card">
 
                 <h2>My Assigned Vehicle</h2>
@@ -154,6 +161,15 @@ function DriverTripDashboard() {
 
                                     <button
                                         onClick={() => setShowEndModal(true)}
+                                        style={{
+                                            background: "#dc2626",
+                                            color: "white",
+                                            border: "none",
+                                            borderRadius: "8px",
+                                            padding: "10px 18px",
+                                            cursor: "pointer",
+                                            fontWeight: "600"
+                                        }}
                                     >
                                         End Trip
                                     </button>
@@ -162,6 +178,15 @@ function DriverTripDashboard() {
 
                                     <button
                                         onClick={() => setShowStartModal(true)}
+                                        style={{
+                                            background: "#059669",
+                                            color: "white",
+                                            border: "none",
+                                            borderRadius: "8px",
+                                            padding: "10px 18px",
+                                            cursor: "pointer",
+                                            fontWeight: "600"
+                                        }}
                                     >
                                         Start Trip
                                     </button>
@@ -182,6 +207,58 @@ function DriverTripDashboard() {
 
             </div>
 
+            {/* Current Trip */}
+
+            {
+
+                currentTrip && (
+
+                    <div className="trip-stat-card" style={{ marginTop: "20px" }}>
+
+                        <h2>Current Trip</h2>
+
+                        <p>
+                            <strong>Driver:</strong> {currentTrip.driverName}
+                        </p>
+
+                        <p>
+                            <strong>Vehicle:</strong> {currentTrip.vehiclePlate}
+                        </p>
+
+                        <p>
+                            <strong>Route:</strong> {currentTrip.route}
+                        </p>
+
+                        <p>
+                            <strong>Passengers:</strong> {currentTrip.passengerCount}
+                        </p>
+
+                        <p>
+                            <strong>Started:</strong> {new Date(currentTrip.startTime).toLocaleString()}
+                        </p>
+
+                        <p>
+                            <strong>Status:</strong> {currentTrip.status}
+                        </p>
+
+                    </div>
+
+                )
+
+            }
+
+            {/* Trip History */}
+
+            <div className="trip-stat-card" style={{ marginTop: "20px" }}>
+
+                <h2>My Trip History</h2>
+
+                <DriverTripTable trips={trips} />
+
+            </div>
+
+            {/* Start Trip Modal */}
+
             <StartTripModal
 
                 show={showStartModal}
@@ -194,11 +271,15 @@ function DriverTripDashboard() {
 
                     setShowStartModal(false);
 
+                    await refreshTrips();
+
                     refreshCurrentTrip();
 
                 }}
 
             />
+
+            {/* End Trip Modal */}
 
             {
 
@@ -217,6 +298,8 @@ function DriverTripDashboard() {
                             await handleEndTrip(id, endOdometer);
 
                             setShowEndModal(false);
+
+                            await refreshTrips();
 
                             refreshCurrentTrip();
 
