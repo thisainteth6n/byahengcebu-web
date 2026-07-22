@@ -20,7 +20,7 @@ public class CorsConfig {
         configuration.setAllowedOrigins(
                 List.of(
                         "http://localhost:5173",
-                        "https://byahengcebu-web.onrender.com"
+                        "https://byahengcebu-web-4g4o.onrender.com"
                 )
         );
 
