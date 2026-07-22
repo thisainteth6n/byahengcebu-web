@@ -1,4 +1,4 @@
-# Build stage
+# ---------- Build Stage ----------
 FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /app
@@ -9,12 +9,12 @@ RUN chmod +x mvnw
 
 RUN ./mvnw clean package -DskipTests
 
-# Runtime stage
+# ---------- Runtime Stage ----------
 FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-COPY --from=build /app/targetgit add Dockerfile/*.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
 
