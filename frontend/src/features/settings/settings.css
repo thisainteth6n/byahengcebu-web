@@ -1,0 +1,93 @@
+.settings-page{
+
+    padding:40px;
+
+    background:#eef3ff;
+
+    min-height:100vh;
+
+}
+
+.settings-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:35px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    max-width:800px;
+
+}
+
+.settings-card h1{
+
+    margin:0;
+
+    color:#1e3a8a;
+
+}
+
+.settings-card p{
+
+    color:#64748b;
+
+    margin-top:8px;
+
+    margin-bottom:30px;
+
+}
+
+.setting-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    margin-bottom:20px;
+
+}
+
+.setting-group label{
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:#334155;
+
+}
+
+.setting-group input{
+
+    padding:14px;
+
+    border-radius:10px;
+
+    border:1px solid #dbe3ec;
+
+    background:#f8fafc;
+
+}
+
+.save-btn{
+
+    margin-top:20px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:14px 24px;
+
+    border-radius:10px;
+
+    cursor:not-allowed;
+
+    opacity:.6;
+
+}

@@ -1,6 +1,5 @@
 import "../styles/trip.css";
 
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import { useTrips } from "../hooks/useTrips";
@@ -9,13 +8,10 @@ import AdminLayout from "../../../shared/components/AdminLayout";
 import PageHeader from "../../../shared/components/PageHeader";
 
 import StatCard from "../../../shared/ui/StatCard";
-import Button from "../../../shared/ui/Button";
 
 import TripTable from "../components/TripTable";
 
 function TripDashboard() {
-
-    const navigate = useNavigate();
 
     const [statusFilter, setStatusFilter] = useState("ALL");
 
@@ -58,22 +54,6 @@ function TripDashboard() {
                     title="Trip Monitoring"
 
                     subtitle="Monitor all ongoing and completed trips"
-
-                    actions={
-
-                        <Button
-
-                            variant="secondary"
-
-                            onClick={() => navigate("/admin/dashboard")}
-
-                        >
-
-                            ← Dashboard
-
-                        </Button>
-
-                    }
 
                 />
 
@@ -173,13 +153,45 @@ function TripDashboard() {
 
                 </div>
 
-                <TripTable
+                <div className="trip-table-container">
 
-                    trips={filteredTrips}
+                    <table className="trip-table">
 
-                    onDelete={handleDeleteTrip}
+                        <thead>
 
-                />
+                        <tr>
+
+                            <th>Driver Name</th>
+
+                            <th>Plate Number</th>
+
+                            <th>Route</th>
+
+                            <th>Start Odometer</th>
+
+                            <th>End Odometer</th>
+
+                            <th>Status</th>
+
+                            <th>Passengers</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                        </thead>
+
+                        <TripTable
+
+                            trips={filteredTrips}
+
+                            onDelete={handleDeleteTrip}
+
+                        />
+
+                    </table>
+
+                </div>
 
             </div>
 

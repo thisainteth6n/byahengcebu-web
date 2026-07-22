@@ -638,3 +638,43 @@ tbody tr:hover{
     background:#f8fbff;
 
 }
+
+.dashboard-nav-button{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.dashboard-nav-button:hover{
+
+    transform:translateY(-2px);
+
+    opacity:.9;
+
+}
+
+.dashboard-settings-button{
+
+    background:#374151;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}

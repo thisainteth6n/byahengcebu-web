@@ -1,0 +1,187 @@
+/* ==========================
+   LAYOUT
+========================== */
+
+.layout{
+
+    display:flex;
+
+    min-height:100vh;
+
+    background:#f5f7fb;
+
+}
+
+.main-content{
+
+    flex:1;
+
+    padding:30px;
+
+    overflow:auto;
+
+}
+
+/* ==========================
+   SIDEBAR
+========================== */
+
+.sidebar{
+
+    width:270px;
+
+    background:#1e293b;
+
+    color:white;
+
+    display:flex;
+
+    flex-direction:column;
+
+    box-shadow:4px 0 15px rgba(0,0,0,.08);
+
+}
+
+/* ==========================
+   LOGO
+========================== */
+
+.sidebar-logo{
+
+    padding:30px 25px;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.sidebar-logo h2{
+
+    margin:0;
+
+    font-size:26px;
+
+    font-weight:700;
+
+}
+
+.sidebar-logo span{
+
+    display:block;
+
+    margin-top:6px;
+
+    font-size:13px;
+
+    opacity:.75;
+
+}
+
+/* ==========================
+   NAVIGATION
+========================== */
+
+.sidebar-nav{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+
+    padding:18px 12px;
+
+}
+
+.sidebar-link{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    text-decoration:none;
+
+    color:#d7dee8;
+
+    padding:14px 18px;
+
+    border-radius:12px;
+
+    transition:.25s;
+
+    font-size:15px;
+
+    font-weight:500;
+
+}
+
+.sidebar-link svg{
+
+    font-size:18px;
+
+}
+
+.sidebar-link:hover{
+
+    background:#334155;
+
+    color:white;
+
+}
+
+.sidebar-link.active{
+
+    background:#2563eb;
+
+    color:white;
+
+    font-weight:600;
+
+}
+
+/* ==========================
+   LOGOUT
+========================== */
+
+.logout-button{
+
+    margin-top:auto;
+
+    margin-left:20px;
+
+    margin-right:20px;
+
+    margin-bottom:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    background:#dc2626;
+
+    color:white;
+
+    border:none;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.logout-button:hover{
+
+    background:#b91c1c;
+
+}

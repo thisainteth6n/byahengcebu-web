@@ -13,6 +13,8 @@ import MaintenanceDashboard from "./features/maintenance/pages/MaintenanceDashbo
 import RemittanceDashboard from "./features/remittance/pages/RemittanceDashboard.jsx";
 import DriverRemittanceDashboard from "./features/remittance/pages/DriverRemittanceDashboard.jsx";
 
+import Settings from "./features/settings/Settings.jsx";
+
 import ProtectedRoute from "./shared/routes/ProtectedRoute.jsx";
 import AdminRoute from "./shared/routes/AdminRoute.jsx";
 import DriverRoute from "./shared/routes/DriverRoute.jsx";
@@ -83,6 +85,17 @@ function App() {
                         <ProtectedRoute>
                             <AdminRoute>
                                 <RemittanceDashboard />
+                            </AdminRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/settings"
+                    element={
+                        <ProtectedRoute>
+                            <AdminRoute>
+                                <Settings />
                             </AdminRoute>
                         </ProtectedRoute>
                     }

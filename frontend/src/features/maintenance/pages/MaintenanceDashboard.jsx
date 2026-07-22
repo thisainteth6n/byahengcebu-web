@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import "../styles/maintenance.css";
 
@@ -14,9 +13,9 @@ import CompleteMaintenanceModal from "../components/CompleteMaintenanceModal";
 import DataTable from "../../../shared/ui/DataTable";
 import Button from "../../../shared/ui/Button";
 
-function MaintenanceDashboard() {
+import AdminLayout from "../../../shared/components/AdminLayout";
 
-    const navigate = useNavigate();
+function MaintenanceDashboard() {
 
     const [showAddModal, setShowAddModal] = useState(false);
 
@@ -62,7 +61,9 @@ function MaintenanceDashboard() {
 
     return (
 
-        <div className="maintenance-dashboard">
+        <AdminLayout>
+
+            <div className="maintenance-dashboard">
 
             <section
                 style={{
@@ -179,22 +180,6 @@ function MaintenanceDashboard() {
 
                         </Button>
 
-                        <Button
-
-                            variant="secondary"
-
-                            onClick={() =>
-
-                                navigate("/admin/dashboard")
-
-                            }
-
-                        >
-
-                            Dashboard
-
-                        </Button>
-
                     </>
 
                 }
@@ -271,10 +256,32 @@ function MaintenanceDashboard() {
 
             }
 
-        </div>
+            </div>
+
+        </AdminLayout>
 
     );
 
 }
 
 export default MaintenanceDashboard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -8,6 +8,7 @@ import { useTrips } from "../hooks/useTrips";
 import StartTripModal from "../components/StartTripModal";
 import EndTripModal from "../components/EndTripModal";
 import DriverTripTable from "../components/DriverTripTable";
+import DriverLayout from "../../../shared/components/DriverLayout";
 
 function DriverTripDashboard() {
 
@@ -45,14 +46,6 @@ function DriverTripDashboard() {
 
     const [showEndModal, setShowEndModal] = useState(false);
 
-    const handleLogout = () => {
-
-        localStorage.removeItem("user");
-
-        navigate("/login", { replace: true });
-
-    };
-
     if (loading) {
 
         return <h2>Loading...</h2>;
@@ -61,7 +54,9 @@ function DriverTripDashboard() {
 
     return (
 
-        <div className="trip-dashboard">
+        <DriverLayout>
+
+            <div className="trip-dashboard">
 
             <div
                 style={{
@@ -80,46 +75,6 @@ function DriverTripDashboard() {
                         gap: "10px"
                     }}
                 >
-
-                    <button
-
-                        onClick={() => navigate("/driver/remittances")}
-
-                        style={{
-                            background: "#7c3aed",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: "8px",
-                            padding: "10px 18px",
-                            cursor: "pointer",
-                            fontWeight: "600"
-                        }}
-
-                    >
-
-                        Cash Remittances
-
-                    </button>
-
-                    <button
-
-                        onClick={handleLogout}
-
-                        style={{
-                            background: "#dc2626",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: "8px",
-                            padding: "10px 18px",
-                            cursor: "pointer",
-                            fontWeight: "600"
-                        }}
-
-                    >
-
-                        Logout
-
-                    </button>
 
                 </div>
 
@@ -311,7 +266,9 @@ function DriverTripDashboard() {
 
             }
 
-        </div>
+            </div>
+
+        </DriverLayout>
 
     );
 

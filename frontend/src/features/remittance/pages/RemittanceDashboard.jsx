@@ -1,17 +1,16 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import "../styles/remittance.css";
 
 import { useRemittance } from "../hooks/useRemittance";
 
-import RemittanceStatCard from "../components/RemittanceStatCard";
+import StatCard from "../../../shared/ui/StatCard";
 import RemittanceTable from "../components/RemittanceTable";
 import VerifyRemittanceModal from "../components/VerifyRemittanceModal";
+import AdminLayout from "../../../shared/components/AdminLayout";
 
 function RemittanceDashboard() {
 
-    const navigate = useNavigate();
 
     const {
 
@@ -39,7 +38,9 @@ function RemittanceDashboard() {
 
     return (
 
-        <div className="trip-dashboard">
+        <AdminLayout>
+
+            <div className="trip-dashboard">
 
             <div
                 style={{
@@ -52,55 +53,29 @@ function RemittanceDashboard() {
 
                 <h1>Cash Remittance Management</h1>
 
-                <button
-
-                    onClick={() => navigate("/admin/dashboard")}
-
-                    style={{
-                        background: "#2563eb",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "8px",
-                        padding: "10px 18px",
-                        cursor: "pointer",
-                        fontWeight: "600"
-                    }}
-
-                >
-
-                    ← Dashboard
-
-                </button>
-
             </div>
 
-            <section className="trip-stats">
+                <section className="stats">
 
-                <RemittanceStatCard
+                    <StatCard
+                        title="Total Remittances"
+                        value={statistics.total}
+                        subtitle="All Submitted"
+                    />
 
-                    title="Total"
+                    <StatCard
+                        title="Pending"
+                        value={statistics.pending}
+                        subtitle="Awaiting Verification"
+                    />
 
-                    value={statistics.total}
+                    <StatCard
+                        title="Verified"
+                        value={statistics.verified}
+                        subtitle="Successfully Approved"
+                    />
 
-                />
-
-                <RemittanceStatCard
-
-                    title="Pending"
-
-                    value={statistics.pending}
-
-                />
-
-                <RemittanceStatCard
-
-                    title="Verified"
-
-                    value={statistics.verified}
-
-                />
-
-            </section>
+                </section>
 
             <RemittanceTable
 
@@ -152,7 +127,9 @@ function RemittanceDashboard() {
 
             />
 
-        </div>
+            </div>
+
+        </AdminLayout>
 
     );
 

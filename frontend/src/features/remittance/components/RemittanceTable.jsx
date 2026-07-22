@@ -12,7 +12,7 @@ function RemittanceTable({
 
     return (
 
-        <table className="trip-table">
+        <table className="remittance-table">
 
             <thead>
 
@@ -20,23 +20,21 @@ function RemittanceTable({
 
                 <th>Driver</th>
 
-                <th>Vehicle</th>
+                <th>Plate Number</th>
 
-                <th>Total</th>
+                <th>Total Collection</th>
 
                 <th>Expenses</th>
 
-                <th>Net</th>
+                <th>Net Collection</th>
 
                 <th>Status</th>
 
                 {
 
-                    isAdmin && (
+                    isAdmin &&
 
-                        <th>Actions</th>
-
-                    )
+                    <th>Actions</th>
 
                 }
 
@@ -48,155 +46,129 @@ function RemittanceTable({
 
             {
 
-                remittances.length > 0 ?
+                remittances.length > 0 ? (
 
-                    (
+                    remittances.map(remittance => (
 
-                        remittances.map(
+                        <tr key={remittance.id}>
 
-                            remittance => (
+                            <td>{remittance.driverName}</td>
 
-                                <tr key={remittance.id}>
+                            <td>{remittance.vehiclePlate}</td>
 
-                                    <td>
+                            <td>₱{remittance.totalCollection}</td>
 
-                                        {remittance.driverName}
+                            <td>₱{remittance.expenses}</td>
 
-                                    </td>
+                            <td>₱{remittance.netCollection}</td>
 
-                                    <td>
+                            <td>
 
-                                        {remittance.vehiclePlate}
-
-                                    </td>
-
-                                    <td>
-
-                                        ₱{remittance.totalCollection}
-
-                                    </td>
-
-                                    <td>
-
-                                        ₱{remittance.expenses}
-
-                                    </td>
-
-                                    <td>
-
-                                        ₱{remittance.netCollection}
-
-                                    </td>
-
-                                    <td>
+                                    <span
+                                        className={
+                                            remittance.status === "VERIFIED"
+                                                ? "status verified"
+                                                : "status pending"
+                                        }
+                                    >
 
                                         {remittance.status}
 
-                                    </td>
-
-                                    {
-
-                                        isAdmin && (
-
-                                            <td>
-
-                                                {
-
-                                                    remittance.status === "PENDING" && (
-
-                                                        <button
-
-                                                            onClick={() =>
-
-                                                                onVerify(
-
-                                                                    remittance.id
-
-                                                                )
-
-                                                            }
-
-                                                        >
-
-                                                            Verify
-
-                                                        </button>
-
-                                                    )
-
-                                                }
-
-                                                <button
-
-                                                    onClick={() => {
-
-                                                        if (
-
-                                                            window.confirm(
-
-                                                                "Delete this remittance?"
-
-                                                            )
-
-                                                        ) {
-
-                                                            onDelete(
-
-                                                                remittance.id
-
-                                                            );
-
-                                                        }
-
-                                                    }}
-
-                                                >
-
-                                                    Delete
-
-                                                </button>
-
-                                            </td>
-
-                                        )
-
-                                    }
-
-                                </tr>
-
-                            )
-
-                        )
-
-                    )
-
-                    :
-
-                    (
-
-                        <tr>
-
-                            <td
-
-                                colSpan={isAdmin ? 7 : 6}
-
-                                style={{
-
-                                    textAlign: "center",
-
-                                    padding: "20px"
-
-                                }}
-
-                            >
-
-                                No remittances found.
+                                    </span>
 
                             </td>
 
+                            {
+
+                                isAdmin && (
+
+                                    <td>
+
+                                        {
+
+                                            remittance.status === "PENDING" && (
+
+                                                <button
+
+                                                    className="verify-btn"
+
+                                                    onClick={() =>
+                                                        onVerify(remittance.id)
+                                                    }
+
+                                                >
+
+                                                    Verify
+
+                                                </button>
+
+                                            )
+
+                                        }
+
+                                        <button
+
+                                            className="delete-btn"
+
+                                            onClick={() => {
+
+                                                if (
+
+                                                    window.confirm(
+
+                                                        "Delete this remittance?"
+
+                                                    )
+
+                                                ) {
+
+                                                    onDelete(remittance.id);
+
+                                                }
+
+                                            }}
+
+                                        >
+
+                                            Delete
+
+                                        </button>
+
+                                    </td>
+
+                                )
+
+                            }
+
                         </tr>
 
-                    )
+                    ))
+
+                ) : (
+
+                    <tr>
+
+                        <td
+
+                            colSpan={isAdmin ? 7 : 6}
+
+                            style={{
+
+                                textAlign: "center",
+
+                                padding: "30px"
+
+                            }}
+
+                        >
+
+                            No remittances found.
+
+                        </td>
+
+                    </tr>
+
+                )
 
             }
 

@@ -2,13 +2,13 @@ import Sidebar from "./Sidebar";
 
 import "../styles/sidebar.css";
 
-function AdminLayout({ children }) {
+function DriverLayout({ children }) {
 
     return (
 
         <div className="layout">
 
-            <Sidebar role="ADMIN" />
+            <Sidebar role="DRIVER" />
 
             <main className="main-content">
 
@@ -22,4 +22,4 @@ function AdminLayout({ children }) {
 
 }
 
-export default AdminLayout;
+export default DriverLayout;

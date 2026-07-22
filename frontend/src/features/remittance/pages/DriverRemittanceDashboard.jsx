@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import "../styles/remittance.css";
 
@@ -8,10 +7,10 @@ import { useRemittance } from "../hooks/useRemittance";
 import RemittanceStatCard from "../components/RemittanceStatCard";
 import RemittanceTable from "../components/RemittanceTable";
 import SubmitRemittanceModal from "../components/SubmitRemittanceModal";
+import DriverLayout from "../../../shared/components/DriverLayout";
 
 function DriverRemittanceDashboard() {
 
-    const navigate = useNavigate();
 
     const {
 
@@ -37,7 +36,9 @@ function DriverRemittanceDashboard() {
 
     return (
 
-        <div className="trip-dashboard">
+        <DriverLayout>
+
+            <div className="trip-dashboard">
 
             <div
                 style={{
@@ -76,26 +77,6 @@ function DriverRemittanceDashboard() {
                     >
 
                         Submit Remittance
-
-                    </button>
-
-                    <button
-
-                        onClick={() => navigate("/driver/dashboard")}
-
-                        style={{
-                            background: "#2563eb",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: "8px",
-                            padding: "10px 18px",
-                            cursor: "pointer",
-                            fontWeight: "600"
-                        }}
-
-                    >
-
-                        ← Dashboard
 
                     </button>
 
@@ -167,7 +148,9 @@ function DriverRemittanceDashboard() {
 
             />
 
-        </div>
+            </div>
+
+        </DriverLayout>
 
     );
 

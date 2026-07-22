@@ -2,16 +2,17 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 import {
     FaHome,
+    FaBus,
     FaRoute,
     FaTools,
     FaMoneyBillWave,
-    FaSignOutAlt,
-    FaBus
+    FaCog,
+    FaSignOutAlt
 } from "react-icons/fa";
 
-import "./layout.css";
+import "../styles/sidebar.css";
 
-function Sidebar() {
+function Sidebar({ role }) {
 
     const navigate = useNavigate();
 
@@ -23,73 +24,32 @@ function Sidebar() {
 
     };
 
-    const menuItems = [
-
-        {
-            path: "/admin/dashboard",
-            label: "Dashboard",
-            icon: <FaHome />
-        },
-
-        {
-            path: "/admin/trips",
-            label: "Trip Management",
-            icon: <FaRoute />
-        },
-
-        {
-            path: "/admin/maintenance",
-            label: "Maintenance",
-            icon: <FaTools />
-        },
-
-        {
-            path: "/admin/remittances",
-            label: "Remittances",
-            icon: <FaMoneyBillWave />
-        }
-
-    ];
-
     return (
 
         <aside className="sidebar">
 
-            <div>
+            <div className="sidebar-logo">
 
-                <div className="sidebar-logo">
+                <h2>ByahengCebu</h2>
 
-                    <div className="logo-circle">
+                <span>
 
-                        <FaBus />
+                    Fleet Management System
 
-                    </div>
+                </span>
 
-                    <h2>
+            </div>
 
-                        ByahengCebu
+            <nav className="sidebar-nav">
 
-                    </h2>
+                {
+                    role === "ADMIN" && (
 
-                    <p>
-
-                        Fleet Management System
-
-                    </p>
-
-                </div>
-
-                <nav className="sidebar-links">
-
-                    {
-
-                        menuItems.map(item => (
+                        <>
 
                             <NavLink
 
-                                key={item.path}
-
-                                to={item.path}
+                                to="/admin/dashboard"
 
                                 className={({ isActive }) =>
 
@@ -103,23 +63,162 @@ function Sidebar() {
 
                             >
 
-                                <span>
+                                <FaHome />
 
-                                    {item.icon}
-
-                                </span>
-
-                                {item.label}
+                                Dashboard
 
                             </NavLink>
 
-                        ))
+                            <NavLink
 
-                    }
+                                to="/admin/trips"
 
-                </nav>
+                                className={({ isActive }) =>
 
-            </div>
+                                    isActive
+
+                                        ? "sidebar-link active"
+
+                                        : "sidebar-link"
+
+                                }
+
+                            >
+
+                                <FaRoute />
+
+                                Trips
+
+                            </NavLink>
+
+                            <NavLink
+
+                                to="/admin/maintenance"
+
+                                className={({ isActive }) =>
+
+                                    isActive
+
+                                        ? "sidebar-link active"
+
+                                        : "sidebar-link"
+
+                                }
+
+                            >
+
+                                <FaTools />
+
+                                Maintenance
+
+                            </NavLink>
+
+                            <NavLink
+
+                                to="/admin/remittances"
+
+                                className={({ isActive }) =>
+
+                                    isActive
+
+                                        ? "sidebar-link active"
+
+                                        : "sidebar-link"
+
+                                }
+
+                            >
+
+                                <FaMoneyBillWave />
+
+                                Remittances
+
+                            </NavLink>
+
+                            <NavLink
+
+                                to="/admin/settings"
+
+                                className={({ isActive }) =>
+
+                                    isActive
+
+                                        ? "sidebar-link active"
+
+                                        : "sidebar-link"
+
+                                }
+
+                            >
+
+                                <FaCog />
+
+                                Settings
+
+                            </NavLink>
+
+                        </>
+
+                    )
+                }
+
+                {
+
+                    role === "DRIVER" && (
+
+                        <>
+
+                            <NavLink
+
+                                to="/driver/dashboard"
+
+                                className={({ isActive }) =>
+
+                                    isActive
+
+                                        ? "sidebar-link active"
+
+                                        : "sidebar-link"
+
+                                }
+
+                            >
+
+                                <FaBus />
+
+                                Dashboard
+
+                            </NavLink>
+
+                            <NavLink
+
+                                to="/driver/remittances"
+
+                                className={({ isActive }) =>
+
+                                    isActive
+
+                                        ? "sidebar-link active"
+
+                                        : "sidebar-link"
+
+                                }
+
+                            >
+
+                                <FaMoneyBillWave />
+
+                                Remittances
+
+                            </NavLink>
+
+                        </>
+
+                    )
+
+                }
+
+            </nav>
 
             <button
 
