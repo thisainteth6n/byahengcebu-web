@@ -7,6 +7,7 @@ import com.byahengcebu.mobile.features.vehicle.model.Vehicle
 import retrofit2.Response
 import retrofit2.http.*
 import com.byahengcebu.mobile.features.remittance.model.Remittance
+import com.byahengcebu.mobile.features.issue.model.Issue
 
 interface ApiService {
 
@@ -93,5 +94,21 @@ interface ApiService {
         driverName: String
 
     ): Response<List<Remittance>>
+
+    @POST("issues")
+    suspend fun submitIssue(
+
+        @Body
+        issue: Issue
+
+    ): Response<Issue>
+
+    @GET("issues/driver/{driverName}")
+    suspend fun getDriverIssues(
+
+        @Path("driverName")
+        driverName: String
+
+    ): Response<List<Issue>>
 
 }
