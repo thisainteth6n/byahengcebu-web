@@ -1,17 +1,22 @@
 package com.byahengcebu.mobile.features.trip.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.compose.runtime.*
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.byahengcebu.mobile.features.trip.model.Trip
 import com.byahengcebu.mobile.features.trip.repository.TripRepository
+import com.byahengcebu.mobile.shared.session.SessionManager
 import kotlinx.coroutines.launch
 
-class TripViewModel : ViewModel() {
+class TripViewModel(
+    application: Application
+) : AndroidViewModel(application) {
 
     private val repository = TripRepository()
+
+    private val session =
+        SessionManager(application)
 
     var trips by mutableStateOf<List<Trip>>(emptyList())
         private set
@@ -25,7 +30,7 @@ class TripViewModel : ViewModel() {
     var errorMessage by mutableStateOf("")
         private set
 
-    fun loadTrips(email: String) {
+    fun loadTrips() {
 
         loading = true
 
@@ -33,18 +38,24 @@ class TripViewModel : ViewModel() {
 
             try {
 
-                val tripsResponse =
+                val email = session.getEmail()
+
+                val response =
                     repository.getDriverTrips(email)
 
-                if (tripsResponse.isSuccessful) {
-                    trips = tripsResponse.body() ?: emptyList()
+                if (response.isSuccessful) {
+
+                    trips = response.body() ?: emptyList()
+
                 }
 
-                val currentTripResponse =
+                val current =
                     repository.getCurrentTrip(email)
 
-                if (currentTripResponse.isSuccessful) {
-                    currentTrip = currentTripResponse.body()
+                if (current.isSuccessful) {
+
+                    currentTrip = current.body()
+
                 }
 
             } catch (e: Exception) {
@@ -60,44 +71,30 @@ class TripViewModel : ViewModel() {
 
     }
 
-    fun startTrip(
-        email: String,
-        trip: Trip
-    ) {
+    fun startTrip(trip: Trip) {
 
         viewModelScope.launch {
 
-            try {
+            val email = session.getEmail()
 
-                repository.startTrip(email, trip)
+            repository.startTrip(email, trip)
 
-                loadTrips(email)
-
-            } catch (_: Exception) {
-
-            }
+            loadTrips()
 
         }
 
     }
 
     fun endTrip(
-        email: String,
         id: Long,
         trip: Trip
     ) {
 
         viewModelScope.launch {
 
-            try {
+            repository.endTrip(id, trip)
 
-                repository.endTrip(id, trip)
-
-                loadTrips(email)
-
-            } catch (_: Exception) {
-
-            }
+            loadTrips()
 
         }
 

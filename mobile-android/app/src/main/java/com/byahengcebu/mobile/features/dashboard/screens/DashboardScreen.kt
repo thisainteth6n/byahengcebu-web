@@ -2,12 +2,6 @@ package com.byahengcebu.mobile.features.dashboard.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DirectionsBus
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Report
-import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -177,17 +171,7 @@ fun DashboardScreen(
 
         ) {
 
-            Icon(
-
-                Icons.Default.Logout,
-
-                null
-
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text("Logout")
+            Text("🚪 Logout")
 
         }
 

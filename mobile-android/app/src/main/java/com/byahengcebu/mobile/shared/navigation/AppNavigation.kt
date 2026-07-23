@@ -8,9 +8,13 @@ import androidx.navigation.compose.rememberNavController
 import com.byahengcebu.mobile.features.auth.screens.LoginScreen
 import com.byahengcebu.mobile.features.auth.screens.RegisterScreen
 import com.byahengcebu.mobile.features.dashboard.screens.DashboardScreen
+import com.byahengcebu.mobile.features.issue.screens.ReportIssueScreen
+import com.byahengcebu.mobile.features.profile.screens.ProfileScreen
+import com.byahengcebu.mobile.features.remittance.screens.RemittanceScreen
 import com.byahengcebu.mobile.features.trip.screens.TripScreen
 import com.byahengcebu.mobile.features.trip.viewmodel.TripViewModel
 import com.byahengcebu.mobile.features.vehicle.viewmodel.VehicleViewModel
+import com.byahengcebu.mobile.shared.session.SessionManager
 
 @Composable
 fun AppNavigation() {
@@ -20,6 +24,8 @@ fun AppNavigation() {
     val vehicleViewModel: VehicleViewModel = viewModel()
 
     val tripViewModel: TripViewModel = viewModel()
+
+    val session = SessionManager(navController.context)
 
     NavHost(
 
@@ -35,7 +41,15 @@ fun AppNavigation() {
 
                 onLoginClick = {
 
-                    navController.navigate(Routes.Dashboard.route)
+                    navController.navigate(Routes.Dashboard.route) {
+
+                        popUpTo(Routes.Login.route) {
+
+                            inclusive = true
+
+                        }
+
+                    }
 
                 },
 
@@ -81,7 +95,27 @@ fun AppNavigation() {
 
                 },
 
+                onRemittanceClick = {
+
+                    navController.navigate(Routes.Remittance.route)
+
+                },
+
+                onReportIssueClick = {
+
+                    navController.navigate(Routes.ReportIssue.route)
+
+                },
+
+                onProfileClick = {
+
+                    navController.navigate(Routes.Profile.route)
+
+                },
+
                 onLogout = {
+
+                    session.logout()
 
                     navController.navigate(Routes.Login.route) {
 
@@ -100,6 +134,30 @@ fun AppNavigation() {
             TripScreen(
 
                 viewModel = tripViewModel
+
+            )
+
+        }
+
+        composable(Routes.Remittance.route) {
+
+            RemittanceScreen()
+
+        }
+
+        composable(Routes.ReportIssue.route) {
+
+            ReportIssueScreen()
+
+        }
+
+        composable(Routes.Profile.route) {
+
+            ProfileScreen(
+
+                fullname = session.getFullname(),
+
+                email = session.getEmail()
 
             )
 

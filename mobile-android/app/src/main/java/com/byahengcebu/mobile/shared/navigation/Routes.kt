@@ -8,8 +8,12 @@ sealed class Routes(val route: String) {
 
     object Dashboard : Routes("dashboard")
 
-    object VehicleDetails : Routes("vehicle_details")
-
     object Trip : Routes("trip")
+
+    object Remittance : Routes("remittance")
+
+    object ReportIssue : Routes("report_issue")
+
+    object Profile : Routes("profile")
 
 }
