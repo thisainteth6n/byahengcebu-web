@@ -1,6 +1,5 @@
 package com.byahengcebu.mobile.features.trip.screens
 
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,140 +13,182 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byahengcebu.mobile.features.trip.model.Trip
 import com.byahengcebu.mobile.features.trip.viewmodel.TripViewModel
-import com.byahengcebu.mobile.features.vehicle.viewmodel.VehicleViewModel
 
 @Composable
 fun TripScreen(
-
-    tripViewModel: TripViewModel,
-
-    vehicleViewModel: VehicleViewModel
-
+    tripViewModel: TripViewModel
 ) {
 
     LaunchedEffect(Unit) {
-
-        vehicleViewModel.loadAssignedVehicle()
-
         tripViewModel.loadTrips()
+    }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(tripViewModel.errorMessage) {
+
+        if (tripViewModel.errorMessage.isNotBlank()) {
+
+            snackbarHostState.showSnackbar(
+                tripViewModel.errorMessage
+            )
+
+            tripViewModel.clearError()
+
+        }
 
     }
 
     var passengers by remember { mutableStateOf("") }
     var startOdometer by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp)
-    ) {
+    Scaffold(
 
-        Text(
-            text = "My Trips",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold
-        )
+        snackbarHost = {
 
-        Spacer(modifier = Modifier.height(20.dp))
+            SnackbarHost(snackbarHostState)
 
-        if (tripViewModel.currentTrip == null) {
+        }
+
+    ) { padding ->
+
+        Column(
+
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .padding(20.dp)
+
+        ) {
 
             Text(
-                "No active trip.",
+                text = "My Trips",
+                fontSize = 28.sp,
                 fontWeight = FontWeight.Bold
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            OutlinedTextField(
-                value = passengers,
-                onValueChange = {
-                    passengers = it
-                },
-                label = {
-                    Text("Passenger Count")
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
+            if (tripViewModel.currentTrip == null) {
 
-            Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    "No active trip.",
+                    fontWeight = FontWeight.Bold
+                )
 
-            OutlinedTextField(
-                value = startOdometer,
-                onValueChange = {
-                    startOdometer = it
-                },
-                label = {
-                    Text("Start Odometer")
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
+                Spacer(modifier = Modifier.height(20.dp))
 
-            Spacer(modifier = Modifier.height(20.dp))
+                OutlinedTextField(
 
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
+                    value = passengers,
 
-                    if (
-                        passengers.isBlank() ||
-                        startOdometer.isBlank()
-                    ) return@Button
+                    onValueChange = {
+                        passengers = it
+                    },
 
-                    tripViewModel.startTrip(
+                    label = {
+                        Text("Passenger Count")
+                    },
 
-                        Trip(
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    ),
 
-                            passengerCount =
-                                passengers.toInt(),
+                    modifier = Modifier.fillMaxWidth()
 
-                            startOdometer =
-                                startOdometer.toInt()
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                OutlinedTextField(
+
+                    value = startOdometer,
+
+                    onValueChange = {
+                        startOdometer = it
+                    },
+
+                    label = {
+                        Text("Start Odometer")
+                    },
+
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    ),
+
+                    modifier = Modifier.fillMaxWidth()
+
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Button(
+
+                    modifier = Modifier.fillMaxWidth(),
+
+                    onClick = {
+
+                        if (
+                            passengers.isBlank() ||
+                            startOdometer.isBlank()
+                        ) return@Button
+
+                        tripViewModel.startTrip(
+
+                            Trip(
+
+                                passengerCount = passengers.toInt(),
+
+                                startOdometer = startOdometer.toInt()
+
+                            )
 
                         )
 
-                    )
+                        passengers = ""
+                        startOdometer = ""
 
-                    passengers = ""
-                    startOdometer = ""
+                    }
+
+                ) {
+
+                    Text("START TRIP")
 
                 }
-            ) {
 
-                Text("START TRIP")
+            } else {
+
+                CurrentTripCard(
+
+                    trip = tripViewModel.currentTrip!!,
+
+                    tripViewModel = tripViewModel
+
+                )
 
             }
 
-        } else {
+            Spacer(modifier = Modifier.height(30.dp))
 
-            CurrentTripCard(
-                trip = tripViewModel.currentTrip!!,
-                tripViewModel = tripViewModel
+            Text(
+
+                text = "Trip History",
+
+                fontSize = 22.sp,
+
+                fontWeight = FontWeight.Bold
+
             )
 
-        }
+            Spacer(modifier = Modifier.height(12.dp))
 
-        Spacer(modifier = Modifier.height(30.dp))
+            LazyColumn {
 
-        Text(
-            text = "Trip History",
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold
-        )
+                items(tripViewModel.trips) { trip ->
 
-        Spacer(modifier = Modifier.height(12.dp))
+                    HistoryCard(trip)
 
-        LazyColumn {
-
-            items(tripViewModel.trips) { trip ->
-
-                HistoryCard(trip)
+                }
 
             }
 
@@ -173,23 +214,33 @@ fun CurrentTripCard(
     }
 
     Card(
+
         modifier = Modifier.fillMaxWidth()
+
     ) {
 
         Column(
+
             modifier = Modifier.padding(20.dp)
+
         ) {
 
             Text(
+
                 "CURRENT TRIP",
+
                 fontWeight = FontWeight.Bold
+
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Text("Vehicle : ${trip.vehiclePlate}")
+
             Text("Route : ${trip.route}")
+
             Text("Passengers : ${trip.passengerCount}")
+
             Text("Started : ${trip.startOdometer}")
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -238,8 +289,7 @@ fun CurrentTripCard(
 
                             trip.copy(
 
-                                endOdometer =
-                                    endOdometer.toInt()
+                                endOdometer = endOdometer.toInt()
 
                             )
 
@@ -263,22 +313,31 @@ fun CurrentTripCard(
 
 @Composable
 fun HistoryCard(
+
     trip: Trip
+
 ) {
 
     Card(
+
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 10.dp)
+
     ) {
 
         Column(
+
             modifier = Modifier.padding(16.dp)
+
         ) {
 
             Text(
+
                 trip.vehiclePlate,
+
                 fontWeight = FontWeight.Bold
+
             )
 
             Text("Route : ${trip.route}")
@@ -292,4 +351,3 @@ fun HistoryCard(
     }
 
 }
-

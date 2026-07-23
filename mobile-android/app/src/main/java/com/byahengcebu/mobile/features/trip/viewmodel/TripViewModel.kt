@@ -30,6 +30,10 @@ class TripViewModel(
     var errorMessage by mutableStateOf("")
         private set
 
+    fun clearError() {
+        errorMessage = ""
+    }
+
     fun loadTrips() {
 
         loading = true
@@ -40,22 +44,12 @@ class TripViewModel(
 
                 val email = session.getEmail()
 
-                val response =
-                    repository.getDriverTrips(email)
-
-                if (response.isSuccessful) {
-
-                    trips = response.body() ?: emptyList()
-
+                repository.getDriverTrips(email).body()?.let {
+                    trips = it
                 }
 
-                val current =
-                    repository.getCurrentTrip(email)
-
-                if (current.isSuccessful) {
-
-                    currentTrip = current.body()
-
+                repository.getCurrentTrip(email).body()?.let {
+                    currentTrip = it
                 }
 
             } catch (e: Exception) {
@@ -71,15 +65,37 @@ class TripViewModel(
 
     }
 
-    fun startTrip(trip: Trip) {
+    fun startTrip(
+        trip: Trip
+    ) {
 
         viewModelScope.launch {
 
-            val email = session.getEmail()
+            try {
 
-            repository.startTrip(email, trip)
+                val email = session.getEmail()
 
-            loadTrips()
+                val response =
+                    repository.startTrip(email, trip)
+
+                if (response.isSuccessful) {
+
+                    loadTrips()
+
+                } else {
+
+                    errorMessage =
+                        response.errorBody()?.string()
+                            ?: "Unable to start trip."
+
+                }
+
+            } catch (e: Exception) {
+
+                errorMessage =
+                    e.localizedMessage ?: "Connection Error"
+
+            }
 
         }
 
@@ -92,9 +108,29 @@ class TripViewModel(
 
         viewModelScope.launch {
 
-            repository.endTrip(id, trip)
+            try {
 
-            loadTrips()
+                val response =
+                    repository.endTrip(id, trip)
+
+                if (response.isSuccessful) {
+
+                    loadTrips()
+
+                } else {
+
+                    errorMessage =
+                        response.errorBody()?.string()
+                            ?: "Unable to end trip."
+
+                }
+
+            } catch (e: Exception) {
+
+                errorMessage =
+                    e.localizedMessage ?: "Connection Error"
+
+            }
 
         }
 

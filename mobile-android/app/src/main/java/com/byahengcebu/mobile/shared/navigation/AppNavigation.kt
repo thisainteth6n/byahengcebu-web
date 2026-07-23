@@ -133,9 +133,7 @@ fun AppNavigation() {
 
             TripScreen(
 
-                tripViewModel = tripViewModel,
-
-                vehicleViewModel = vehicleViewModel
+                tripViewModel = tripViewModel
 
             )
 
