@@ -14,14 +14,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byahengcebu.mobile.features.trip.model.Trip
 import com.byahengcebu.mobile.features.trip.viewmodel.TripViewModel
+import com.byahengcebu.mobile.features.vehicle.viewmodel.VehicleViewModel
 
 @Composable
 fun TripScreen(
-    viewModel: TripViewModel
+
+    tripViewModel: TripViewModel,
+
+    vehicleViewModel: VehicleViewModel
+
 ) {
 
     LaunchedEffect(Unit) {
-        viewModel.loadTrips()
+
+        vehicleViewModel.loadAssignedVehicle()
+
+        tripViewModel.loadTrips()
+
     }
 
     var passengers by remember { mutableStateOf("") }
@@ -41,7 +50,7 @@ fun TripScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        if (viewModel.currentTrip == null) {
+        if (tripViewModel.currentTrip == null) {
 
             Text(
                 "No active trip.",
@@ -91,7 +100,7 @@ fun TripScreen(
                         startOdometer.isBlank()
                     ) return@Button
 
-                    viewModel.startTrip(
+                    tripViewModel.startTrip(
 
                         Trip(
 
@@ -118,8 +127,8 @@ fun TripScreen(
         } else {
 
             CurrentTripCard(
-                trip = viewModel.currentTrip!!,
-                viewModel = viewModel
+                trip = tripViewModel.currentTrip!!,
+                tripViewModel = tripViewModel
             )
 
         }
@@ -136,7 +145,7 @@ fun TripScreen(
 
         LazyColumn {
 
-            items(viewModel.trips) { trip ->
+            items(tripViewModel.trips) { trip ->
 
                 HistoryCard(trip)
 
@@ -153,7 +162,7 @@ fun CurrentTripCard(
 
     trip: Trip,
 
-    viewModel: TripViewModel
+    tripViewModel: TripViewModel
 
 ) {
 
@@ -223,7 +232,7 @@ fun CurrentTripCard(
 
                     trip.id?.let {
 
-                        viewModel.endTrip(
+                        tripViewModel.endTrip(
 
                             it,
 

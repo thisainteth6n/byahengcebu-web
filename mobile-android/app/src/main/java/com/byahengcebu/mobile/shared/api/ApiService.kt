@@ -6,6 +6,7 @@ import com.byahengcebu.mobile.features.auth.model.User
 import com.byahengcebu.mobile.features.vehicle.model.Vehicle
 import retrofit2.Response
 import retrofit2.http.*
+import com.byahengcebu.mobile.features.remittance.model.Remittance
 
 interface ApiService {
 
@@ -64,5 +65,33 @@ interface ApiService {
         @Path("id") id: Long,
         @Body trip: Trip
     ): Response<Trip>
+
+    // ==========================
+// REMITTANCE
+// ==========================
+
+    @GET("remittances/driver/{driverName}/eligible")
+    suspend fun getEligibleTrips(
+
+        @Path("driverName")
+        driverName: String
+
+    ): Response<List<Trip>>
+
+    @POST("remittances")
+    suspend fun submitRemittance(
+
+        @Body
+        remittance: Remittance
+
+    ): Response<Remittance>
+
+    @GET("remittances/driver/{driverName}")
+    suspend fun getDriverRemittances(
+
+        @Path("driverName")
+        driverName: String
+
+    ): Response<List<Remittance>>
 
 }
