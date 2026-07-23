@@ -1,8 +1,8 @@
 package com.byahengcebu.mobile.features.trip.viewmodel
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byahengcebu.mobile.features.trip.model.Trip
@@ -13,7 +13,10 @@ class TripViewModel : ViewModel() {
 
     private val repository = TripRepository()
 
-    var ongoingTrips by mutableStateOf<List<Trip>>(emptyList())
+    var trips by mutableStateOf<List<Trip>>(emptyList())
+        private set
+
+    var currentTrip by mutableStateOf<Trip?>(null)
         private set
 
     var loading by mutableStateOf(false)
@@ -22,7 +25,7 @@ class TripViewModel : ViewModel() {
     var errorMessage by mutableStateOf("")
         private set
 
-    fun loadTrips() {
+    fun loadTrips(email: String) {
 
         loading = true
 
@@ -30,26 +33,24 @@ class TripViewModel : ViewModel() {
 
             try {
 
-                val response = repository.getOngoingTrips()
+                val tripsResponse =
+                    repository.getDriverTrips(email)
 
-                if (response.isSuccessful) {
+                if (tripsResponse.isSuccessful) {
+                    trips = tripsResponse.body() ?: emptyList()
+                }
 
-                    ongoingTrips = response.body() ?: emptyList()
+                val currentTripResponse =
+                    repository.getCurrentTrip(email)
 
-                    println("Trips Loaded: ${ongoingTrips.size}")
-
-                } else {
-
-                    println("Load Trips Failed")
-                    println("HTTP ${response.code()}")
-                    println(response.errorBody()?.string())
-
+                if (currentTripResponse.isSuccessful) {
+                    currentTrip = currentTripResponse.body()
                 }
 
             } catch (e: Exception) {
 
-                errorMessage = e.localizedMessage ?: "Connection Error"
-                e.printStackTrace()
+                errorMessage =
+                    e.localizedMessage ?: "Connection Error"
 
             }
 
@@ -59,32 +60,20 @@ class TripViewModel : ViewModel() {
 
     }
 
-    fun startTrip(trip: Trip) {
+    fun startTrip(
+        email: String,
+        trip: Trip
+    ) {
 
         viewModelScope.launch {
 
             try {
 
-                val response = repository.startTrip(trip)
+                repository.startTrip(email, trip)
 
-                if (response.isSuccessful) {
+                loadTrips(email)
 
-                    println("Trip Created Successfully")
-                    println(response.body())
-
-                    loadTrips()
-
-                } else {
-
-                    println("START TRIP FAILED")
-                    println("HTTP ${response.code()}")
-                    println(response.errorBody()?.string())
-
-                }
-
-            } catch (e: Exception) {
-
-                e.printStackTrace()
+            } catch (_: Exception) {
 
             }
 
@@ -92,31 +81,21 @@ class TripViewModel : ViewModel() {
 
     }
 
-    fun endTrip(id: Long, trip: Trip) {
+    fun endTrip(
+        email: String,
+        id: Long,
+        trip: Trip
+    ) {
 
         viewModelScope.launch {
 
             try {
 
-                val response = repository.endTrip(id, trip)
+                repository.endTrip(id, trip)
 
-                if (response.isSuccessful) {
+                loadTrips(email)
 
-                    println("Trip Ended Successfully")
-
-                    loadTrips()
-
-                } else {
-
-                    println("END TRIP FAILED")
-                    println("HTTP ${response.code()}")
-                    println(response.errorBody()?.string())
-
-                }
-
-            } catch (e: Exception) {
-
-                e.printStackTrace()
+            } catch (_: Exception) {
 
             }
 

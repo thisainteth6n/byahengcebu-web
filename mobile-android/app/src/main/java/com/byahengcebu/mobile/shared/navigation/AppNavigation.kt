@@ -8,7 +8,6 @@ import androidx.navigation.compose.rememberNavController
 import com.byahengcebu.mobile.features.auth.screens.LoginScreen
 import com.byahengcebu.mobile.features.auth.screens.RegisterScreen
 import com.byahengcebu.mobile.features.dashboard.screens.DashboardScreen
-import com.byahengcebu.mobile.features.dashboard.screens.VehicleDetailsScreen
 import com.byahengcebu.mobile.features.trip.screens.TripScreen
 import com.byahengcebu.mobile.features.trip.viewmodel.TripViewModel
 import com.byahengcebu.mobile.features.vehicle.viewmodel.VehicleViewModel
@@ -76,33 +75,19 @@ fun AppNavigation() {
 
                 viewModel = vehicleViewModel,
 
-                onVehicleClick = {
-
-                    vehicleViewModel.selectVehicle(it)
-
-                    navController.navigate(Routes.VehicleDetails.route)
-
-                },
-
                 onTripClick = {
 
                     navController.navigate(Routes.Trip.route)
 
-                }
+                },
 
-            )
+                onLogout = {
 
-        }
+                    navController.navigate(Routes.Login.route) {
 
-        composable(Routes.VehicleDetails.route) {
+                        popUpTo(0)
 
-            VehicleDetailsScreen(
-
-                viewModel = vehicleViewModel,
-
-                onBackClick = {
-
-                    navController.popBackStack()
+                    }
 
                 }
 

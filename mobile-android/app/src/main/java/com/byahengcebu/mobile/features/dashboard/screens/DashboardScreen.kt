@@ -1,205 +1,123 @@
 package com.byahengcebu.mobile.features.dashboard.screens
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsBus
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Report
+import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.byahengcebu.mobile.features.vehicle.model.Vehicle
 import com.byahengcebu.mobile.features.vehicle.viewmodel.VehicleViewModel
-import kotlin.collections.get
 
 @Composable
 fun DashboardScreen(
+
     viewModel: VehicleViewModel,
-    onVehicleClick: (Vehicle) -> Unit,
-    onTripClick: () -> Unit
+
+    onTripClick: () -> Unit,
+
+    onRemittanceClick: () -> Unit,
+
+    onReportIssueClick: () -> Unit,
+
+    onProfileClick: () -> Unit,
+
+    onLogout: () -> Unit
+
 ) {
 
     LaunchedEffect(Unit) {
-        viewModel.loadDashboard()
+
+        viewModel.loadAssignedVehicle()
+
     }
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(20.dp)
+    Column(
+
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp)
+
     ) {
 
-        item {
+        Text(
 
-            Text(
-                text = "🚍 ByahengCebu",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
+            text = "🚍 ByahengCebu",
 
-            Text(
-                text = "Fleet Management Dashboard",
-                style = MaterialTheme.typography.bodyLarge
-            )
+            fontSize = 30.sp,
 
-            Spacer(modifier = Modifier.height(24.dp))
-        }
+            fontWeight = FontWeight.Bold
 
-        item {
+        )
 
-            Text(
-                text = "Fleet Statistics",
-                fontWeight = FontWeight.Bold,
-                fontSize = 22.sp
-            )
+        Spacer(modifier = Modifier.height(6.dp))
 
-            Spacer(modifier = Modifier.height(12.dp))
-        }
+        Text(
 
-        item {
+            text = "Driver Dashboard",
 
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                userScrollEnabled = false
+            style = MaterialTheme.typography.bodyLarge
+
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Card(
+
+            modifier = Modifier.fillMaxWidth(),
+
+            shape = RoundedCornerShape(18.dp)
+
+        ) {
+
+            Column(
+
+                modifier = Modifier.padding(20.dp)
+
             ) {
 
-                item {
-                    StatisticCard(
-                        "Total",
-                        viewModel.statistics.total.toString()
-                    )
-                }
+                Text(
 
-                item {
-                    StatisticCard(
-                        "Active",
-                        viewModel.statistics.active.toString()
-                    )
-                }
+                    text = "Assigned Vehicle",
 
-                item {
-                    StatisticCard(
-                        "Maintenance",
-                        viewModel.statistics.maintenance.toString()
-                    )
-                }
+                    fontWeight = FontWeight.Bold,
 
-            }
+                    fontSize = 20.sp
 
-            Spacer(modifier = Modifier.height(24.dp))
+                )
 
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onTripClick
-            ) {
-                Text("Trip Management")
-            }
+                Spacer(modifier = Modifier.height(12.dp))
 
-            Spacer(modifier = Modifier.height(20.dp))
+                if (viewModel.loading) {
 
-            HorizontalDivider()
+                    CircularProgressIndicator()
 
-            Spacer(modifier = Modifier.height(20.dp))
+                } else {
 
-            Text(
-                text = "Fleet Vehicles",
-                fontWeight = FontWeight.Bold,
-                fontSize = 22.sp
-            )
+                    val vehicle = viewModel.assignedVehicle
 
-            Spacer(modifier = Modifier.height(12.dp))
-        }
+                    if (vehicle == null) {
 
-        if (viewModel.loading) {
+                        Text("No assigned vehicle.")
 
-            item {
+                    } else {
 
-                CircularProgressIndicator()
+                        Text("Plate: ${vehicle.plateNumber}")
 
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-        }
+                        Text("Route: ${vehicle.route}")
 
-        items(viewModel.vehicles.size) { index ->
+                        Text("Model: ${vehicle.model}")
 
-            val vehicle = viewModel.vehicles[index]
-
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp)
-                    .clickable {
-                        onVehicleClick(vehicle)
-                    },
-                elevation = CardDefaults.cardElevation(4.dp)
-            ) {
-
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-
-                    Text(
-                        text = vehicle.plateNumber,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-
-                    Spacer(modifier = Modifier.height(6.dp))
-
-                    Text("Route: ${vehicle.route}")
-                    Text("Model: ${vehicle.model}")
-                    Text("Status: ${vehicle.status}")
-
-                }
-
-            }
-
-        }
-
-        if (!viewModel.loading && viewModel.vehicles.isEmpty()) {
-
-            item {
-
-                Card(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-
-                    Column(
-                        modifier = Modifier.padding(24.dp)
-                    ) {
-
-                        Text(
-                            text = "🚍",
-                            fontSize = 42.sp
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Text(
-                            text = "No vehicles found.",
-                            fontWeight = FontWeight.Bold
-                        )
+                        Text("Status: ${vehicle.status}")
 
                     }
 
@@ -209,38 +127,100 @@ fun DashboardScreen(
 
         }
 
+        Spacer(modifier = Modifier.height(30.dp))
+
+        ActionButton(
+
+            "🚍  My Trips",
+
+            onTripClick
+
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        ActionButton(
+
+            "💰  Remittance",
+
+            onRemittanceClick
+
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        ActionButton(
+
+            "⚠  Report Vehicle Issue",
+
+            onReportIssueClick
+
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        ActionButton(
+
+            "👤  Profile",
+
+            onProfileClick
+
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        OutlinedButton(
+
+            modifier = Modifier.fillMaxWidth(),
+
+            onClick = onLogout
+
+        ) {
+
+            Icon(
+
+                Icons.Default.Logout,
+
+                null
+
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text("Logout")
+
+        }
+
     }
 
 }
 
 @Composable
-fun StatisticCard(
+private fun ActionButton(
+
     title: String,
-    value: String
+
+    onClick: () -> Unit
+
 ) {
 
-    Card(
-        elevation = CardDefaults.cardElevation(4.dp)
+    Button(
+
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+
+        onClick = onClick
+
     ) {
 
-        Column(
-            modifier = Modifier.padding(12.dp)
-        ) {
+        Text(
 
-            Text(
-                text = title,
-                style = MaterialTheme.typography.labelMedium
-            )
+            title,
 
-            Spacer(modifier = Modifier.height(6.dp))
+            fontSize = 16.sp
 
-            Text(
-                text = value,
-                fontWeight = FontWeight.Bold,
-                fontSize = 26.sp
-            )
-
-        }
+        )
 
     }
 

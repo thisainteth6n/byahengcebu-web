@@ -1,7 +1,6 @@
 package com.byahengcebu.mobile.shared.api
 
 import com.byahengcebu.mobile.features.auth.model.AuthResponse
-import com.byahengcebu.mobile.features.trip.model.Statistics
 import com.byahengcebu.mobile.features.trip.model.Trip
 import com.byahengcebu.mobile.features.auth.model.User
 import com.byahengcebu.mobile.features.vehicle.model.Vehicle
@@ -29,11 +28,10 @@ interface ApiService {
     // VEHICLES
     // ==========================
 
-    @GET("vehicles")
-    suspend fun getVehicles(): Response<List<Vehicle>>
-
-    @GET("vehicles/statistics")
-    suspend fun getStatistics(): Response<Statistics>
+    @GET("vehicles/assigned/{email}")
+    suspend fun getAssignedVehicle(
+        @Path("email") email: String
+    ): Response<Vehicle>
 
     @GET("vehicles/{id}")
     suspend fun getVehicleById(
@@ -45,14 +43,19 @@ interface ApiService {
     // TRIPS
     // ==========================
 
-    @GET("trips")
-    suspend fun getTrips(): Response<List<Trip>>
+    @GET("trips/driver/{email}")
+    suspend fun getDriverTrips(
+        @Path("email") email: String
+    ): Response<List<Trip>>
 
-    @GET("trips/ongoing")
-    suspend fun getOngoingTrips(): Response<List<Trip>>
+    @GET("trips/driver/{email}/ongoing")
+    suspend fun getCurrentTrip(
+        @Path("email") email: String
+    ): Response<Trip>
 
-    @POST("trips/start")
+    @POST("trips/start/{email}")
     suspend fun startTrip(
+        @Path("email") email: String,
         @Body trip: Trip
     ): Response<Trip>
 

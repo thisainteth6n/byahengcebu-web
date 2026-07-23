@@ -1,32 +1,24 @@
 package com.byahengcebu.mobile.features.vehicle.viewmodel
 
+import android.app.Application
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.byahengcebu.mobile.features.trip.model.Statistics
 import com.byahengcebu.mobile.features.vehicle.model.Vehicle
 import com.byahengcebu.mobile.features.vehicle.repository.VehicleRepository
+import com.byahengcebu.mobile.shared.session.SessionManager
 import kotlinx.coroutines.launch
 
-class VehicleViewModel : ViewModel() {
+class VehicleViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = VehicleRepository()
 
-    var vehicles by mutableStateOf<List<Vehicle>>(emptyList())
-        private set
+    private val session =
+        SessionManager(application.applicationContext)
 
-    var statistics by mutableStateOf(
-        Statistics(
-            total = 0,
-            active = 0,
-            maintenance = 0
-        )
-    )
-        private set
-
-    var selectedVehicle by mutableStateOf<Vehicle?>(null)
+    var assignedVehicle by mutableStateOf<Vehicle?>(null)
         private set
 
     var loading by mutableStateOf(false)
@@ -35,7 +27,7 @@ class VehicleViewModel : ViewModel() {
     var errorMessage by mutableStateOf("")
         private set
 
-    fun loadDashboard() {
+    fun loadAssignedVehicle() {
 
         loading = true
 
@@ -43,18 +35,18 @@ class VehicleViewModel : ViewModel() {
 
             try {
 
-                val statisticsResponse = repository.getStatistics()
+                val email = session.getEmail()
 
-                if (statisticsResponse.isSuccessful) {
-                    statisticsResponse.body()?.let {
-                        statistics = it
-                    }
-                }
+                val response = repository.getAssignedVehicle(email)
 
-                val vehiclesResponse = repository.getVehicles()
+                if (response.isSuccessful) {
 
-                if (vehiclesResponse.isSuccessful) {
-                    vehicles = vehiclesResponse.body() ?: emptyList()
+                    assignedVehicle = response.body()
+
+                } else {
+
+                    errorMessage = "No assigned vehicle."
+
                 }
 
             } catch (e: Exception) {
@@ -67,10 +59,6 @@ class VehicleViewModel : ViewModel() {
 
         }
 
-    }
-
-    fun selectVehicle(vehicle: Vehicle) {
-        selectedVehicle = vehicle
     }
 
 }

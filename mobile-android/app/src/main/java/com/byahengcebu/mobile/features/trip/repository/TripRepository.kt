@@ -6,25 +6,38 @@ import retrofit2.Response
 
 class TripRepository {
 
-    suspend fun getTrips(): Response<List<Trip>> {
-        return ApiClient.api.getTrips()
+    suspend fun getDriverTrips(
+        email: String
+    ): Response<List<Trip>> {
+
+        return ApiClient.api.getDriverTrips(email)
+
     }
 
-    suspend fun getOngoingTrips(): Response<List<Trip>> {
-        return ApiClient.api.getOngoingTrips()
+    suspend fun getCurrentTrip(
+        email: String
+    ): Response<Trip> {
+
+        return ApiClient.api.getCurrentTrip(email)
+
     }
 
     suspend fun startTrip(
+        email: String,
         trip: Trip
     ): Response<Trip> {
-        return ApiClient.api.startTrip(trip)
+
+        return ApiClient.api.startTrip(email, trip)
+
     }
 
     suspend fun endTrip(
         id: Long,
         trip: Trip
     ): Response<Trip> {
+
         return ApiClient.api.endTrip(id, trip)
+
     }
 
 }

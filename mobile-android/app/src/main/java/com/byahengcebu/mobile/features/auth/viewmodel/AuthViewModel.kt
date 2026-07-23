@@ -66,19 +66,23 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
                         if (body.success) {
 
-                            session.saveUser(
+                            if (body.role != "DRIVER") {
 
-                                fullname = body.fullname ?: "",
+                                message = "Administrator accounts must use the Web Portal."
 
-                                email = body.email ?: "",
+                            } else {
 
-                                role = body.role ?: ""
+                                session.saveUser(
+                                    fullname = body.fullname ?: "",
+                                    email = body.email ?: "",
+                                    role = body.role ?: ""
+                                )
 
-                            )
+                                delay(1200)
 
-                            delay(1200)
+                                onSuccess()
 
-                            onSuccess()
+                            }
 
                         }
 
