@@ -13,6 +13,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byahengcebu.mobile.features.trip.model.Trip
 import com.byahengcebu.mobile.features.trip.viewmodel.TripViewModel
+import com.byahengcebu.mobile.shared.components.StatusChip
+import com.byahengcebu.mobile.shared.utils.DateUtils
 
 @Composable
 fun TripScreen(

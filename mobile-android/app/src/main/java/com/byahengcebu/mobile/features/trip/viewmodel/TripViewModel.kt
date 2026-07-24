@@ -44,15 +44,34 @@ class TripViewModel(
 
                 val email = session.getEmail()
 
-                repository.getDriverTrips(email).body()?.let {
-                    trips = it
+                // Trip history
+                val tripsResponse = repository.getDriverTrips(email)
+
+                if (tripsResponse.isSuccessful) {
+
+                    trips = tripsResponse.body() ?: emptyList()
+
                 }
 
-                repository.getCurrentTrip(email).body()?.let {
-                    currentTrip = it
+                // Current trip
+                val currentResponse = repository.getCurrentTrip(email)
+
+                if (
+                    currentResponse.isSuccessful &&
+                    currentResponse.body() != null
+                ) {
+
+                    currentTrip = currentResponse.body()
+
+                } else {
+
+                    currentTrip = null
+
                 }
 
             } catch (e: Exception) {
+
+                currentTrip = null
 
                 errorMessage =
                     e.localizedMessage ?: "Connection Error"
