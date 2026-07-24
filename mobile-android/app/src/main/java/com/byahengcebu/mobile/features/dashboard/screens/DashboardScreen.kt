@@ -2,13 +2,18 @@ package com.byahengcebu.mobile.features.dashboard.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.DirectionsBus
 import androidx.compose.material.icons.filled.Payments
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,8 +23,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.byahengcebu.mobile.features.issue.viewmodel.IssueViewModel
+import com.byahengcebu.mobile.features.remittance.viewmodel.RemittanceViewModel
+import com.byahengcebu.mobile.features.trip.viewmodel.TripViewModel
 import com.byahengcebu.mobile.features.vehicle.viewmodel.VehicleViewModel
-import androidx.compose.material.icons.automirrored.filled.Logout
+import com.byahengcebu.mobile.shared.components.SectionTitle
+import com.byahengcebu.mobile.shared.components.StatisticCard
 
 private val PrimaryColor = Color(0xFF0F766E)
 private val BackgroundColor = Color(0xFFF5F7FA)
@@ -27,156 +36,127 @@ private val BackgroundColor = Color(0xFFF5F7FA)
 @Composable
 fun DashboardScreen(
 
-    viewModel: VehicleViewModel,
+    vehicleViewModel: VehicleViewModel,
+    tripViewModel: TripViewModel,
+    remittanceViewModel: RemittanceViewModel,
+    issueViewModel: IssueViewModel,
 
     onTripClick: () -> Unit,
-
     onRemittanceClick: () -> Unit,
-
     onReportIssueClick: () -> Unit,
-
     onProfileClick: () -> Unit,
-
     onLogout: () -> Unit
 
 ) {
 
     LaunchedEffect(Unit) {
-        viewModel.loadAssignedVehicle()
+
+        vehicleViewModel.loadAssignedVehicle()
+        tripViewModel.loadTrips()
+        remittanceViewModel.loadData()
+        issueViewModel.loadIssues()
+
     }
 
-    val vehicle = viewModel.assignedVehicle
+    val vehicle = vehicleViewModel.assignedVehicle
 
-    Column(
+    LazyColumn(
 
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundColor)
-            .padding(20.dp)
+            .padding(20.dp),
+
+        verticalArrangement = Arrangement.spacedBy(16.dp)
 
     ) {
 
-        Text(
+        item {
 
-            text = "Good Day 👋",
+            Text(
 
-            fontSize = 16.sp,
+                text = "Good Day 👋",
 
-            color = Color.Gray
+                fontSize = 16.sp,
 
-        )
+                color = Color.Gray
 
-        Text(
+            )
 
-            text = "Driver Dashboard",
+            Text(
 
-            fontSize = 30.sp,
+                text = "Driver Dashboard",
 
-            fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
 
-            color = PrimaryColor
+                fontWeight = FontWeight.Bold,
 
-        )
+                color = PrimaryColor
 
-        Spacer(modifier = Modifier.height(24.dp))
+            )
 
-        Card(
+        }
 
-            modifier = Modifier.fillMaxWidth(),
+        item {
 
-            colors = CardDefaults.cardColors(
+            Card(
 
-                containerColor = Color.White
+                modifier = Modifier.fillMaxWidth(),
 
-            ),
+                colors = CardDefaults.cardColors(
 
-            elevation = CardDefaults.cardElevation(
+                    containerColor = Color.White
 
-                defaultElevation = 8.dp
+                ),
 
-            ),
+                elevation = CardDefaults.cardElevation(8.dp),
 
-            shape = RoundedCornerShape(20.dp)
-
-        ) {
-
-            Column(
-
-                modifier = Modifier.padding(20.dp)
+                shape = RoundedCornerShape(20.dp)
 
             ) {
 
-                Text(
+                Column(
 
-                    text = "Assigned Vehicle",
+                    modifier = Modifier.padding(20.dp)
 
-                    fontSize = 20.sp,
+                ) {
 
-                    fontWeight = FontWeight.Bold
+                    Text(
 
-                )
+                        "Assigned Vehicle",
 
-                Spacer(modifier = Modifier.height(16.dp))
+                        fontWeight = FontWeight.Bold,
 
-                if (viewModel.loading) {
+                        fontSize = 20.sp
 
-                    Box(
+                    )
 
-                        modifier = Modifier.fillMaxWidth(),
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                        contentAlignment = Alignment.Center
-
-                    ) {
+                    if (vehicleViewModel.loading) {
 
                         CircularProgressIndicator()
 
-                    }
-
-                } else {
-
-                    if (vehicle == null) {
-
-                        Text(
-
-                            "No vehicle assigned.",
-
-                            color = Color.Red
-
-                        )
-
                     } else {
 
-                        InfoRow(
+                        if (vehicle == null) {
 
-                            "Plate Number",
+                            Text(
 
-                            vehicle.plateNumber
+                                "No assigned vehicle",
 
-                        )
+                                color = Color.Red
 
-                        InfoRow(
+                            )
 
-                            "Route",
+                        } else {
 
-                            vehicle.route
+                            InfoRow("Plate Number", vehicle.plateNumber)
+                            InfoRow("Route", vehicle.route)
+                            InfoRow("Model", vehicle.model)
+                            InfoRow("Status", vehicle.status)
 
-                        )
-
-                        InfoRow(
-
-                            "Model",
-
-                            vehicle.model
-
-                        )
-
-                        InfoRow(
-
-                            "Status",
-
-                            vehicle.status
-
-                        )
+                        }
 
                     }
 
@@ -186,75 +166,163 @@ fun DashboardScreen(
 
         }
 
-        Spacer(modifier = Modifier.height(28.dp))
+        item {
 
-        DashboardButton(
-
-            text = "Trip Management",
-
-            icon = Icons.Default.DirectionsBus,
-
-            onClick = onTripClick
-
-        )
-
-        Spacer(modifier = Modifier.height(14.dp))
-
-        DashboardButton(
-
-            text = "Submit Remittance",
-
-            icon = Icons.Default.Payments,
-
-            onClick = onRemittanceClick
-
-        )
-
-        Spacer(modifier = Modifier.height(14.dp))
-
-        DashboardButton(
-
-            text = "Report Vehicle Issue",
-
-            icon = Icons.Default.Build,
-
-            onClick = onReportIssueClick
-
-        )
-
-        Spacer(modifier = Modifier.height(14.dp))
-
-        DashboardButton(
-
-            text = "Profile",
-
-            icon = Icons.Default.AccountCircle,
-
-            onClick = onProfileClick
-
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        OutlinedButton(
-
-            modifier = Modifier.fillMaxWidth(),
-
-            onClick = onLogout
-
-        ) {
-
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.Logout,
-                contentDescription = null
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text("Logout")
+            SectionTitle("Overview")
 
         }
 
+        item {
+
+            LazyVerticalGrid(
+
+                columns = GridCells.Fixed(2),
+
+                modifier = Modifier.height(240.dp),
+
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+
+                userScrollEnabled = false
+
+            ) {
+
+                items(
+
+                    listOf(
+
+                        Triple(
+                            "Trips",
+                            tripViewModel.trips.size.toString(),
+                            Icons.Default.DirectionsBus
+                        ),
+
+                        Triple(
+                            "Remittances",
+                            remittanceViewModel.remittances.size.toString(),
+                            Icons.Default.Payments
+                        ),
+
+                        Triple(
+                            "Issues",
+                            issueViewModel.issues.size.toString(),
+                            Icons.Default.Warning
+                        ),
+
+                        Triple(
+                            "Vehicle",
+                            if (vehicle != null) "✓" else "--",
+                            Icons.Default.Build
+                        )
+
+                    )
+
+                ) { stat ->
+
+                    StatisticCard(
+
+                        title = stat.first,
+
+                        value = stat.second,
+
+                        icon = stat.third
+
+                    )
+
+                }
+
+            }
+
+        }
+
+        item {
+
+            SectionTitle("Quick Actions")
+
+        }
+
+        item {
+
+            DashboardButton(
+
+                text = "Trip Management",
+
+                icon = Icons.Default.DirectionsBus,
+
+                onClick = onTripClick
+
+            )
+
+        }
+
+        item {
+
+            DashboardButton(
+
+                text = "Submit Remittance",
+
+                icon = Icons.Default.Payments,
+
+                onClick = onRemittanceClick
+
+            )
+
+        }
+
+        item {
+
+            DashboardButton(
+
+                text = "Report Vehicle Issue",
+
+                icon = Icons.Default.Build,
+
+                onClick = onReportIssueClick
+
+            )
+
+        }
+
+        item {
+
+            DashboardButton(
+
+                text = "Profile",
+
+                icon = Icons.Default.AccountCircle,
+
+                onClick = onProfileClick
+
+            )
+
+        }
+
+        item {
+
+            OutlinedButton(
+
+                modifier = Modifier.fillMaxWidth(),
+
+                onClick = onLogout
+
+            ) {
+
+                Icon(
+
+                    imageVector = Icons.AutoMirrored.Filled.Logout,
+
+                    contentDescription = null
+
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text("Logout")
+
+            }
+
+        }
     }
 
 }
@@ -270,7 +338,7 @@ private fun InfoRow(
 
     Column(
 
-        modifier = Modifier.padding(bottom = 10.dp)
+        modifier = Modifier.padding(bottom = 12.dp)
 
     ) {
 
@@ -278,19 +346,23 @@ private fun InfoRow(
 
             text = label,
 
-            color = Color.Gray,
+            fontSize = 13.sp,
 
-            fontSize = 13.sp
+            color = Color.Gray
 
         )
+
+        Spacer(modifier = Modifier.height(2.dp))
 
         Text(
 
             text = value,
 
+            fontSize = 17.sp,
+
             fontWeight = FontWeight.SemiBold,
 
-            fontSize = 17.sp
+            color = Color.Black
 
         )
 
@@ -313,7 +385,9 @@ private fun DashboardButton(
 
         modifier = Modifier
             .fillMaxWidth()
-            .height(68.dp),
+            .height(62.dp),
+
+        shape = RoundedCornerShape(18.dp),
 
         colors = ButtonDefaults.elevatedButtonColors(
 
@@ -328,8 +402,6 @@ private fun DashboardButton(
             defaultElevation = 6.dp
 
         ),
-
-        shape = RoundedCornerShape(18.dp),
 
         onClick = onClick
 
@@ -358,3 +430,4 @@ private fun DashboardButton(
     }
 
 }
+

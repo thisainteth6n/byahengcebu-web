@@ -1,16 +1,19 @@
-package com.byahengcebu.mobile.shared.navigation
+    package com.byahengcebu.mobile.shared.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+
 import com.byahengcebu.mobile.features.auth.screens.LoginScreen
 import com.byahengcebu.mobile.features.auth.screens.RegisterScreen
 import com.byahengcebu.mobile.features.dashboard.screens.DashboardScreen
 import com.byahengcebu.mobile.features.issue.screens.ReportIssueScreen
+import com.byahengcebu.mobile.features.issue.viewmodel.IssueViewModel
 import com.byahengcebu.mobile.features.profile.screens.ProfileScreen
 import com.byahengcebu.mobile.features.remittance.screens.RemittanceScreen
+import com.byahengcebu.mobile.features.remittance.viewmodel.RemittanceViewModel
 import com.byahengcebu.mobile.features.trip.screens.TripScreen
 import com.byahengcebu.mobile.features.trip.viewmodel.TripViewModel
 import com.byahengcebu.mobile.features.vehicle.viewmodel.VehicleViewModel
@@ -22,8 +25,9 @@ fun AppNavigation() {
     val navController = rememberNavController()
 
     val vehicleViewModel: VehicleViewModel = viewModel()
-
     val tripViewModel: TripViewModel = viewModel()
+    val remittanceViewModel: RemittanceViewModel = viewModel()
+    val issueViewModel: IssueViewModel = viewModel()
 
     val session = SessionManager(navController.context)
 
@@ -87,7 +91,13 @@ fun AppNavigation() {
 
             DashboardScreen(
 
-                viewModel = vehicleViewModel,
+                vehicleViewModel = vehicleViewModel,
+
+                tripViewModel = tripViewModel,
+
+                remittanceViewModel = remittanceViewModel,
+
+                issueViewModel = issueViewModel,
 
                 onTripClick = {
 
