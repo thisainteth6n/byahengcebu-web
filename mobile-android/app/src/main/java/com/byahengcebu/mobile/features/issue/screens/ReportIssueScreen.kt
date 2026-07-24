@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.byahengcebu.mobile.features.issue.viewmodel.IssueViewModel
-import androidx.compose.material3.ExperimentalMaterial3Api
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,9 +27,9 @@ fun ReportIssueScreen(
 
     }
 
-    var title by remember {
+    var issueType by remember {
 
-        mutableStateOf("")
+        mutableStateOf("ENGINE")
 
     }
 
@@ -40,17 +39,15 @@ fun ReportIssueScreen(
 
     }
 
-    var severity by remember {
+    val issueTypes = listOf(
 
-        mutableStateOf("LOW")
-
-    }
-
-    val severityOptions = listOf(
-
-        "LOW",
-        "MEDIUM",
-        "HIGH"
+        "ENGINE",
+        "BRAKES",
+        "TIRES",
+        "LIGHTS",
+        "AIRCON",
+        "BODY",
+        "OTHER"
 
     )
 
@@ -80,51 +77,17 @@ fun ReportIssueScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        OutlinedTextField(
+        Text(
 
-            value = title,
+            text = "Assigned Vehicle",
 
-            onValueChange = {
-
-                title = it
-
-            },
-
-            label = {
-
-                Text("Issue Title")
-
-            },
-
-            modifier = Modifier.fillMaxWidth()
+            fontWeight = FontWeight.Bold
 
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Text(viewModel.assignedPlate)
 
-        OutlinedTextField(
-
-            value = description,
-
-            onValueChange = {
-
-                description = it
-
-            },
-
-            label = {
-
-                Text("Description")
-
-            },
-
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp)
-
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         ExposedDropdownMenuBox(
 
@@ -140,7 +103,7 @@ fun ReportIssueScreen(
 
             OutlinedTextField(
 
-                value = severity,
+                value = issueType,
 
                 onValueChange = {},
 
@@ -148,7 +111,7 @@ fun ReportIssueScreen(
 
                 label = {
 
-                    Text("Severity")
+                    Text("Issue Type")
 
                 },
 
@@ -176,7 +139,7 @@ fun ReportIssueScreen(
 
             ) {
 
-                severityOptions.forEach {
+                issueTypes.forEach {
 
                     DropdownMenuItem(
 
@@ -188,7 +151,7 @@ fun ReportIssueScreen(
 
                         onClick = {
 
-                            severity = it
+                            issueType = it
 
                             expanded = false
 
@@ -202,6 +165,30 @@ fun ReportIssueScreen(
 
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+
+            value = description,
+
+            onValueChange = {
+
+                description = it
+
+            },
+
+            label = {
+
+                Text("Describe the issue")
+
+            },
+
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(140.dp)
+
+        )
+
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
@@ -210,29 +197,17 @@ fun ReportIssueScreen(
 
             onClick = {
 
-                if (
-
-                    title.isBlank() ||
-
-                    description.isBlank()
-
-                ) return@Button
+                if (description.isBlank()) return@Button
 
                 viewModel.submitIssue(
 
-                    title,
+                    issueType,
 
-                    description,
-
-                    severity
+                    description
 
                 )
 
-                title = ""
-
                 description = ""
-
-                severity = "LOW"
 
             }
 
@@ -254,7 +229,7 @@ fun ReportIssueScreen(
 
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         LazyColumn {
 
@@ -276,15 +251,21 @@ fun ReportIssueScreen(
 
                         Text(
 
-                            issue.title,
+                            issue.issueType,
 
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+
+                            fontSize = 18.sp
 
                         )
 
+                        Spacer(modifier = Modifier.height(4.dp))
+
                         Text(issue.description)
 
-                        Text("Severity : ${issue.severity}")
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Text("Vehicle : ${issue.vehiclePlate}")
 
                         Text("Status : ${issue.status}")
 

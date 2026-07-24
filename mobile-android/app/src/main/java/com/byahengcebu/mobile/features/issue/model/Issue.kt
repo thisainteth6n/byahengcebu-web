@@ -8,11 +8,9 @@ data class Issue(
 
     val vehiclePlate: String = "",
 
-    val title: String,
+    val issueType: String,
 
     val description: String,
-
-    val severity: String,
 
     val status: String = "",
 

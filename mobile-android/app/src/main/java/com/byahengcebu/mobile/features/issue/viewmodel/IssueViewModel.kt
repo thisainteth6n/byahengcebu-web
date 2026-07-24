@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.byahengcebu.mobile.features.issue.model.Issue
 import com.byahengcebu.mobile.features.issue.repository.IssueRepository
+import com.byahengcebu.mobile.features.vehicle.repository.VehicleRepository
 import com.byahengcebu.mobile.shared.session.SessionManager
 import kotlinx.coroutines.launch
 
@@ -17,10 +18,15 @@ class IssueViewModel(
 
     private val repository = IssueRepository()
 
+    private val vehicleRepository = VehicleRepository()
+
     private val session =
         SessionManager(application)
 
     var issues by mutableStateOf<List<Issue>>(emptyList())
+        private set
+
+    var assignedPlate by mutableStateOf("")
         private set
 
     var loading by mutableStateOf(false)
@@ -38,7 +44,19 @@ class IssueViewModel(
             try {
 
                 val driverName = session.getFullname()
+                val email = session.getEmail()
 
+                // Load assigned vehicle
+                vehicleRepository
+                    .getAssignedVehicle(email)
+                    .body()
+                    ?.let {
+
+                        assignedPlate = it.plateNumber
+
+                    }
+
+                // Load driver's issues
                 val response =
                     repository.getDriverIssues(driverName)
 
@@ -48,8 +66,7 @@ class IssueViewModel(
 
                 } else {
 
-                    errorMessage =
-                        "Unable to load issues."
+                    errorMessage = "Unable to load issues."
 
                 }
 
@@ -68,11 +85,9 @@ class IssueViewModel(
 
     fun submitIssue(
 
-        title: String,
+        issueType: String,
 
-        description: String,
-
-        severity: String
+        description: String
 
     ) {
 
@@ -82,17 +97,28 @@ class IssueViewModel(
 
                 val issue = Issue(
 
-                    title = title,
+                    driverName = session.getFullname(),
 
-                    description = description,
+                    vehiclePlate = assignedPlate,
 
-                    severity = severity
+                    issueType = issueType,
+
+                    description = description
 
                 )
 
-                repository.submitIssue(issue)
+                val response =
+                    repository.submitIssue(issue)
 
-                loadIssues()
+                if (response.isSuccessful) {
+
+                    loadIssues()
+
+                } else {
+
+                    errorMessage = "Unable to submit issue."
+
+                }
 
             } catch (e: Exception) {
 
